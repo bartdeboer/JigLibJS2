@@ -1,0 +1,4 @@
+Based heavily on JigLibJS this is a Javascript port of JigLibFlash. The code is generated automatically from the AS3 code ensuring (allmost) all functionality works like the AS3 version.
+
+JigLibFlash: http://www.jiglibflash.com/
+Original JigLibJS: https://github.com/supereggbert/JigLibJS
