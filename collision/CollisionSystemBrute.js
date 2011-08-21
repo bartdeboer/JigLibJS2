@@ -54,7 +54,7 @@
 				continue;
 				}
 				
-				if (_collBody && _collBody.isActive && bodyID > _collBody.get_id())
+				if (_collBody.isActive && bodyID > _collBody.get_id())
 				{
 				continue;
 				}

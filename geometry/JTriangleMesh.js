@@ -43,7 +43,7 @@
 			this.createMesh(this._skinVertices,skin.indices);
 			
 			this._boundingBox=this._octree.boundingBox().clone();
-			this._boundingSphere=this._boundingBox.getRadiusAboutCentre();
+			skin.transform = JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z));
 		}
 		
 		this._type = "TRIANGLEMESH";

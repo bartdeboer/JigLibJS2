@@ -52,7 +52,8 @@
 		if (wheelNumRays == null) wheelNumRays = 1;
 
 		var mass = this._chassis.get_mass();
-		var mass4 = 0.25 * mass;		
+		var mass4 = 0.25 * mass;
+		
 		var gravity = PhysicsSystem.getInstance().get_gravity().clone();
 		var gravityLen = PhysicsSystem.getInstance().get_gravity().get_length();
 		gravity.normalize();

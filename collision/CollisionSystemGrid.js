@@ -164,7 +164,7 @@
 	{
 
 		var tempStoreVector = this.calcGridForSkin3(colBody);
-		//trace(tempStoreVector.x,tempStoreVector.y,tempStoreVector.z);
+		
 		if (tempStoreVector.x == -1) return -1;
 		return this.calcIndex(tempStoreVector.x, tempStoreVector.y, tempStoreVector.z);
 		
@@ -259,8 +259,8 @@
 		}
 		
 		// todo - work back from the mGridIndex rather than calculating it again...
-		var i; var j; var k;
-		var fi; var fj; var fk;
+		var i, j, k;
+		var fi, fj, fk;
 		var tempStoreObject = this.calcGridForSkin6(colBody);
 		i = tempStoreObject.i; j = tempStoreObject.j; k = tempStoreObject.k; fi = tempStoreObject.fi; fj = tempStoreObject.fj; fk = tempStoreObject.fk;
 		
@@ -291,11 +291,11 @@
 			{
 				for (var dk = -1; dk <= maxK; ++dk)
 				{
-				var thisIndex = this.calcIndex(this.nx + i + di, this.ny + j + dj, this.nz + k + dk); // + ((this.nx*this.ny*this.nz)*0.5);
+				var thisIndex = this.calcIndex(i + di, j + dj, k + dk); // + ((this.nx*this.ny*this.nz)*0.5);
 				//trace("ge", this.gridEntries.length);
 				if (this.gridEntries.length-1 > thisIndex && thisIndex >=0) {
 					var start = this.gridEntries[thisIndex];
-				
+				 
 					//trace(thisIndex,this.gridEntries.length);
 					if (start != null && start.next != null)
 					{
@@ -336,7 +336,7 @@
 				if (body == entry.collisionBody)
 					continue;
 				
-				if (entry.collisionBody && entry.collisionBody.isActive && bodyID > entry.collisionBody.get_id())
+				if (entry.collisionBody.isActive && bodyID > entry.collisionBody.get_id())
 					continue;
 				
 				if (this.checkCollidables(body, entry.collisionBody) && this.detectionFunctors[bodyType + "_" + entry.collisionBody.get_type()] != undefined)

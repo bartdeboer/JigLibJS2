@@ -1185,7 +1185,7 @@
 
 			if (!PhysicsSystem._currentPhysicsSystem)
 			{
-				trace("version: JigLibFlash molehill - beta (2011-2-27)");
+				trace("version: JigLibFlash fp11 (2011-7-14)");
 				PhysicsSystem._currentPhysicsSystem = new PhysicsSystem();
 			}
 			return PhysicsSystem._currentPhysicsSystem;
