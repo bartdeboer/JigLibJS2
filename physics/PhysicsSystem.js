@@ -916,7 +916,7 @@
 				if (body1) id1=body1.get_id();
 				fricImpulse = (body0.get_id() > id1) ? ptInfo.accumulatedFrictionImpulse : JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
 				
-				this._cachedContacts[ i++] = contact = new ContactData();
+				this._cachedContacts[i++] = contact = new ContactData();
 				contact.pair = new BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
 				contact.impulse = new CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
 			}
@@ -1136,7 +1136,7 @@
 			// findAllActiveBodies
 			if (body.isActive)
 			{
-				this._activeBodies[ i++] = body;
+				this._activeBodies[i++] = body;
 				body.copyCurrentStateToOld();
 			}
 			

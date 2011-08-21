@@ -107,8 +107,8 @@
 		w = this.limiteInt(point.x, this._terrain.minW, this._terrain.maxW);
 		h = this.limiteInt(point.z, this._terrain.minH, this._terrain.maxH);
 
-		i0 =  (w - this._terrain.minW / this._terrain.dw);
-		j0 =  (h - this._terrain.minH / this._terrain.dh);
+		i0 = (w - this._terrain.minW) / this._terrain.dw;
+		j0 = (h - this._terrain.minH) / this._terrain.dh;
 		i0 = this.limiteInt(i0, 0, this._terrain.sw);
 		j0 = this.limiteInt(j0, 0, this._terrain.sh);
 

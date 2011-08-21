@@ -142,11 +142,11 @@
 				continue;
 			}
 			for (i = 0; i < OctreeCell.NUM_CHILDREN; i++ ) {
-				this._cells[cellIndex].childCellIndices[i] =  this._cells.length;
-				cellsToProcess.push( this._cells.length);
+				this._cells[cellIndex].childCellIndices[i] = this._cells.length;
+				cellsToProcess.push(this._cells.length);
 				this._cells.push(new OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
 				
-				childCell = this._cells[_cells.length - 1];
+				childCell = this._cells[this._cells.length - 1];
 				numTriangles = this._cells[cellIndex].triangleIndices.length;
 				for (var j=0; j < numTriangles; j++ ) {
 				iTri = this._cells[cellIndex].triangleIndices[j];
@@ -234,7 +234,7 @@
 				}
 			}else {
 				for (var i = 0 ; i < OctreeCell.NUM_CHILDREN ; i++) {
-				if ((cell.childCellIndices[i] >= 0) && (cell.childCellIndices[i] <  this._cells.length)) {
+				if ((cell.childCellIndices[i] >= 0) && (cell.childCellIndices[i] < this._cells.length)) {
 					cellsToProcess.push(cell.childCellIndices[i]);
 				}
 				}

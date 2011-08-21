@@ -286,7 +286,7 @@
 			if (overlapDepths[i].depth < minDepth)
 			{
 				minDepth = overlapDepths[i].depth;
-				minAxis =  i;
+				minAxis = i;
 			}
 		}
 		
@@ -449,7 +449,7 @@
 				}
 				
 				cpInfo.initialPenetration = depth;
-				collPts[ i++] = cpInfo;
+				collPts[i++] = cpInfo;
 			}
 		}
 		else

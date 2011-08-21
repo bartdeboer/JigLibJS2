@@ -101,9 +101,9 @@
 		min.y = JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
 		min.z = JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
-		i =   ((min.x - this.startPoint.x / this.dx) % this.nx);
-		j =   ((min.y - this.startPoint.y / this.dy) % this.ny);
-		k =   ((min.z - this.startPoint.z / this.dz) % this.nz);
+		i =  ((min.x - this.startPoint.x) / this.dx) % this.nx;
+		j =  ((min.y - this.startPoint.y) / this.dy) % this.ny;
+		k =  ((min.z - this.startPoint.z) / this.dz) % this.nz;
 		
 		return new Vector3D(i,j,k);
 		
@@ -137,20 +137,20 @@
 		fj = (min.y - this.startPoint.y) / this.dy;
 		fk = (min.z - this.startPoint.z) / this.dz;
 		
-		i =  fi;
-		j =  fj;
-		k =  fk;
+		i = fi;
+		j = fj;
+		k = fk;
 		
 		if (i < 0) { i = 0; fi = 0.0; }
-		else if (i >=  this.nx) { i = 0; fi = 0.0; }
+		else if (i >= this.nx) { i = 0; fi = 0.0; }
 		else fi -= Number(i);
 		
 		if (j < 0) { j = 0; fj = 0.0; }
-		else if (j >=  this.ny) { j = 0; fj = 0.0; }
+		else if (j >= this.ny) { j = 0; fj = 0.0; }
 		else fj -= Number(j);
 		
 		if (k < 0) { k = 0; fk = 0.0; }
-		else if (k >=  this.nz) { k = 0; fk = 0.0; }
+		else if (k >= this.nz) { k = 0; fk = 0.0; }
 		else fk -= Number(k);
 		
 		tempStoreObject.i = i; tempStoreObject.j = j; tempStoreObject.k = k; tempStoreObject.fi = fi; tempStoreObject.fj = fj; tempStoreObject.fk = fk;
