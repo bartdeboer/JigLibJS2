@@ -1,0 +1,484 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>JigLibJS2 Javascript Vehicle Physics</title>
+		<meta charset="utf-8">
+		<style type="text/css">
+			body {
+				background:#fff;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+		</style>		
+
+		<script type="text/javascript" src="three.min.js"></script>	
+		<script type="text/javascript" src="RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="./geom/glMatrix.js"></script>							
+
+		<script type="text/javascript" src="./jiglib.js"></script>
+
+		<script type="text/javascript" src="./geom/Vector3D.js"></script>							
+		<script type="text/javascript" src="./geom/Matrix3D.js"></script>							
+
+		<script type="text/javascript" src="./math/JMatrix3D.js"></script>
+		<script type="text/javascript" src="./math/JMath3D.js"></script>
+		<script type="text/javascript" src="./math/JNumber3D.js"></script>		
+		
+		<script type="text/javascript" src="./cof/JConfig.js"></script>
+		<script type="text/javascript" src="./data/CollOutData.js"></script>
+		<script type="text/javascript" src="./data/ContactData.js"></script>
+		<script type="text/javascript" src="./data/PlaneData.js"></script>
+		<script type="text/javascript" src="./data/EdgeData.js"></script>
+		<script type="text/javascript" src="./data/TerrainData.js"></script>
+		<script type="text/javascript" src="./data/OctreeCell.js"></script>
+		<script type="text/javascript" src="./data/CollOutBodyData.js"></script>
+		<script type="text/javascript" src="./data/TriangleVertexIndices.js"></script>
+		<script type="text/javascript" src="./data/SpanData.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraint.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintMaxDistance.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintWorldPoint.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintPoint.js"></script>
+		<script type="text/javascript" src="./physics/MaterialProperties.js"></script>
+		<script type="text/javascript" src="./collision/CollPointInfo.js"></script>
+		<script type="text/javascript" src="./collision/CollisionInfo.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectInfo.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectFunctor.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectBoxTerrain.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSphereMesh.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectCapsuleBox.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSphereCapsule.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectCapsuleTerrain.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSphereBox.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSphereTerrain.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectBoxBox.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectBoxMesh.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectBoxPlane.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectCapsuleCapsule.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSphereSphere.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectSpherePlane.js"></script>
+		<script type="text/javascript" src="./collision/CollDetectCapsulePlane.js"></script>
+		<script type="text/javascript" src="./collision/CollisionSystemAbstract.js"></script>
+		<script type="text/javascript" src="./collision/CollisionSystemGridEntry.js"></script>
+		<script type="text/javascript" src="./collision/CollisionSystemGrid.js"></script>
+		<script type="text/javascript" src="./collision/CollisionSystemBrute.js"></script>
+		<script type="text/javascript" src="./geometry/JIndexedTriangle.js"></script>
+		<script type="text/javascript" src="./geometry/JOctree.js"></script>
+		<script type="text/javascript" src="./geometry/JRay.js"></script>
+		<script type="text/javascript" src="./geometry/JAABox.js"></script>
+		<script type="text/javascript" src="./geometry/JTriangle.js"></script>
+		<script type="text/javascript" src="./geometry/JSegment.js"></script>
+		<script type="text/javascript" src="./events/JCollisionEvent.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraint.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintMaxDistance.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintWorldPoint.js"></script>
+		<script type="text/javascript" src="./physics/constraint/JConstraintPoint.js"></script>
+		<script type="text/javascript" src="./physics/PhysicsController.js"></script>
+		<script type="text/javascript" src="./physics/CachedImpulse.js"></script>
+		<script type="text/javascript" src="./physics/HingeJoint.js"></script>
+		<script type="text/javascript" src="./physics/BodyPair.js"></script>
+		<script type="text/javascript" src="./physics/PhysicsState.js"></script>
+		<script type="text/javascript" src="./physics/PhysicsSystem.js"></script>
+		<script type="text/javascript" src="./physics/RigidBody.js"></script>
+		<script type="text/javascript" src="./geometry/JSphere.js"></script>
+		<script type="text/javascript" src="./geometry/JTriangleMesh.js"></script>
+		<script type="text/javascript" src="./geometry/JPlane.js"></script>
+		<script type="text/javascript" src="./geometry/JTerrain.js"></script>
+		<script type="text/javascript" src="./geometry/JBox.js"></script>
+		<script type="text/javascript" src="./geometry/JCapsule.js"></script>
+		<script type="text/javascript" src="./debug/Stats.js"></script>
+
+		<script type="text/javascript" src="./vehicles/JChassis.js"></script>
+		<script type="text/javascript" src="./vehicles/JWheel.js"></script>
+		<script type="text/javascript" src="./vehicles/JCar.js"></script>
+
+		<script type="text/javascript"> 
+		 
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-22245928-1']);
+			_gaq.push(['_setDomainName', 'none']);
+			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(['_trackPageview']);
+			 
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		 
+		</script> 		
+		
+	</head>
+	<body>
+
+		<script type="text/javascript">
+
+			var container, stats;
+
+			var camera, scene, renderer;
+			
+			var projector;
+			
+			var material;
+
+			var geometry, group;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+			var t0 = new Date().getTime();
+			var system;
+
+			var JChassis;
+			var JWheel;	
+
+			init_jiglib();
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				projector = new THREE.Projector();
+
+        camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );        
+				// camera = new THREE.Camera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 5;
+				camera.position.x = 10;
+				camera.position.y = 10;
+
+				scene = new THREE.Scene();
+
+				material = new THREE.MeshNormalMaterial();
+
+				//var ground = new THREE.Mesh( new Cube( 40, 0, 40 ), material );
+				//ground.position.x = 0;
+				//ground.position.y = -10;
+				//ground.position.z = 0;
+				//scene.addObject( ground );				
+				
+				for ( var i = 0; i < 20; i ++ ) {
+
+					if (Math.random() > .5) {
+
+						var width = Math.random() * 4;
+						var height = Math.random() * 4;
+						var depth = Math.random() * 4;
+					
+						var geometry = new THREE.CubeGeometry( width, height, depth );
+						var mesh = new THREE.Mesh( geometry, material );
+	
+						mesh.matrixAutoUpdate = false;
+						mesh.overdraw = true;					
+						
+						mesh.position.x = Math.random() * 10 - 5;
+						mesh.position.y = 6 + 6 * i;
+						mesh.position.z = Math.random() * 10 - 5;
+	
+						scene.add( mesh );
+		
+						var cube = new jiglib.JBox( null, width, depth, height );
+						cube.set_mass( width * height * depth );
+						cube.moveTo( new Vector3D( mesh.position.x, mesh.position.y, mesh.position.z, 0 ) );
+						system.addBody( cube );						
+						mesh.rigidBody = cube;
+
+					} else {
+						
+						var radius = Math.random() * 4 / 2;
+					
+						var geometry = new THREE.SphereGeometry( radius, 5, 5 );
+						var mesh = new THREE.Mesh( geometry, material );
+	
+						mesh.matrixAutoUpdate = false;
+						mesh.overdraw = true;					
+						
+						mesh.position.x = Math.random() * 10 - 5;
+						mesh.position.y = 6 + 6 * i;
+						mesh.position.z = Math.random() * 10 - 5;
+	
+						scene.add( mesh );
+		
+						var sphere = new jiglib.JSphere( null, radius );
+						sphere.set_mass( 4 / 3 * Math.PI * Math.pow( radius, 3 ) );
+						sphere.moveTo( new Vector3D( mesh.position.x, mesh.position.y, mesh.position.z, 0 ) );
+						system.addBody( sphere );
+						
+						mesh.rigidBody = sphere;
+												
+					}
+
+				}
+
+				var width = 4;
+				var height = 1;
+				var depth = 8;
+				
+				var mesh = new THREE.Mesh( new THREE.CubeGeometry( width, height, depth ), material );
+				mesh.matrixAutoUpdate = false;
+				mesh.overdraw = true;					
+				mesh.position.x = 0;
+				mesh.position.y = 0;
+				mesh.position.z = 0;
+								
+				var numSegs = 10;
+				var topRad = 1; 
+				var botRad = 1; 
+				var height = 1;
+				var topOffset = 0; 
+				var botOffset = 0;
+				
+				mesh.wheelFL = new THREE.Object3D();
+				mesh.wheelFR = new THREE.Object3D();
+				mesh.wheelBL = new THREE.Object3D();
+				mesh.wheelBR = new THREE.Object3D();
+				
+				mesh.wheelFL.position.x = -2.2; mesh.wheelFL.position.y = -0.5; mesh.wheelFL.position.z = 4;
+				mesh.wheelFR.position.x = 2.2; mesh.wheelFR.position.y = -0.5; mesh.wheelFR.position.z = 4;
+				mesh.wheelBL.position.x = -2.2; mesh.wheelBL.position.y = -0.5; mesh.wheelBL.position.z = -4;
+				mesh.wheelBR.position.x = 2.2; mesh.wheelBR.position.y = -0.5; mesh.wheelBR.position.z = -4;
+
+				mesh.wheelFL.add(new THREE.Mesh( new THREE.CylinderGeometry( topRad, botRad, height ), material ));
+				mesh.wheelFR.add(new THREE.Mesh( new THREE.CylinderGeometry( topRad, botRad, height ), material ));
+				mesh.wheelBL.add(new THREE.Mesh( new THREE.CylinderGeometry( topRad, botRad, height ), material ));
+				mesh.wheelBR.add(new THREE.Mesh( new THREE.CylinderGeometry( topRad, botRad, height ), material ));
+        
+				mesh.wheelFL.children[0].rotation.z = degToRad(90);
+				mesh.wheelFR.children[0].rotation.z = degToRad(90);
+				mesh.wheelBL.children[0].rotation.z = degToRad(90);
+				mesh.wheelBR.children[0].rotation.z = degToRad(90);
+        
+				mesh.add( mesh.wheelFL );
+				mesh.add( mesh.wheelFR );
+				mesh.add( mesh.wheelBL );
+				mesh.add( mesh.wheelBR );
+				
+				scene.add( mesh );
+        
+				var carBody = new jiglib.JCar(null);
+			
+				var maxSteerAngle = 50;
+				var steerRate = 3;
+				var driveTorque = 300;
+				
+				carBody.setCar(maxSteerAngle, steerRate, driveTorque);
+				carBody.get_chassis().set_sideLengths(new Vector3D(width, height, depth, 0));
+				carBody.get_chassis().moveTo(new Vector3D(0, -0.8, -20));
+				carBody.get_chassis().set_mass(20);
+				
+				system.addBody(carBody.get_chassis());
+				
+				mesh.carBody = carBody;
+				mesh.rigidBody = carBody.get_chassis();
+				
+				var wheelRadius = 1;
+				var travel = .5;
+				var sideFriction = 1.6; // 1.2;
+				var fwdFriction = 1.6; // 1.2;
+				var restingFrac = 0.3; // 0.6; // 0.5;
+				var dampingFrac = 0.3; // 0.6;
+				var rays = 2;
+				
+				carBody.setupWheel(0, new Vector3D(-2.2, -1,  4), sideFriction, fwdFriction, travel, wheelRadius, restingFrac, dampingFrac, rays, false);
+				carBody.setupWheel(1, new Vector3D( 2.2, -1,  4), sideFriction, fwdFriction, travel, wheelRadius, restingFrac, dampingFrac, rays, false);
+				carBody.setupWheel(2, new Vector3D(-2.2, -1, -4), sideFriction, fwdFriction, travel, wheelRadius, restingFrac, dampingFrac, rays, true);
+				carBody.setupWheel(3, new Vector3D( 2.2, -1, -4), sideFriction, fwdFriction, travel, wheelRadius, restingFrac, dampingFrac, rays, true);
+
+				carBody.wheelFL = carBody.get_wheels()[0];
+				carBody.wheelFR = carBody.get_wheels()[1];
+				carBody.wheelBL = carBody.get_wheels()[2];
+				carBody.wheelBR = carBody.get_wheels()[3];
+				
+
+				document.onkeydown = function( e ){
+					switch(e.keyCode)
+					{
+						case 32:
+							carBody.setHBrake(1);
+							return false;
+						case 38:
+							carBody.setAccelerate(1);
+							return false;
+						case 40:
+							carBody.setAccelerate(-1);
+							return false;
+						case 37:
+							carBody.setSteer([0, 1], 1);
+							return false;
+						case 39:
+							carBody.setSteer([0, 1], -1);
+							return false;
+					}
+				}
+				
+				document.onkeyup = function( e ){
+					switch(e.keyCode)
+					{
+						case 32:
+							carBody.setHBrake(0);
+							return false;
+						case 38:
+							carBody.setAccelerate(0);
+							return false;
+						case 40:
+							carBody.setAccelerate(0);
+							return false;
+						case 37:
+							carBody.setSteer([0, 1], 0);
+							return false;
+						case 39:
+							carBody.setSteer([0, 1], 0);
+							return false;
+					}
+				}
+
+				// renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.CanvasRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.sortObjects = false;
+				container.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        
+			}
+
+
+			function init_jiglib() {
+
+				system = jiglib.PhysicsSystem.getInstance();
+				system.setCollisionSystem(); // CollisionSystemBrute
+				// system.setCollisionSystem(true); // CollisionSystemGrid
+				// system.setSolverType("FAST");
+				// system.setSolverType("NORMAL");
+				system.setSolverType("ACCUMULATED");
+				system.setGravity( new Vector3D( 0, -9.8, 0, 0 ) );
+				
+				var ground = new jiglib.JPlane();
+				ground.set_y(-10);
+				ground.set_rotationX(90);
+				ground.set_movable(false);				
+				system.addBody( ground );
+
+			}
+			
+			
+			function onDocumentMouseMove(event) {
+
+				mouseX = ( event.clientX - windowHalfX ) * .1;
+				mouseY = ( event.clientY - windowHalfY ) * .1;
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				updateDynamicsWorld();
+				render();
+
+			}
+
+			function degToRad(deg) {
+				return (deg * 3.14159) / 180;
+			}
+			
+			function radToDeg(rad) {
+				return rad * (180 / 3.14159);
+			}
+			
+			function updateDynamicsWorld() {
+
+				var t1 = new Date().getTime();
+				var ms = t1 - t0;
+				t0 = t1;
+
+				system.integrate( ms / 1000 );				
+				
+				for ( var i = 0, l = scene.children.length; i < l; i ++ ) {
+ 
+					var mesh = scene.children[i];
+ 
+					if (mesh.rigidBody) {
+
+					    var pos = mesh.rigidBody.get_currentState().position;
+					    var dir = mesh.rigidBody.get_currentState().orientation.get_rawData();
+
+					    var matrix = new THREE.Matrix4();
+					    matrix.makeTranslation( pos.x, pos.y, pos.z );
+					    var rotate = new THREE.Matrix4(dir[0], dir[1], dir[2], dir[3], dir[4], dir[5], dir[6], dir[7], dir[8], dir[9], dir[10], dir[11], dir[12], dir[13], dir[14], dir[15]);
+					    matrix.multiplySelf(rotate);
+
+              mesh.matrix = matrix;
+              
+              mesh.updateMatrixWorld(true);
+					}
+					
+					if (mesh.carBody) {
+						
+						mesh.wheelFL.position.y = mesh.carBody.wheelFL.getActualPos().y;
+						mesh.wheelFR.position.y = mesh.carBody.wheelFR.getActualPos().y;
+						mesh.wheelBL.position.y = mesh.carBody.wheelBL.getActualPos().y;
+						mesh.wheelBR.position.y = mesh.carBody.wheelBR.getActualPos().y;
+						
+						mesh.wheelFL.rotation.y = degToRad(mesh.carBody.wheelFL.getSteerAngle());
+						mesh.wheelFR.rotation.y = degToRad(mesh.carBody.wheelFR.getSteerAngle());
+						mesh.wheelBL.rotation.y = degToRad(mesh.carBody.wheelBL.getSteerAngle());
+						mesh.wheelBR.rotation.y = degToRad(mesh.carBody.wheelBR.getSteerAngle());
+
+						mesh.wheelFL.children[0].rotation.x = degToRad(mesh.carBody.wheelFL.getAxisAngle());
+						mesh.wheelFR.children[0].rotation.x = degToRad(mesh.carBody.wheelFR.getAxisAngle());
+						mesh.wheelBL.children[0].rotation.x = degToRad(mesh.carBody.wheelBL.getAxisAngle());
+						mesh.wheelBR.children[0].rotation.x = degToRad(mesh.carBody.wheelBR.getAxisAngle());
+						
+						var dir = mesh.carBody.get_chassis().get_currentState().orientation.get_rawData();
+					  var rotate = new THREE.Matrix4(dir[0], dir[1], dir[2], dir[3], dir[4], dir[5], dir[6], dir[7], dir[8], dir[9], dir[10], dir[11], dir[12], dir[13], dir[14], dir[15]);
+
+            mesh.updateMatrixWorld(true);
+
+            camera.lookAt(mesh.position);
+            
+					}
+				}
+			}
+			
+			
+			function render() {
+
+				camera.position.x += ( mouseX - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+
+				renderer.render(scene, camera);
+        
+			}
+
+			function onDocumentMouseDown( event ) {
+ 
+				event.preventDefault();
+ 
+				var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+				projector.unprojectVector( vector, camera );
+ 
+				var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() ); 
+				var intersects = ray.intersectObject(scene);
+ 
+        console.log(intersects);
+ 
+				if ( intersects.length > 0 ) {
+ 					var object = intersects[ 0 ].object;
+ 					if ( object.rigidBody ) {
+ 						object.rigidBody.setLineVelocity( new Vector3D( 0, 20, 0 ), false );
+ 					}
+				}
+			}
+
+
+		</script>
+
+	</body>
+</html>

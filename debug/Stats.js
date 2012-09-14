@@ -2,6 +2,7 @@
 (function(jiglib) {
 
 	var PhysicsSystem = jiglib.PhysicsSystem;
+	var Away3D4Physics = jiglib.Away3D4Physics;
 
 	var Stats = function(view3d, physics, grid)
 	{
@@ -100,9 +101,9 @@
 			this.textFps.htmlText = this.fps + " / " + stage.frameRate + "<br>" + PhysicsSystem.getInstance().getCollisionSystem().numCollisionsChecks + "<br>" + this.view3d.renderedFacesCount;
 
 			// todo temp. till away3d got _deltatime avail.
-			var ms3D = (this.timer - this.ms) - this.physics.frameTime;
+			var ms3D = (this.timer - this.ms) - this.physics.get_frameTime();
 
-			this.textMs.htmlText = (this.timer - this.ms) + " this.ms<br>" + this.physics.frameTime + " this.ms<br>" + ms3D + " this.ms";
+			this.textMs.htmlText = (this.timer - this.ms) + " this.ms<br>" + this.physics.get_frameTime() + " this.ms<br>" + ms3D + " this.ms";
 			this.textBottomLeft.htmlText = "MEM " + this.mem + "<br>RIGIDB. " + PhysicsSystem.getInstance().get_bodies().length;
 			this.textBottomRight.htmlText = "/ MAX <font color='#cb2929'>" + this.mem_max + "</font><br>/ ACTIVE <font color='#cb2929'>" + PhysicsSystem.getInstance().get_activeBodies().length + "</font>";
 			if (this.grid) {
