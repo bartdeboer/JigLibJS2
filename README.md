@@ -1,12 +1,19 @@
+JigLibJS2
+=========
+
+#### JavaScript 3D physics engine ####
+
 Javascript port of JiglibFlash (which is a port of c++ JigLib). The code is generated automatically from the AS3 code so all functionality should work exactly like the AS3 version.
 
 JigLibJS2: http://www.brokstuk.com/jiglibjs2/
 
 Other links:
 
-JiglibFlash: http://www.jiglibflash.com/
-Original c++ JigLib: http://www.rowlhouse.co.uk/jiglib/
-glmatrix: http://code.google.com/p/glmatrix/
+* [JiglibFlash](http://www.jiglibflash.com/)
+* [Original c++ JigLib](http://www.rowlhouse.co.uk/jiglib/)
+* [The original Javascript port](http://www.jiglibjs.org/)
+* [glmatrix](http://code.google.com/p/glmatrix/)
+* [three.js](https://github.com/mrdoob/three.js)
 
 ### Change log ###
 
