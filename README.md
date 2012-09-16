@@ -5,7 +5,7 @@ JigLibJS2
 
 Javascript port of JiglibFlash (which is a port of c++ JigLib). The code is generated automatically from the AS3 code so all functionality should work exactly like the AS3 version.
 
-JigLibJS2: http://www.brokstuk.com/jiglibjs2/
+* [JigLibJS2](http://www.brokstuk.com/jiglibjs2/)
 
 Other links:
 
