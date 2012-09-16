@@ -13,6 +13,6 @@ glmatrix: http://code.google.com/p/glmatrix/
 2012 09 16
 
 * Ported latest JigLibFlash (But nothing changed).
-* Update port script to removed a bunch of dependencies.
+* Updated port script to remove a bunch of dependencies.
 * Included example.
 * Updated to latest three.js.
