@@ -9,9 +9,9 @@ Javascript port of JiglibFlash (which is a port of c++ JigLib). The code is gene
 
 Other links:
 
-* [JiglibFlash](http://www.jiglibflash.com/)
+* [JiglibFlash Source](http://github.com/ringodotnl/jiglibflash-core-fp11)
 * [Original c++ JigLib](http://www.rowlhouse.co.uk/jiglib/)
-* [The original Javascript port](http://www.jiglibjs.org/)
+* [The other Javascript port](http://www.jiglibjs.org/)
 * [glmatrix](http://code.google.com/p/glmatrix/)
 * [three.js](http://github.com/mrdoob/three.js)
 * [webstunts](http://github.com/cobbpg/webstunts)
