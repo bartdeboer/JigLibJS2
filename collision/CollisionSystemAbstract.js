@@ -11,7 +11,31 @@
 
 		this.collBody = [];
 		this.detectionFunctors = [];
-
+		this.detectionFunctors["BOX_BOX"] = new JigLib.CollDetectBoxBox();
+		this.detectionFunctors["BOX_SPHERE"] = new JigLib.CollDetectSphereBox();
+		this.detectionFunctors["BOX_CAPSULE"] = new JigLib.CollDetectCapsuleBox();
+		this.detectionFunctors["BOX_PLANE"] = new JigLib.CollDetectBoxPlane();
+		this.detectionFunctors["BOX_TERRAIN"] = new JigLib.CollDetectBoxTerrain();
+		this.detectionFunctors["BOX_TRIANGLEMESH"] = new JigLib.CollDetectBoxMesh();
+		this.detectionFunctors["SPHERE_BOX"] = new JigLib.CollDetectSphereBox();
+		this.detectionFunctors["SPHERE_SPHERE"] = new JigLib.CollDetectSphereSphere();
+		this.detectionFunctors["SPHERE_CAPSULE"] = new JigLib.CollDetectSphereCapsule();
+		this.detectionFunctors["SPHERE_PLANE"] = new JigLib.CollDetectSpherePlane();
+		this.detectionFunctors["SPHERE_TERRAIN"] = new JigLib.CollDetectSphereTerrain();
+		this.detectionFunctors["SPHERE_TRIANGLEMESH"] = new JigLib.CollDetectSphereMesh();
+		this.detectionFunctors["CAPSULE_CAPSULE"] = new JigLib.CollDetectCapsuleCapsule();
+		this.detectionFunctors["CAPSULE_BOX"] = new JigLib.CollDetectCapsuleBox();
+		this.detectionFunctors["CAPSULE_SPHERE"] = new JigLib.CollDetectSphereCapsule();
+		this.detectionFunctors["CAPSULE_PLANE"] = new JigLib.CollDetectCapsulePlane();
+		this.detectionFunctors["CAPSULE_TERRAIN"] = new JigLib.CollDetectCapsuleTerrain();
+		this.detectionFunctors["PLANE_BOX"] = new JigLib.CollDetectBoxPlane();
+		this.detectionFunctors["PLANE_SPHERE"] = new JigLib.CollDetectSpherePlane();
+		this.detectionFunctors["PLANE_CAPSULE"] = new JigLib.CollDetectCapsulePlane();
+		this.detectionFunctors["TERRAIN_SPHERE"] = new JigLib.CollDetectSphereTerrain();
+		this.detectionFunctors["TERRAIN_BOX"] = new JigLib.CollDetectBoxTerrain();
+		this.detectionFunctors["TERRAIN_CAPSULE"] = new JigLib.CollDetectCapsuleTerrain();
+		this.detectionFunctors["TRIANGLEMESH_SPHERE"] = new JigLib.CollDetectSphereMesh();
+		this.detectionFunctors["TRIANGLEMESH_BOX"] = new JigLib.CollDetectBoxMesh();
 		
 	}
 

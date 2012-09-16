@@ -22,6 +22,7 @@
     <script type="text/javascript" src="./geom/Vector3D.js"></script>
     <script type="text/javascript" src="./geom/Matrix3D.js"></script>
 
+<script type="text/javascript" src="../JigLibJS2/cof/JConfig.js"></script>
 <script type="text/javascript" src="../JigLibJS2/vehicles/JCar.js"></script>
 <script type="text/javascript" src="../JigLibJS2/vehicles/JWheel.js"></script>
 <script type="text/javascript" src="../JigLibJS2/physics/RigidBody.js"></script>
@@ -63,7 +64,6 @@
 <script type="text/javascript" src="../JigLibJS2/geometry/JTriangle.js"></script>
 <script type="text/javascript" src="../JigLibJS2/geometry/JSphere.js"></script>
 <script type="text/javascript" src="../JigLibJS2/geometry/JSegment.js"></script>
-<script type="text/javascript" src="../JigLibJS2/cof/JConfig.js"></script>
 <script type="text/javascript" src="../JigLibJS2/data/CollOutData.js"></script>
 <script type="text/javascript" src="../JigLibJS2/data/ContactData.js"></script>
 <script type="text/javascript" src="../JigLibJS2/data/PlaneData.js"></script>
@@ -108,27 +108,20 @@
 		<script type="text/javascript">
 
 			var container, stats;
-
 			var camera, scene, renderer;
-			
 			var projector;
-			
 			var material;
-
 			var geometry, group;
-
+      
 			var mouseX = 0, mouseY = 0;
-
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-
-			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
 			var t0 = new Date().getTime();
 			var system;
-
 			var JChassis;
 			var JWheel;	
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
       
 			init_jiglib();
 			init();
@@ -142,7 +135,6 @@
 				projector = new THREE.Projector();
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );        
-				// camera = new THREE.Camera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.z = 5;
 				camera.position.x = 10;
 				camera.position.y = 10;
@@ -434,6 +426,8 @@
 
             mesh.updateMatrixWorld(true);
 
+            console.log(mesh.position.x, mesh.position.y, mesh.position.z);
+            
             camera.lookAt(mesh.position);
             
 					}
