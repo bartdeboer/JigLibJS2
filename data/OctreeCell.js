@@ -1,17 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollOutData = jiglib.CollOutData;
-	var ContactData = jiglib.ContactData;
-	var PlaneData = jiglib.PlaneData;
-	var EdgeData = jiglib.EdgeData;
-	var TerrainData = jiglib.TerrainData;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var TriangleVertexIndices = jiglib.TriangleVertexIndices;
-	var SpanData = jiglib.SpanData;
-	var Vector3D = jiglib.Vector3D;
-	var JAABox = jiglib.JAABox;
-	var JNumber3D = jiglib.JNumber3D;
 
 	var OctreeCell = function(aabox)
 	{
@@ -29,7 +18,7 @@
 		if(aabox){
 			this.AABox = aabox.clone();
 		}else {
-			this.AABox = new JAABox();
+			this.AABox = new JigLib.JAABox();
 		}
 		this._points = this.AABox.getAllPoints();
 		this._egdes = this.AABox.get_edges();
@@ -46,7 +35,7 @@
 	OctreeCell.prototype.clear = function()
 	{
 
-		for (var i = 0; i < OctreeCell.NUM_CHILDREN; i++ ) {
+		for (var i = 0; i < JigLib.OctreeCell.NUM_CHILDREN; i++ ) {
 			this.childCellIndices[i] = -1;
 		}
 		this.triangleIndices.splice(0, this.triangleIndices.length);
@@ -70,7 +59,7 @@
 	OctreeCell.NUM_CHILDREN =  8; // uint
 
 
-	jiglib.OctreeCell = OctreeCell; 
+	JigLib.OctreeCell = OctreeCell; 
 
-})(jiglib);
+})(JigLib);
 

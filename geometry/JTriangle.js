@@ -1,23 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JSphere = jiglib.JSphere;
-	var JSegment = jiglib.JSegment;
-	var Vector3D = jiglib.Vector3D;
-	var CollOutData = jiglib.CollOutData;
-	var PlaneData = jiglib.PlaneData;
-	var SpanData = jiglib.SpanData;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
 
 	var JTriangle = function(pt0, pt1, pt2)
 	{
@@ -51,7 +34,7 @@
 	JTriangle.prototype.get_plane = function()
 	{
 
-		var pl = new PlaneData();
+		var pl = new JigLib.PlaneData();
 		pl.setWithNormal(this.origin, this.get_normal());
 		
 		return pl;
@@ -104,7 +87,7 @@
 		d1 = this.getVertex(1).dotProduct(axis);
 		d2 = this.getVertex(2).dotProduct(axis);
 		
-		var result = new SpanData();
+		var result = new JigLib.SpanData();
 		result.min = Math.min(d0, d1, d2);
 		result.max = Math.max(d0, d1, d2);
 		
@@ -122,7 +105,7 @@
 		p = seg.delta.crossProduct(this.edge1);
 		a = this.edge0.dotProduct(p);
 		
-		if (a > -JMath3D.NUM_TINY && a < JMath3D.NUM_TINY) {
+		if (a > -JigLib.JMath3D.NUM_TINY && a < JigLib.JMath3D.NUM_TINY) {
 			return false;
 		}
 		f = 1 / a;
@@ -370,7 +353,7 @@
 
 
 
-	jiglib.JTriangle = JTriangle; 
+	JigLib.JTriangle = JTriangle; 
 
-})(jiglib);
+})(JigLib);
 

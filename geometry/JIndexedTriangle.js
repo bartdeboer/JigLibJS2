@@ -1,20 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSphere = jiglib.JSphere;
-	var JSegment = jiglib.JSegment;
-	var Vector3D = jiglib.Vector3D;
-	var PlaneData = jiglib.PlaneData;
-	var JNumber3D = jiglib.JNumber3D;
 
 	var JIndexedTriangle = function()
 	{
@@ -28,8 +14,8 @@
 		this._vertexIndices[0] = -1;
 		this._vertexIndices[1] = -1;
 		this._vertexIndices[2] = -1;
-		this._plane = new PlaneData();
-		this._boundingBox = new JAABox();
+		this._plane = new JigLib.PlaneData();
+		this._boundingBox = new JigLib.JAABox();
 		
 	}
 
@@ -96,7 +82,7 @@
 
 
 
-	jiglib.JIndexedTriangle = JIndexedTriangle; 
+	JigLib.JIndexedTriangle = JIndexedTriangle; 
 
-})(jiglib);
+})(JigLib);
 

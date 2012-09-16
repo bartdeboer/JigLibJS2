@@ -1,14 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollOutData = jiglib.CollOutData;
-	var ContactData = jiglib.ContactData;
-	var PlaneData = jiglib.PlaneData;
-	var TerrainData = jiglib.TerrainData;
-	var OctreeCell = jiglib.OctreeCell;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var TriangleVertexIndices = jiglib.TriangleVertexIndices;
-	var SpanData = jiglib.SpanData;
 
 	var EdgeData = function(ind0, ind1)
 	{
@@ -22,7 +14,7 @@
 
 
 
-	jiglib.EdgeData = EdgeData; 
+	JigLib.EdgeData = EdgeData; 
 
-})(jiglib);
+})(JigLib);
 

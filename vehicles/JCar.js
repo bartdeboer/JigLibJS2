@@ -1,11 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JWheel = jiglib.JWheel;
-	var JChassis = jiglib.JChassis;
-	var Vector3D = jiglib.Vector3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var PhysicsSystem = jiglib.PhysicsSystem;
 
 	var JCar = function(skin)
 	{
@@ -21,7 +16,7 @@
 		this._wheels = null; // Array
 		this._steerWheels = null; // Array
 
-		this._chassis = new JChassis(this, skin);
+		this._chassis = new JigLib.JChassis(this, skin);
 		this._wheels = [];
 		this._steerWheels = [];
 		this._destSteering = this._destAccelerate = this._steering = this._accelerate = this._HBrake = 0;
@@ -54,16 +49,16 @@
 		var mass = this._chassis.get_mass();
 		var mass4 = 0.25 * mass;
 		
-		var gravity = PhysicsSystem.getInstance().get_gravity().clone();
-		var gravityLen = PhysicsSystem.getInstance().get_gravity().get_length();
+		var gravity = JigLib.PhysicsSystem.getInstance().get_gravity().clone();
+		var gravityLen = JigLib.PhysicsSystem.getInstance().get_gravity().get_length();
 		gravity.normalize();
-		var axis = JNumber3D.getScaleVector(gravity, -1);
+		var axis = JigLib.JNumber3D.getScaleVector(gravity, -1);
 		var spring = mass4 * gravityLen / (wheelRestingFrac * wheelTravel);
 		var inertia = 0.015 * wheelRadius * wheelRadius * mass;
 		var damping = 2 * Math.sqrt(spring * mass);
 		damping *= (0.25 * wheelDampingFrac);
 
-		this._wheels[_name] = new JWheel(this);
+		this._wheels[_name] = new JigLib.JWheel(this);
 		this._wheels[_name].setup(pos, axis, spring, wheelTravel, inertia,
 			wheelRadius, wheelSideFriction, wheelFwdFriction,
 			damping, wheelNumRays);
@@ -203,7 +198,7 @@
 
 
 
-	jiglib.JCar = JCar; 
+	JigLib.JCar = JCar; 
 
-})(jiglib);
+})(JigLib);
 

@@ -1,5 +1,5 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
 
 	var JConfig = function()
@@ -22,7 +22,7 @@
 	JConfig.numConstraintIterations =  2; // Number
 
 
-	jiglib.JConfig = JConfig; 
+	JigLib.JConfig = JConfig; 
 
-})(jiglib);
+})(JigLib);
 

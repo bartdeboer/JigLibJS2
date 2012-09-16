@@ -1,27 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var MaterialProperties = jiglib.MaterialProperties;
-	var PhysicsController = jiglib.PhysicsController;
-	var CachedImpulse = jiglib.CachedImpulse;
-	var PhysicsState = jiglib.PhysicsState;
-	var HingeJoint = jiglib.HingeJoint;
-	var BodyPair = jiglib.BodyPair;
-	var PhysicsSystem = jiglib.PhysicsSystem;
-	var Matrix3D = jiglib.Matrix3D;
-	var Vector3D = jiglib.Vector3D;
-	var JConfig = jiglib.JConfig;
-	var CollisionInfo = jiglib.CollisionInfo;
-	var CollisionSystemAbstract = jiglib.CollisionSystemAbstract;
-	var CollisionSystemGridEntry = jiglib.CollisionSystemGridEntry;
-	var CollOutData = jiglib.CollOutData;
-	var JAABox = jiglib.JAABox;
-	var JSegment = jiglib.JSegment;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var JCollisionEvent = jiglib.JCollisionEvent;
-	var JConstraint = jiglib.JConstraint;
 
 	var RigidBody = function(skin)
 	{
@@ -71,30 +50,30 @@
 		this.collisionSystem = null; // CollisionSystemAbstract
 		this.isActive = null; // Boolean
 
-		this._useDegrees = (JConfig.rotationType == "DEGREES") ? true : false;
+		this._useDegrees = (JigLib.JConfig.rotationType == "DEGREES") ? true : false;
 
-		this._id = RigidBody.idCounter++;
+		this._id = JigLib.RigidBody.idCounter++;
 
 		this._skin = skin;
-		this._material = new MaterialProperties();
+		this._material = new JigLib.MaterialProperties();
 
-		this._bodyInertia = new Matrix3D();
-		this._bodyInvInertia = JMatrix3D.getInverseMatrix(this._bodyInertia);
+		this._bodyInertia = new JigLib.Matrix3D();
+		this._bodyInvInertia = JigLib.JMatrix3D.getInverseMatrix(this._bodyInertia);
 
-		this._currState = new PhysicsState();
-		this._oldState = new PhysicsState();
-		this._storeState = new PhysicsState();
-		this._currLinVelocityAux = new Vector3D();
-		this._currRotVelocityAux = new Vector3D();
+		this._currState = new JigLib.PhysicsState();
+		this._oldState = new JigLib.PhysicsState();
+		this._storeState = new JigLib.PhysicsState();
+		this._currLinVelocityAux = new JigLib.Vector3D();
+		this._currRotVelocityAux = new JigLib.Vector3D();
 
-		this._force = new Vector3D();
-		this._torque = new Vector3D();
+		this._force = new JigLib.Vector3D();
+		this._torque = new JigLib.Vector3D();
 
-		this._invOrientation = JMatrix3D.getInverseMatrix(this._currState.orientation);
-		this._linVelDamping = new Vector3D(0.999, 0.999, 0.999);
-		this._rotVelDamping = new Vector3D(0.999, 0.999, 0.999);
-		this._maxLinVelocities = new Vector3D(JMath3D.NUM_HUGE,JMath3D.NUM_HUGE,JMath3D.NUM_HUGE);
-		this._maxRotVelocities = new Vector3D(JMath3D.NUM_HUGE,JMath3D.NUM_HUGE,JMath3D.NUM_HUGE);
+		this._invOrientation = JigLib.JMatrix3D.getInverseMatrix(this._currState.orientation);
+		this._linVelDamping = new JigLib.Vector3D(0.999, 0.999, 0.999);
+		this._rotVelDamping = new JigLib.Vector3D(0.999, 0.999, 0.999);
+		this._maxLinVelocities = new JigLib.Vector3D(JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE);
+		this._maxRotVelocities = new JigLib.Vector3D(JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE);
 
 		this._inactiveTime = 0;
 		this.isActive = true;
@@ -106,14 +85,14 @@
 		this._nonCollidables = [];
 		this._collideBodies = [];
 
-		this._storedPositionForActivation = new Vector3D();
+		this._storedPositionForActivation = new JigLib.Vector3D();
 		this._bodiesToBeActivatedOnMovement = [];
 		this._lastPositionForDeactivation = this._currState.position.clone();
 		this._lastOrientationForDeactivation = this._currState.orientation.clone();
 
 		this._type = "Object3D";
-		this._boundingSphere = JMath3D.NUM_HUGE;
-		this._boundingBox = new JAABox();
+		this._boundingSphere = JigLib.JMath3D.NUM_HUGE;
+		this._boundingBox = new JigLib.JAABox();
 		
 		this.externalData=null;
 		
@@ -137,9 +116,9 @@
 	{
 
 		var rotationVector = this._currState.orientation.decompose()[1];
-		this._rotationX = RigidBody.formatRotation(this.radiansToDegrees(rotationVector.x));
-		this._rotationY = RigidBody.formatRotation(this.radiansToDegrees(rotationVector.y));
-		this._rotationZ = RigidBody.formatRotation(this.radiansToDegrees(rotationVector.z));
+		this._rotationX = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.x));
+		this._rotationY = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.y));
+		this._rotationZ = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.z));
 		
 	}
 
@@ -194,31 +173,31 @@
 	RigidBody.prototype.pitch = function(rot)
 	{
 
-		this.setOrientation(JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JMatrix3D.getRotationMatrixAxis(rot, Vector3D.X_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.X_AXIS)));
 		
 	}
 
 	RigidBody.prototype.yaw = function(rot)
 	{
 
-		this.setOrientation(JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JMatrix3D.getRotationMatrixAxis(rot, Vector3D.Y_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.Y_AXIS)));
 		
 	}
 
 	RigidBody.prototype.roll = function(rot)
 	{
 
-		this.setOrientation(JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JMatrix3D.getRotationMatrixAxis(rot, Vector3D.Z_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.Z_AXIS)));
 		
 	}
 
 	RigidBody.prototype.createRotationMatrix = function()
 	{
 
-		var matrix3D = new Matrix3D();
-		matrix3D.appendRotation(this._rotationX, Vector3D.X_AXIS);
-		matrix3D.appendRotation(this._rotationY, Vector3D.Y_AXIS);
-		matrix3D.appendRotation(this._rotationZ, Vector3D.Z_AXIS);
+		var matrix3D = new JigLib.Matrix3D();
+		matrix3D.appendRotation(this._rotationX, JigLib.Vector3D.X_AXIS);
+		matrix3D.appendRotation(this._rotationY, JigLib.Vector3D.Y_AXIS);
+		matrix3D.appendRotation(this._rotationZ, JigLib.Vector3D.Z_AXIS);
 		return matrix3D;
 		
 	}
@@ -334,7 +313,7 @@
 		this._gravity = gravity;
 		this._gravityAxis = gravityAxis;
 		
-		this._gravityForce = JNumber3D.getScaleVector(this._gravity, this._mass);
+		this._gravityForce = JigLib.JNumber3D.getScaleVector(this._gravity, this._mass);
 		
 	}
 
@@ -406,7 +385,7 @@
 		{
 			return;
 		}
-		this._currState.linVelocity = this._currState.linVelocity.add(JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = pos.subtract(this._currState.position).crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -424,7 +403,7 @@
 		{
 			return;
 		}
-		this._currLinVelocityAux = this._currLinVelocityAux.add(JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = pos.subtract(this._currState.position).crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -442,7 +421,7 @@
 		{
 			return;
 		}
-		this._currState.linVelocity = this._currState.linVelocity.add(JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = delta.crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -460,7 +439,7 @@
 		{
 			return;
 		}
-		this._currLinVelocityAux = this._currLinVelocityAux.add(JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = delta.crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -476,9 +455,9 @@
 		if (!this._movable || !this.isActive)
 			return;
 
-		this._currState.linVelocity = this._currState.linVelocity.add(JNumber3D.getScaleVector(this._force, this._invMass * dt));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(this._force, this._invMass * dt));
 
-		var rac = JNumber3D.getScaleVector(this._torque, dt);
+		var rac = JigLib.JNumber3D.getScaleVector(this._torque, dt);
 		rac = this._worldInvInertia.transformVector(rac);
 		this._currState.rotVelocity = this._currState.rotVelocity.add(rac);
 		
@@ -495,7 +474,7 @@
 		   var angMomBefore = this._currState.rotVelocity.clone();
 		   angMomBefore = this._worldInertia.transformVector(angMomBefore);
 
-		   this._currState.position = this._currState.position.add(JNumber3D.getScaleVector(this._currState.linVelocity, dt));
+		   this._currState.position = this._currState.position.add(JigLib.JNumber3D.getScaleVector(this._currState.linVelocity, dt));
 
 		   var dir = this._currState.rotVelocity.clone();
 		   var ang = dir.get_length();
@@ -503,8 +482,8 @@
 		   {
 		   dir.normalize();
 		   ang *= dt;
-		   var rot = JMatrix3D.rotationMatrix(dir.x, dir.y, dir.z, ang);
-		   this._currState.orientation = JMatrix3D.getMatrix3D(JMatrix3D.multiply(rot, JMatrix3D.getJMatrix3D(this._currState.orientation)));
+		   var rot = JigLib.JMatrix3D.rotationMatrix(dir.x, dir.y, dir.z, ang);
+		   this._currState.orientation = JigLib.JMatrix3D.getMatrix3D(JigLib.JMatrix3D.multiply(rot, JigLib.JMatrix3D.getJMatrix3D(this._currState.orientation)));
 		   this.updateInertia();
 		   }
 
@@ -526,13 +505,13 @@
 		var ga = this._gravityAxis;
 		if (ga != -1)
 		{
-			var arr = JNumber3D.toArray(this._currLinVelocityAux);
+			var arr = JigLib.JNumber3D.toArray(this._currLinVelocityAux);
 			arr[(ga + 1) % 3] *= 0.1;
 			arr[(ga + 2) % 3] *= 0.1;
-			JNumber3D.copyFromArray(this._currLinVelocityAux, arr);
+			JigLib.JNumber3D.copyFromArray(this._currLinVelocityAux, arr);
 		}
 
-		this._currState.position = this._currState.position.add(JNumber3D.getScaleVector(this._currState.linVelocity.add(this._currLinVelocityAux), dt));
+		this._currState.position = this._currState.position.add(JigLib.JNumber3D.getScaleVector(this._currState.linVelocity.add(this._currLinVelocityAux), dt));
 
 		var dir = this._currState.rotVelocity.add(this._currRotVelocityAux);
 		var ang = dir.get_length() * 180 / Math.PI;
@@ -542,8 +521,8 @@
 			ang *= dt;
 
 
-			var rot = JMatrix3D.getRotationMatrix(dir.x, dir.y, dir.z, ang);
-			this._currState.orientation = JMatrix3D.getAppendMatrix3D(this._currState.orientation, rot);
+			var rot = JigLib.JMatrix3D.getRotationMatrix(dir.x, dir.y, dir.z, ang);
+			this._currState.orientation = JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, rot);
 
 			this.updateInertia();
 		}
@@ -562,17 +541,17 @@
 			return;
 		}
 		
-		if (this._currState.position.subtract(this._lastPositionForDeactivation).get_length() > JConfig.posThreshold)
+		if (this._currState.position.subtract(this._lastPositionForDeactivation).get_length() > JigLib.JConfig.posThreshold)
 		{
 			this._lastPositionForDeactivation = this._currState.position.clone();
 			this._inactiveTime = 0;
 			return;
 		}
 
-		var ot = JConfig.orientThreshold;
-		var deltaMat = JMatrix3D.getSubMatrix(this._currState.orientation, this._lastOrientationForDeactivation);
+		var ot = JigLib.JConfig.orientThreshold;
+		var deltaMat = JigLib.JMatrix3D.getSubMatrix(this._currState.orientation, this._lastOrientationForDeactivation);
 
-		var cols = JMatrix3D.getCols(deltaMat);
+		var cols = JigLib.JMatrix3D.getCols(deltaMat);
 
 		if (cols[0].get_length() > ot || cols[1].get_length() > ot || cols[2].get_length() > ot)
 		{
@@ -587,7 +566,7 @@
 		}
 
 		this._inactiveTime += dt;
-		if (this._inactiveTime > JConfig.deactivationTime)
+		if (this._inactiveTime > JigLib.JConfig.deactivationTime)
 		{
 			this._lastPositionForDeactivation = this._currState.position.clone();
 			this._lastOrientationForDeactivation = this._currState.orientation.clone();
@@ -630,7 +609,7 @@
 		this.setInertia(this.getInertiaProperties(m));
 		
 		// this.get_mass() is dirty have to recalculate gravity this.get_force()
-		var physicsSystem = PhysicsSystem.getInstance();
+		var physicsSystem = JigLib.PhysicsSystem.getInstance();
 		this.updateGravity(physicsSystem.get_gravity(), physicsSystem.get_gravityAxis());
 		
 	}
@@ -639,7 +618,7 @@
 	{
 
 		this._bodyInertia = matrix3D.clone();
-		this._bodyInvInertia = JMatrix3D.getInverseMatrix(this._bodyInertia.clone());
+		this._bodyInvInertia = JigLib.JMatrix3D.getInverseMatrix(this._bodyInertia.clone());
 
 		this.updateInertia();
 		
@@ -648,11 +627,11 @@
 	RigidBody.prototype.updateInertia = function()
 	{
 
-		this._invOrientation = JMatrix3D.getTransposeMatrix(this._currState.orientation);
+		this._invOrientation = JigLib.JMatrix3D.getTransposeMatrix(this._currState.orientation);
 
-		this._worldInertia = JMatrix3D.getAppendMatrix3D(this._invOrientation, JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInertia));
+		this._worldInertia = JigLib.JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInertia));
 
-		this._worldInvInertia = JMatrix3D.getAppendMatrix3D(this._invOrientation, JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInvInertia));
+		this._worldInvInertia = JigLib.JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInvInertia));
 		
 	}
 
@@ -706,7 +685,7 @@
 	{
 
 		if (this._movable) {
-			this._inactiveTime = JConfig.deactivationTime;
+			this._inactiveTime = JigLib.JConfig.deactivationTime;
 			this.isActive = false;
 		}
 		
@@ -729,14 +708,14 @@
 	RigidBody.prototype.getShouldBeActive = function()
 	{
 
-		return ((this._currState.linVelocity.get_length() > JConfig.velThreshold) || (this._currState.rotVelocity.get_length() > JConfig.angVelThreshold));
+		return ((this._currState.linVelocity.get_length() > JigLib.JConfig.velThreshold) || (this._currState.rotVelocity.get_length() > JigLib.JConfig.angVelThreshold));
 		
 	}
 
 	RigidBody.prototype.getShouldBeActiveAux = function()
 	{
 
-		return ((this._currLinVelocityAux.get_length() > JConfig.velThreshold) || (this._currRotVelocityAux.get_length() > JConfig.angVelThreshold));
+		return ((this._currLinVelocityAux.get_length() > JigLib.JConfig.velThreshold) || (this._currRotVelocityAux.get_length() > JigLib.JConfig.angVelThreshold));
 		
 	}
 
@@ -758,7 +737,7 @@
 		this._currRotVelocityAux.z *= this._rotVelDamping.z;
 
 		var r = 0.5;
-		var frac = this._inactiveTime / JConfig.deactivationTime;
+		var frac = this._inactiveTime / JigLib.JConfig.deactivationTime;
 		if (frac < r)
 			return;
 
@@ -780,7 +759,7 @@
 	RigidBody.prototype.doMovementActivations = function(physicsSystem)
 	{
 
-		if (this._bodiesToBeActivatedOnMovement.length == 0 || this._currState.position.subtract(this._storedPositionForActivation).get_length() < JConfig.posThreshold)
+		if (this._bodiesToBeActivatedOnMovement.length == 0 || this._currState.position.subtract(this._storedPositionForActivation).get_length() < JigLib.JConfig.posThreshold)
 			return;
 
 		for (var _bodiesToBeActivatedOnMovement_i = 0, _bodiesToBeActivatedOnMovement_l = this._bodiesToBeActivatedOnMovement.length, body; (_bodiesToBeActivatedOnMovement_i < _bodiesToBeActivatedOnMovement_l) && (body = this._bodiesToBeActivatedOnMovement[_bodiesToBeActivatedOnMovement_i]); _bodiesToBeActivatedOnMovement_i++)
@@ -826,7 +805,7 @@
 	RigidBody.prototype.getInertiaProperties = function(m)
 	{
 
-		return new Matrix3D();
+		return new JigLib.Matrix3D();
 		
 	}
 
@@ -1048,9 +1027,9 @@
 	RigidBody.prototype.set_linVelocityDamping = function(vel)
 	{
 
-		this._linVelDamping.x = JMath3D.getLimiteNumber(vel.x, 0, 1);
-		this._linVelDamping.y = JMath3D.getLimiteNumber(vel.y, 0, 1);
-		this._linVelDamping.z = JMath3D.getLimiteNumber(vel.z, 0, 1);
+		this._linVelDamping.x = JigLib.JMath3D.getLimiteNumber(vel.x, 0, 1);
+		this._linVelDamping.y = JigLib.JMath3D.getLimiteNumber(vel.y, 0, 1);
+		this._linVelDamping.z = JigLib.JMath3D.getLimiteNumber(vel.z, 0, 1);
 		
 	}
 
@@ -1064,9 +1043,9 @@
 	RigidBody.prototype.set_rotVelocityDamping = function(vel)
 	{
 
-		this._rotVelDamping.x = JMath3D.getLimiteNumber(vel.x, 0, 1);
-		this._rotVelDamping.y = JMath3D.getLimiteNumber(vel.y, 0, 1);
-		this._rotVelDamping.z = JMath3D.getLimiteNumber(vel.z, 0, 1);
+		this._rotVelDamping.x = JigLib.JMath3D.getLimiteNumber(vel.x, 0, 1);
+		this._rotVelDamping.y = JigLib.JMath3D.getLimiteNumber(vel.y, 0, 1);
+		this._rotVelDamping.z = JigLib.JMath3D.getLimiteNumber(vel.z, 0, 1);
 		
 	}
 
@@ -1080,7 +1059,7 @@
 	RigidBody.prototype.set_maxLinVelocities = function(vel)
 	{
 
-		this._maxLinVelocities = new Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
+		this._maxLinVelocities = new JigLib.Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
 		
 	}
 
@@ -1094,7 +1073,7 @@
 	RigidBody.prototype.set_maxRotVelocities = function(vel)
 	{
 
-		this._maxRotVelocities = new Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
+		this._maxRotVelocities = new JigLib.Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
 		
 	}
 
@@ -1108,9 +1087,9 @@
 	RigidBody.prototype.limitVel = function()
 	{
 
-		this._currState.linVelocity.x = JMath3D.getLimiteNumber(this._currState.linVelocity.x, -this._maxLinVelocities.x, this._maxLinVelocities.x);
-		this._currState.linVelocity.y = JMath3D.getLimiteNumber(this._currState.linVelocity.y, -this._maxLinVelocities.y, this._maxLinVelocities.y);
-		this._currState.linVelocity.z = JMath3D.getLimiteNumber(this._currState.linVelocity.z, -this._maxLinVelocities.z, this._maxLinVelocities.z);
+		this._currState.linVelocity.x = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.x, -this._maxLinVelocities.x, this._maxLinVelocities.x);
+		this._currState.linVelocity.y = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.y, -this._maxLinVelocities.y, this._maxLinVelocities.y);
+		this._currState.linVelocity.z = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.z, -this._maxLinVelocities.z, this._maxLinVelocities.z);
 		
 	}
 
@@ -1123,7 +1102,7 @@
 		var f = Math.max(fx, fy, fz);
 
 		if (f > 1)
-			this._currState.rotVelocity = JNumber3D.getDivideVector(this._currState.rotVelocity, f);
+			this._currState.rotVelocity = JigLib.JNumber3D.getDivideVector(this._currState.rotVelocity, f);
 		
 	}
 
@@ -1139,7 +1118,7 @@
 
 		if (this._skin)
 		{
-			this._skin.transform = JMatrix3D.getAppendMatrix3D(this._currState.orientation, JMatrix3D.getTranslationMatrix(this._currState.position.x, this._currState.position.y, this._currState.position.z));
+			this._skin.transform = JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, JigLib.JMatrix3D.getTranslationMatrix(this._currState.position.x, this._currState.position.y, this._currState.position.z));
 		}
 		
 	}
@@ -1161,7 +1140,7 @@
 	RigidBody.prototype.set_restitution = function(restitution)
 	{
 
-		this._material.restitution = JMath3D.getLimiteNumber(restitution, 0, 1);
+		this._material.restitution = JigLib.JMath3D.getLimiteNumber(restitution, 0, 1);
 		
 	}
 
@@ -1175,7 +1154,7 @@
 	RigidBody.prototype.set_friction = function(friction)
 	{
 
-		this._material.friction = JMath3D.getLimiteNumber(friction, 0, 1);
+		this._material.friction = JigLib.JMath3D.getLimiteNumber(friction, 0, 1);
 		
 	}
 
@@ -1199,7 +1178,7 @@
 	}
 
 
-	jiglib.RigidBody = RigidBody; 
+	JigLib.RigidBody = RigidBody; 
 
-})(jiglib);
+})(JigLib);
 

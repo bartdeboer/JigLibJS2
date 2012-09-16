@@ -1,34 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollDetectBoxPlane = jiglib.CollDetectBoxPlane;
-	var CollDetectBoxMesh = jiglib.CollDetectBoxMesh;
-	var CollDetectBoxBox = jiglib.CollDetectBoxBox;
-	var CollDetectSphereTerrain = jiglib.CollDetectSphereTerrain;
-	var CollDetectSphereBox = jiglib.CollDetectSphereBox;
-	var CollDetectCapsuleTerrain = jiglib.CollDetectCapsuleTerrain;
-	var CollDetectSphereCapsule = jiglib.CollDetectSphereCapsule;
-	var CollisionSystemBrute = jiglib.CollisionSystemBrute;
-	var CollDetectCapsuleBox = jiglib.CollDetectCapsuleBox;
-	var CollDetectSphereMesh = jiglib.CollDetectSphereMesh;
-	var CollDetectBoxTerrain = jiglib.CollDetectBoxTerrain;
-	var CollDetectFunctor = jiglib.CollDetectFunctor;
-	var CollDetectCapsuleCapsule = jiglib.CollDetectCapsuleCapsule;
-	var CollPointInfo = jiglib.CollPointInfo;
-	var CollisionInfo = jiglib.CollisionInfo;
-	var CollDetectCapsulePlane = jiglib.CollDetectCapsulePlane;
-	var CollDetectInfo = jiglib.CollDetectInfo;
-	var CollDetectSphereSphere = jiglib.CollDetectSphereSphere;
-	var CollisionSystemGridEntry = jiglib.CollisionSystemGridEntry;
-	var CollDetectSpherePlane = jiglib.CollDetectSpherePlane;
-	var CollisionSystemAbstract = jiglib.CollisionSystemAbstract;
-	var Vector3D = jiglib.Vector3D;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var JAABox = jiglib.JAABox;
-	var JSegment = jiglib.JSegment;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var RigidBody = jiglib.RigidBody;
 
 	var CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 	{
@@ -45,7 +17,7 @@
 		this.sizeZ = null; // Number
 		this.minDelta = null; // Number
 
-		jiglib.CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 		this.nx = nx; this.ny = ny; this.nz = nz;
 		this.dx = dx; this.dy = dy; this.dz = dz;
@@ -54,24 +26,24 @@
 		this.sizeZ = nz * dz;
 		this.minDelta = Math.min(dx, dy, dz);
 		
-		this.startPoint = new Vector3D(sx, sy, sz);
+		this.startPoint = new JigLib.Vector3D(sx, sy, sz);
 		
 		this.gridEntries = [];
 		
 		var len=this.gridEntries.length;
 		for (var j = 0; j < len; ++j)
 		{
-			var gridEntry = new CollisionSystemGridEntry(null);
+			var gridEntry = new JigLib.CollisionSystemGridEntry(null);
 			gridEntry.gridIndex = j;
 			this.gridEntries[j]=gridEntry;
 		}
 		
-		this.overflowEntries = new CollisionSystemGridEntry(null);
+		this.overflowEntries = new JigLib.CollisionSystemGridEntry(null);
 		this.overflowEntries.gridIndex = -1;
 		
 	}
 
-	jiglib.extend(CollisionSystemGrid, CollisionSystemAbstract);
+	JigLib.extend(CollisionSystemGrid, JigLib.CollisionSystemAbstract);
 
 	CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
 	{
@@ -93,19 +65,19 @@
 		if ((sides.x > this.dx) || (sides.y > this.dy) || (sides.z > this.dz))
 		{
 			i = j = k = -1;
-			return new Vector3D(i,j,k);
+			return new JigLib.Vector3D(i,j,k);
 		}
 		
 		var min = colBody.get_boundingBox().minPos.clone();
-		min.x = JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		i =  ((min.x - this.startPoint.x) / this.dx) % this.nx;
 		j =  ((min.y - this.startPoint.y) / this.dy) % this.ny;
 		k =  ((min.z - this.startPoint.z) / this.dz) % this.nz;
 		
-		return new Vector3D(i,j,k);
+		return new JigLib.Vector3D(i,j,k);
 		
 	}
 
@@ -129,9 +101,9 @@
 		
 		var min = colBody.get_boundingBox().minPos.clone();
 
-		min.x = JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		fi = (min.x - this.startPoint.x) / this.dx;
 		fj = (min.y - this.startPoint.y) / this.dy;
@@ -179,11 +151,11 @@
 		body.collisionSystem = this;
 
 		// also do the grid stuff - for now put it on the overflow list
-		var entry = new CollisionSystemGridEntry(body);
+		var entry = new JigLib.CollisionSystemGridEntry(body);
 		body.externalData = entry;
 		
 		// add entry to the start of the list
-		CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
 		this.collisionSkinMoved(body);
 		
 	}
@@ -194,7 +166,7 @@
 		if (body.externalData != null)
 		{
 			body.externalData.collisionBody = null;
-			CollisionSystemGridEntry.removeGridEntry(body.externalData);
+			JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			body.externalData = null;
 		}
 
@@ -210,7 +182,7 @@
 			if (body.externalData != null)
 			{
 				body.externalData.collisionBody = null;
-				CollisionSystemGridEntry.removeGridEntry(body.externalData);
+				JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			}
 		}
 		this.collBody.length=0;
@@ -241,8 +213,8 @@
 		else
 			start = this.overflowEntries;
 		
-		CollisionSystemGridEntry.removeGridEntry(entry);
-		CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
+		JigLib.CollisionSystemGridEntry.removeGridEntry(entry);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
 		
 	}
 
@@ -341,7 +313,7 @@
 				
 				if (this.checkCollidables(body, entry.collisionBody) && this.detectionFunctors[bodyType + "_" + entry.collisionBody.get_type()] != undefined)
 				{
-					info = new CollDetectInfo();
+					info = new JigLib.CollDetectInfo();
 					info.body0 = body;
 					info.body1 = entry.collisionBody;
 					fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -356,7 +328,7 @@
 
 
 
-	jiglib.CollisionSystemGrid = CollisionSystemGrid; 
+	JigLib.CollisionSystemGrid = CollisionSystemGrid; 
 
-})(jiglib);
+})(JigLib);
 

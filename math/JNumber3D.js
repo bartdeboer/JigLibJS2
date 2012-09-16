@@ -1,10 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var Vector3D = jiglib.Vector3D;
 
 	var JNumber3D = function()
 	{
@@ -37,7 +33,7 @@
 	JNumber3D.getScaleVector = function(v, s)
 	{
 
-			return new Vector3D(v.x*s,v.y*s,v.z*s,v.w);
+			return new JigLib.Vector3D(v.x*s,v.y*s,v.z*s,v.w);
 		
 	}
 
@@ -46,11 +42,11 @@
 
 			if (w != 0)
 			{
-				return new Vector3D(v.x / w, v.y / w, v.z / w);
+				return new JigLib.Vector3D(v.x / w, v.y / w, v.z / w);
 			}
 			else
 			{
-				return new Vector3D(0, 0, 0);
+				return new JigLib.Vector3D(0, 0, 0);
 			}
 		
 	}
@@ -68,7 +64,7 @@
 	}
 
 
-	jiglib.JNumber3D = JNumber3D; 
+	JigLib.JNumber3D = JNumber3D; 
 
-})(jiglib);
+})(JigLib);
 

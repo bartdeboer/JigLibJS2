@@ -1,4 +1,4 @@
-(function(jiglib) {
+(function(JigLib) {
 
 	// var mat4 = jigLib.mat4;	
 	
@@ -170,6 +170,6 @@
 	};	
 	
 	
-	jiglib.Matrix3D = Matrix3D;
+	JigLib.Matrix3D = Matrix3D;
 	
-})(jiglib);
+})(JigLib);

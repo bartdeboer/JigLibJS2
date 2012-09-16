@@ -1,14 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollOutData = jiglib.CollOutData;
-	var ContactData = jiglib.ContactData;
-	var PlaneData = jiglib.PlaneData;
-	var EdgeData = jiglib.EdgeData;
-	var TerrainData = jiglib.TerrainData;
-	var OctreeCell = jiglib.OctreeCell;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var SpanData = jiglib.SpanData;
 
 	var TriangleVertexIndices = function(_i0, _i1, _i2)
 	{
@@ -24,7 +16,7 @@
 
 
 
-	jiglib.TriangleVertexIndices = TriangleVertexIndices; 
+	JigLib.TriangleVertexIndices = TriangleVertexIndices; 
 
-})(jiglib);
+})(JigLib);
 

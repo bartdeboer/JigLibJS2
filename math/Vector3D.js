@@ -1,10 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
 
 	var Vector3D = function()
 	{
@@ -42,7 +38,7 @@
 
 
 
-	jiglib.Vector3D = Vector3D; 
+	JigLib.Vector3D = Vector3D; 
 
-})(jiglib);
+})(JigLib);
 

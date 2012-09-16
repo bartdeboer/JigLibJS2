@@ -1,7 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var RigidBody = jiglib.RigidBody;
 
 	var JCollisionEvent = function(type)
 	{
@@ -15,7 +14,7 @@
 	JCollisionEvent.COLLISION_END =  "collisionEnd"; // String
 
 
-	jiglib.JCollisionEvent = JCollisionEvent; 
+	JigLib.JCollisionEvent = JCollisionEvent; 
 
-})(jiglib);
+})(JigLib);
 

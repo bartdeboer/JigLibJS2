@@ -1,25 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSphere = jiglib.JSphere;
-	var JSegment = jiglib.JSegment;
-	var RigidBody = jiglib.RigidBody;
-	var Vector3D = jiglib.Vector3D;
-	var CollOutData = jiglib.CollOutData;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var PhysicsState = jiglib.PhysicsState;
 
 	var JPlane = function(skin, initNormal)
 	{
@@ -27,23 +8,23 @@
 		this._normal = null; // Vector3D
 		this._distance = null; // Number
 
-		jiglib.RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 
-		this._initNormal = initNormal ? initNormal.clone() : new Vector3D(0, 0, -1);
+		this._initNormal = initNormal ? initNormal.clone() : new JigLib.Vector3D(0, 0, -1);
 		this._normal = this._initNormal.clone();
 
 		this._distance = 0;
 		this.set_movable(false);
 		
-		var huge=JMath3D.NUM_HUGE;
-		this._boundingBox.minPos = new Vector3D(-huge, -huge, -huge);
-		this._boundingBox.maxPos = new Vector3D(huge, huge, huge);
+		var huge=JigLib.JMath3D.NUM_HUGE;
+		this._boundingBox.minPos = new JigLib.Vector3D(-huge, -huge, -huge);
+		this._boundingBox.maxPos = new JigLib.Vector3D(huge, huge, huge);
 
 		this._type = "PLANE";
 		
 	}
 
-	jiglib.extend(JPlane, RigidBody);
+	JigLib.extend(JPlane, JigLib.RigidBody);
 
 	JPlane.prototype.get_normal = function()
 	{
@@ -70,13 +51,13 @@
 	{
 
 		out.frac = 0;
-		out.position = new Vector3D();
-		out.normal = new Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
 		var frac = 0, t, denom;
 
 		denom = this._normal.dotProduct(seg.delta);
-		if (Math.abs(denom) > JMath3D.NUM_TINY)
+		if (Math.abs(denom) > JigLib.JMath3D.NUM_TINY)
 		{
 			t = -1 * (this._normal.dotProduct(seg.origin) - this._distance) / denom;
 
@@ -104,7 +85,7 @@
 	JPlane.prototype.updateState = function()
 	{
 
-		jiglib.RigidBody.prototype.updateState.apply(this, [  ]);
+		JigLib.RigidBody.prototype.updateState.apply(this, [  ]);
 
 		this._normal = this._currState.orientation.transformVector(this._initNormal);
 		this._distance = this._currState.position.dotProduct(this._normal);
@@ -113,7 +94,7 @@
 
 
 
-	jiglib.JPlane = JPlane; 
+	JigLib.JPlane = JPlane; 
 
-})(jiglib);
+})(JigLib);
 

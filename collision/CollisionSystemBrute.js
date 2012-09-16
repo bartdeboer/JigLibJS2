@@ -1,37 +1,15 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollDetectBoxPlane = jiglib.CollDetectBoxPlane;
-	var CollDetectBoxMesh = jiglib.CollDetectBoxMesh;
-	var CollDetectBoxBox = jiglib.CollDetectBoxBox;
-	var CollDetectSphereTerrain = jiglib.CollDetectSphereTerrain;
-	var CollDetectSphereBox = jiglib.CollDetectSphereBox;
-	var CollDetectCapsuleTerrain = jiglib.CollDetectCapsuleTerrain;
-	var CollDetectSphereCapsule = jiglib.CollDetectSphereCapsule;
-	var CollDetectCapsuleBox = jiglib.CollDetectCapsuleBox;
-	var CollDetectSphereMesh = jiglib.CollDetectSphereMesh;
-	var CollDetectBoxTerrain = jiglib.CollDetectBoxTerrain;
-	var CollDetectFunctor = jiglib.CollDetectFunctor;
-	var CollisionSystemGrid = jiglib.CollisionSystemGrid;
-	var CollDetectCapsuleCapsule = jiglib.CollDetectCapsuleCapsule;
-	var CollPointInfo = jiglib.CollPointInfo;
-	var CollisionInfo = jiglib.CollisionInfo;
-	var CollDetectCapsulePlane = jiglib.CollDetectCapsulePlane;
-	var CollDetectInfo = jiglib.CollDetectInfo;
-	var CollDetectSphereSphere = jiglib.CollDetectSphereSphere;
-	var CollisionSystemGridEntry = jiglib.CollisionSystemGridEntry;
-	var CollDetectSpherePlane = jiglib.CollDetectSpherePlane;
-	var CollisionSystemAbstract = jiglib.CollisionSystemAbstract;
-	var RigidBody = jiglib.RigidBody;
 
 	var CollisionSystemBrute = function()
 	{
 
-		jiglib.CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 	}
 
-	jiglib.extend(CollisionSystemBrute, CollisionSystemAbstract);
+	JigLib.extend(CollisionSystemBrute, JigLib.CollisionSystemAbstract);
 
 	CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
 	{
@@ -61,7 +39,7 @@
 				
 				if (this.checkCollidables(_body, _collBody) && this.detectionFunctors[bodyType + "_" + _collBody.get_type()] != undefined)
 				{
-				info = new CollDetectInfo();
+				info = new JigLib.CollDetectInfo();
 				info.body0 = _body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -75,7 +53,7 @@
 
 
 
-	jiglib.CollisionSystemBrute = CollisionSystemBrute; 
+	JigLib.CollisionSystemBrute = CollisionSystemBrute; 
 
-})(jiglib);
+})(JigLib);
 

@@ -1,10 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var Vector3D = jiglib.Vector3D;
 
 	var JMatrix3D = function()
 	{
@@ -14,7 +10,7 @@
 	JMatrix3D.getTranslationMatrix = function(x, y, z)
 	{
 
-			var matrix3D = new Matrix3D();
+			var matrix3D = new JigLib.Matrix3D();
 			matrix3D.appendTranslation(x, y, z);
 			return matrix3D;
 		
@@ -23,7 +19,7 @@
 	JMatrix3D.getScaleMatrix = function(x, y, z)
 	{
 
-			var matrix3D = new Matrix3D();
+			var matrix3D = new JigLib.Matrix3D();
 			matrix3D.prependScale(x, y, z);
 			return matrix3D;
 		
@@ -32,8 +28,8 @@
 	JMatrix3D.getRotationMatrix = function(x, y, z, degree, pivotPoint)
 	{
 
-			var matrix3D = new Matrix3D();
-			matrix3D.appendRotation(degree, new Vector3D(x,y,z),pivotPoint);
+			var matrix3D = new JigLib.Matrix3D();
+			matrix3D.appendRotation(degree, new JigLib.Vector3D(x,y,z),pivotPoint);
 			return matrix3D;
 		
 	}
@@ -79,7 +75,7 @@
 
 			var ar = a.get_rawData();
 			var br = b.get_rawData();
-			return new Matrix3D([[
+			return new JigLib.Matrix3D([[
 				ar[0] - br[0],
 				ar[1] - br[1],
 				ar[2] - br[2],
@@ -103,8 +99,8 @@
 	JMatrix3D.getRotationMatrixAxis = function(degree, rotateAxis)
 	{
 
-    		var matrix3D = new Matrix3D();
-    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:Vector3D.X_AXIS);
+    		var matrix3D = new JigLib.Matrix3D();
+    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:JigLib.Vector3D.X_AXIS);
     		return matrix3D;
 		
 	}
@@ -115,9 +111,9 @@
 			var rawData =  matrix3D.get_rawData();
 			var cols = [];
 			
-			cols[0] = new Vector3D(rawData[0], rawData[4], rawData[8]);
-			cols[1] = new Vector3D(rawData[1], rawData[5], rawData[9]);
-			cols[2] = new Vector3D(rawData[2], rawData[6], rawData[10]);
+			cols[0] = new JigLib.Vector3D(rawData[0], rawData[4], rawData[8]);
+			cols[1] = new JigLib.Vector3D(rawData[1], rawData[5], rawData[9]);
+			cols[2] = new JigLib.Vector3D(rawData[2], rawData[6], rawData[10]);
 			
 			return cols;
 		
@@ -145,7 +141,7 @@
 	}
 
 
-	jiglib.JMatrix3D = JMatrix3D; 
+	JigLib.JMatrix3D = JMatrix3D; 
 
-})(jiglib);
+})(JigLib);
 

@@ -1,21 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSphere = jiglib.JSphere;
-	var JSegment = jiglib.JSegment;
-	var Vector3D = jiglib.Vector3D;
-	var EdgeData = jiglib.EdgeData;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
 
 	var JAABox = function()
 	{
@@ -39,7 +24,7 @@
 	{
 
 		var pos = this.minPos.clone();
-		return JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
+		return JigLib.JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
 		
 	}
 
@@ -49,16 +34,16 @@
 		var center, halfSide;
 		var points;
 		center = this.get_centrePos();
-		halfSide = JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
+		halfSide = JigLib.JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
 		points = [];
-		points[0] = center.add(new Vector3D(halfSide.x, -halfSide.y, halfSide.z));
-		points[1] = center.add(new Vector3D(halfSide.x, halfSide.y, halfSide.z));
-		points[2] = center.add(new Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
-		points[3] = center.add(new Vector3D(-halfSide.x, halfSide.y, halfSide.z));
-		points[4] = center.add(new Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
-		points[5] = center.add(new Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
-		points[6] = center.add(new Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
-		points[7] = center.add(new Vector3D(halfSide.x, halfSide.y, -halfSide.z));
+		points[0] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, halfSide.z));
+		points[1] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, halfSide.z));
+		points[2] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
+		points[3] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, halfSide.z));
+		points[4] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
+		points[5] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
+		points[6] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
+		points[7] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, -halfSide.z));
 		
 		return points;
 		
@@ -68,10 +53,10 @@
 	{
 
 		return [
-		new EdgeData( 0, 1 ), new EdgeData( 0, 2 ), new EdgeData( 0, 6 ),
-		new EdgeData( 2, 3 ), new EdgeData( 2, 4 ), new EdgeData( 6, 7 ),
-		new EdgeData( 6, 4 ), new EdgeData( 1, 3 ), new EdgeData( 1, 7 ),
-		new EdgeData( 3, 5 ), new EdgeData( 7, 5 ), new EdgeData( 4, 5 )];
+		new JigLib.EdgeData( 0, 1 ), new JigLib.EdgeData( 0, 2 ), new JigLib.EdgeData( 0, 6 ),
+		new JigLib.EdgeData( 2, 3 ), new JigLib.EdgeData( 2, 4 ), new JigLib.EdgeData( 6, 7 ),
+		new JigLib.EdgeData( 6, 4 ), new JigLib.EdgeData( 1, 3 ), new JigLib.EdgeData( 1, 7 ),
+		new JigLib.EdgeData( 3, 5 ), new JigLib.EdgeData( 7, 5 ), new JigLib.EdgeData( 4, 5 )];
 		
 	}
 
@@ -93,16 +78,16 @@
 	JAABox.prototype.clear = function()
 	{
 
-		var huge=JMath3D.NUM_HUGE;
-		this.minPos = new Vector3D(huge, huge, huge);
-		this.maxPos = new Vector3D( -huge, -huge, -huge);
+		var huge=JigLib.JMath3D.NUM_HUGE;
+		this.minPos = new JigLib.Vector3D(huge, huge, huge);
+		this.maxPos = new JigLib.Vector3D( -huge, -huge, -huge);
 		
 	}
 
 	JAABox.prototype.clone = function()
 	{
 
-		var aabb = new JAABox();
+		var aabb = new JigLib.JAABox();
 		aabb.minPos = this.minPos.clone();
 		aabb.maxPos = this.maxPos.clone();
 		return aabb;
@@ -112,7 +97,7 @@
 	JAABox.prototype.addPoint = function(pos)
 	{
 
-		var tiny=JMath3D.NUM_TINY;
+		var tiny=JigLib.JMath3D.NUM_TINY;
 		if (pos.x < this.minPos.x) this.minPos.x = pos.x - tiny;
 		if (pos.x > this.maxPos.x) this.maxPos.x = pos.x + tiny;
 		if (pos.y < this.minPos.y) this.minPos.y = pos.y - tiny;
@@ -264,13 +249,13 @@
 	{
 
 		var jDir, kDir, i, iFace;
-		var frac, dist0, dist1, tiny=JMath3D.NUM_TINY;
+		var frac, dist0, dist1, tiny=JigLib.JMath3D.NUM_TINY;
 		
 		var pt, minPosArr, maxPosArr, p0, p1, faceOffsets;
-		minPosArr = JNumber3D.toArray(this.minPos);
-		maxPosArr = JNumber3D.toArray(this.maxPos);
-		p0 = JNumber3D.toArray(seg.origin);
-		p1 = JNumber3D.toArray(seg.getEnd());
+		minPosArr = JigLib.JNumber3D.toArray(this.minPos);
+		maxPosArr = JigLib.JNumber3D.toArray(this.maxPos);
+		p0 = JigLib.JNumber3D.toArray(seg.origin);
+		p1 = JigLib.JNumber3D.toArray(seg.getEnd());
 		for (i = 0; i < 3; i++ ) {
 			jDir = (i + 1) % 3;
 			kDir = (i + 2) % 3;
@@ -288,7 +273,7 @@
 				frac = 1;
 				
 				if (frac >= 0) {
-				pt = JNumber3D.toArray(seg.getPoint(frac));
+				pt = JigLib.JNumber3D.toArray(seg.getPoint(frac));
 				if((pt[jDir] > minPosArr[jDir] - tiny) && 
 				(pt[jDir] < maxPosArr[jDir] + tiny) && 
 				(pt[kDir] > minPosArr[kDir] - tiny) && 
@@ -304,7 +289,7 @@
 
 
 
-	jiglib.JAABox = JAABox; 
+	JigLib.JAABox = JAABox; 
 
-})(jiglib);
+})(JigLib);
 

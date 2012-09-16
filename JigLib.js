@@ -1,7 +1,7 @@
 
-jiglib = {};
+JigLib = {};
 
-jiglib.extend = function(dest, source)
+JigLib.extend = function(dest, source)
 {
 	for (proto in source.prototype)
 	{

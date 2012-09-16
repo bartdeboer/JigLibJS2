@@ -1,4 +1,4 @@
-(function(jiglib) {
+(function(JigLib) {
 
 	Vector3D = function(x, y, z, w) 
 	{
@@ -219,6 +219,6 @@
 	Vector3D.Z_AXIS = new Vector3D(0, 0, 1, 0);
 
 
-	jiglib.Vector3D = Vector3D;
+	JigLib.Vector3D = Vector3D;
 
-})(jiglib);
+})(JigLib);

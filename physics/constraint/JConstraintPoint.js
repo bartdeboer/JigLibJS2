@@ -1,16 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JConstraintWorldPoint = jiglib.JConstraintWorldPoint;
-	var JConstraintMaxDistance = jiglib.JConstraintMaxDistance;
-	var JConstraint = jiglib.JConstraint;
-	var Vector3D = jiglib.Vector3D;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var RigidBody = jiglib.RigidBody;
-	var PhysicsSystem = jiglib.PhysicsSystem;
 
 	var JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowedDistance, timescale)
 	{
@@ -27,16 +17,16 @@
 		this._worldPos = null; // Vector3D
 		this._vrExtra = null; // Vector3D
 
-		jiglib.JConstraint.apply(this, [  ]);
+		JigLib.JConstraint.apply(this, [  ]);
 		this._body0 = body0;
 		this._body0Pos = body0Pos;
 		this._body1 = body1;
 		this._body1Pos = body1Pos;
 		this._allowedDistance = allowedDistance;
 		this._timescale = timescale;
-		if (this._timescale < JMath3D.NUM_TINY)
+		if (this._timescale < JigLib.JMath3D.NUM_TINY)
 		{
-			this._timescale = JMath3D.NUM_TINY;
+			this._timescale = JigLib.JMath3D.NUM_TINY;
 		}
 		
 		this._constraintEnabled = false;
@@ -44,7 +34,7 @@
 		
 	}
 
-	jiglib.extend(JConstraintPoint, JConstraint);
+	JigLib.extend(JConstraintPoint, JigLib.JConstraint);
 
 	JConstraintPoint.prototype.enableConstraint = function()
 	{
@@ -56,7 +46,7 @@
 		this._constraintEnabled = true;
 		this._body0.addConstraint(this);
 		this._body1.addConstraint(this);
-		PhysicsSystem.getInstance().addConstraint(this);
+		JigLib.PhysicsSystem.getInstance().addConstraint(this);
 		
 	}
 
@@ -70,7 +60,7 @@
 		this._constraintEnabled = false;
 		this._body0.removeConstraint(this);
 		this._body1.removeConstraint(this);
-		PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
 		
 	}
 
@@ -85,17 +75,17 @@
 		var worldPos0, worldPos1, deviation, deviationAmount;
 		worldPos0 = this._body0.get_currentState().position.add(this.r0);
 		worldPos1 = this._body1.get_currentState().position.add(this.r1);
-		this._worldPos = JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
+		this._worldPos = JigLib.JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
 
 		deviation = worldPos0.subtract(worldPos1);
 		deviationAmount = deviation.get_length();
 		if (deviationAmount > this._allowedDistance)
 		{
-			this._vrExtra = JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
+			this._vrExtra = JigLib.JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
 		}
 		else
 		{
-			this._vrExtra = new Vector3D();
+			this._vrExtra = new JigLib.Vector3D();
 		}
 		
 	}
@@ -124,24 +114,24 @@
 
 		if (normalVel > this._maxVelMag)
 		{
-			Vr = JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
+			Vr = JigLib.JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
 			normalVel = this._maxVelMag;
 		}
 
-		N = JNumber3D.getDivideVector(Vr, normalVel);
+		N = JigLib.JNumber3D.getDivideVector(Vr, normalVel);
 		tempVec1 = this.r0.crossProduct(N);
 		tempVec1 = this._body0.get_worldInvInertia().transformVector(tempVec1);
 		tempVec2 = this.r1.crossProduct(N);
 		tempVec2 = this._body1.get_worldInvInertia().transformVector(tempVec2);
 		denominator = this._body0.get_invMass() + this._body1.get_invMass() + N.dotProduct(tempVec1.crossProduct(this.r0)) + N.dotProduct(tempVec2.crossProduct(this.r1));
-		if (denominator < JMath3D.NUM_TINY)
+		if (denominator < JigLib.JMath3D.NUM_TINY)
 		{
 			return false;
 		}
 
-		normalImpulse = JNumber3D.getScaleVector(N, -normalVel / denominator);
+		normalImpulse = JigLib.JNumber3D.getScaleVector(N, -normalVel / denominator);
 		this._body0.applyWorldImpulse(normalImpulse, this._worldPos, false);
-		this._body1.applyWorldImpulse(JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
+		this._body1.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
 
 		this._body0.setConstraintsAndCollisionsUnsatisfied();
 		this._body1.setConstraintsAndCollisionsUnsatisfied();
@@ -152,7 +142,7 @@
 
 
 
-	jiglib.JConstraintPoint = JConstraintPoint; 
+	JigLib.JConstraintPoint = JConstraintPoint; 
 
-})(jiglib);
+})(JigLib);
 

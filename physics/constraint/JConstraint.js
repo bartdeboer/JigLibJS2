@@ -1,9 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JConstraintWorldPoint = jiglib.JConstraintWorldPoint;
-	var JConstraintMaxDistance = jiglib.JConstraintMaxDistance;
-	var JConstraintPoint = jiglib.JConstraintPoint;
 
 	var JConstraint = function()
 	{
@@ -48,7 +45,7 @@
 
 
 
-	jiglib.JConstraint = JConstraint; 
+	JigLib.JConstraint = JConstraint; 
 
-})(jiglib);
+})(JigLib);
 

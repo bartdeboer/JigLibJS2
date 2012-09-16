@@ -1,23 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSphere = jiglib.JSphere;
-	var JSegment = jiglib.JSegment;
-	var Vector3D = jiglib.Vector3D;
-	var EdgeData = jiglib.EdgeData;
-	var OctreeCell = jiglib.OctreeCell;
-	var TriangleVertexIndices = jiglib.TriangleVertexIndices;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
 
 	var JOctree = function()
 	{
@@ -33,7 +16,7 @@
 		this._vertices = [];
 		this._triangles = [];
 		this._cellsToTest = [];
-		this._boundingBox = new JAABox();
+		this._boundingBox = new JigLib.JAABox();
 		
 	}
 
@@ -88,7 +71,7 @@
 		
 		this._vertices = vertices.concat();
 		
-		var NLen, tiny=JMath3D.NUM_TINY;
+		var NLen, tiny=JigLib.JMath3D.NUM_TINY;
 		var i0, i1, i2;
 		var dr1, dr2, N;
 		var indexedTriangle;
@@ -104,7 +87,7 @@
 			
 			if (NLen > tiny)
 			{
-				indexedTriangle = new JIndexedTriangle();
+				indexedTriangle = new JigLib.JIndexedTriangle();
 				indexedTriangle.setVertexIndices(i0, i1, i2, this._vertices);
 				this._triangles.push(indexedTriangle);
 			}
@@ -122,7 +105,7 @@
 		}
 		
 		this._cells.length=0;
-		this._cells.push(new OctreeCell(this._boundingBox));
+		this._cells.push(new JigLib.OctreeCell(this._boundingBox));
 		
 		var numTriangles = this._triangles.length;
 		for (var i = 0; i < numTriangles; i++ ) {
@@ -141,10 +124,10 @@
 			if (this._cells[cellIndex].triangleIndices.length <= maxTrianglesPerCell || this._cells[cellIndex].AABox.getRadiusAboutCentre() < minCellSize) {
 				continue;
 			}
-			for (i = 0; i < OctreeCell.NUM_CHILDREN; i++ ) {
+			for (i = 0; i < JigLib.OctreeCell.NUM_CHILDREN; i++ ) {
 				this._cells[cellIndex].childCellIndices[i] = this._cells.length;
 				cellsToProcess.push(this._cells.length);
-				this._cells.push(new OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
+				this._cells.push(new JigLib.OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
 				
 				childCell = this._cells[this._cells.length - 1];
 				numTriangles = this._cells[cellIndex].triangleIndices.length;
@@ -205,7 +188,7 @@
 				}
 				}
 			}else {
-				for (i = 0 ; i < OctreeCell.NUM_CHILDREN ; i++) {
+				for (i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
 				this._cellsToTest.push(cell.childCellIndices[i]);
 				}
 			}
@@ -233,7 +216,7 @@
 				maxTris = numTris;
 				}
 			}else {
-				for (var i = 0 ; i < OctreeCell.NUM_CHILDREN ; i++) {
+				for (var i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
 				if ((cell.childCellIndices[i] >= 0) && (cell.childCellIndices[i] < this._cells.length)) {
 					cellsToProcess.push(cell.childCellIndices[i]);
 				}
@@ -246,40 +229,40 @@
 	JOctree.prototype.createAABox = function(aabb, _id)
 	{
 
-		var dims = JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
+		var dims = JigLib.JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
 		var offset;
 		switch(_id) {
 			case 0:
-				offset = new Vector3D(1, 1, 1);
+				offset = new JigLib.Vector3D(1, 1, 1);
 				break;
 			case 1:
-				offset = new Vector3D(1, 1, 0);
+				offset = new JigLib.Vector3D(1, 1, 0);
 				break;
 			case 2:
-				offset = new Vector3D(1, 0, 1);
+				offset = new JigLib.Vector3D(1, 0, 1);
 				break;
 			case 3:
-				offset = new Vector3D(1, 0, 0);
+				offset = new JigLib.Vector3D(1, 0, 0);
 				break;
 			case 4:
-				offset = new Vector3D(0, 1, 1);
+				offset = new JigLib.Vector3D(0, 1, 1);
 				break;
 			case 5:
-				offset = new Vector3D(0, 1, 0);
+				offset = new JigLib.Vector3D(0, 1, 0);
 				break;
 			case 6:
-				offset = new Vector3D(0, 0, 1);
+				offset = new JigLib.Vector3D(0, 0, 1);
 				break;
 			case 7:
-				offset = new Vector3D(0, 0, 0);
+				offset = new JigLib.Vector3D(0, 0, 0);
 				break;
 			default:
-				offset = new Vector3D(0, 0, 0);
+				offset = new JigLib.Vector3D(0, 0, 0);
 				break;
 		}
 		
-		var result = new JAABox();
-		result.minPos = aabb.minPos.add(new Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
+		var result = new JigLib.JAABox();
+		result.minPos = aabb.minPos.add(new JigLib.Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
 		result.maxPos = result.minPos.add(dims);
 		
 		dims.scaleBy(0.00001);
@@ -302,14 +285,14 @@
 				return true;
 			}
 			
-		var tri = new JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
+		var tri = new JigLib.JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
 		var edge;
 		var seg;
 		var edges = cell.get_egdes();
 		var pts = cell.get_points();
 		for (var i = 0; i < 12; i++ ) {
 			edge = edges[i];
-			seg = new JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
+			seg = new JigLib.JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
 			if (tri.segmentTriangleIntersection(null, seg)) {
 				return true;
 			}
@@ -320,7 +303,7 @@
 		for (i = 0; i < 3; i++ ) {
 			pt0 = tri.getVertex(i);
 			pt1 = tri.getVertex((i + 1) % 3);
-			if (cell.AABox.segmentAABoxOverlap(new JSegment(pt0, pt1.subtract(pt0)))) {
+			if (cell.AABox.segmentAABoxOverlap(new JigLib.JSegment(pt0, pt1.subtract(pt0)))) {
 				return true;
 			}
 		}
@@ -344,7 +327,7 @@
 
 
 
-	jiglib.JOctree = JOctree; 
+	JigLib.JOctree = JOctree; 
 
-})(jiglib);
+})(JigLib);
 

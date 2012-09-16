@@ -1,17 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollOutData = jiglib.CollOutData;
-	var ContactData = jiglib.ContactData;
-	var EdgeData = jiglib.EdgeData;
-	var TerrainData = jiglib.TerrainData;
-	var OctreeCell = jiglib.OctreeCell;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var TriangleVertexIndices = jiglib.TriangleVertexIndices;
-	var SpanData = jiglib.SpanData;
-	var Vector3D = jiglib.Vector3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
 
 	var PlaneData = function()
 	{
@@ -19,8 +8,8 @@
 		this._normal = null; // Vector3D
 		this._distance = null; // Number
 
-		this._position = new Vector3D();
-		this._normal = new Vector3D(0, 1, 0);
+		this._position = new JigLib.Vector3D();
+		this._normal = new JigLib.Vector3D(0, 1, 0);
 		this._distance = 0;
 		
 	}
@@ -72,8 +61,8 @@
 		this._normal = dr1.crossProduct(dr2);
 		
 		var nLen = this._normal.get_length();
-		if (nLen < JMath3D.NUM_TINY) {
-			this._normal = new Vector3D(0, 1, 0);
+		if (nLen < JigLib.JMath3D.NUM_TINY) {
+			this._normal = new JigLib.Vector3D(0, 1, 0);
 			this._distance = 0;
 		}else {
 			this._normal.scaleBy(1 / nLen);
@@ -84,7 +73,7 @@
 
 
 
-	jiglib.PlaneData = PlaneData; 
+	JigLib.PlaneData = PlaneData; 
 
-})(jiglib);
+})(JigLib);
 

@@ -1,25 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSegment = jiglib.JSegment;
-	var RigidBody = jiglib.RigidBody;
-	var Matrix3D = jiglib.Matrix3D;
-	var Vector3D = jiglib.Vector3D;
-	var CollOutData = jiglib.CollOutData;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var PhysicsState = jiglib.PhysicsState;
 
 	var JSphere = function(skin, r)
 	{
@@ -27,7 +8,7 @@
 		this._radius = null; // Number
 
 
-		jiglib.RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		this._type = "SPHERE";
 		this._radius = r;
 		this._boundingSphere = this._radius;
@@ -36,7 +17,7 @@
 		
 	}
 
-	jiglib.extend(JSphere, RigidBody);
+	JigLib.extend(JSphere, JigLib.RigidBody);
 
 	JSphere.prototype.set_radius = function(r)
 	{
@@ -60,8 +41,8 @@
 	{
 
 		out.frac = 0;
-		out.position = new Vector3D();
-		out.normal = new Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
 		var frac = 0, radiusSq, rSq, sDotr, sSq, sigma, sigmaSqrt, lambda1, lambda2;
 		var r, s;
@@ -106,7 +87,7 @@
 	{
 
 		var Ixx = 0.4 * m * this._radius * this._radius;
-		return JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
+		return JigLib.JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
 		
 	}
 
@@ -120,7 +101,7 @@
 
 
 
-	jiglib.JSphere = JSphere; 
+	JigLib.JSphere = JSphere; 
 
-})(jiglib);
+})(JigLib);
 

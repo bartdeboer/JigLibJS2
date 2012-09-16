@@ -1,22 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var MaterialProperties = jiglib.MaterialProperties;
-	var CachedImpulse = jiglib.CachedImpulse;
-	var PhysicsState = jiglib.PhysicsState;
-	var RigidBody = jiglib.RigidBody;
-	var BodyPair = jiglib.BodyPair;
-	var PhysicsSystem = jiglib.PhysicsSystem;
-	var PhysicsController = jiglib.PhysicsController;
-	var Vector3D = jiglib.Vector3D;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var JConstraintWorldPoint = jiglib.JConstraintWorldPoint;
-	var JConstraintMaxDistance = jiglib.JConstraintMaxDistance;
-	var JConstraint = jiglib.JConstraint;
-	var JConstraintPoint = jiglib.JConstraintPoint;
 
 	var HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHalfWidth, hingeFwdAngle, hingeBckAngle, sidewaysSlack, damping)
 	{
@@ -46,25 +30,25 @@
 		this._hingeAxis.normalize();
 		var _hingePosRel1 = this._body0.get_currentState().position.add(this._hingePosRel0.subtract(this._body1.get_currentState().position));
 
-		var relPos0a = this._hingePosRel0.add(JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
-		var relPos0b = this._hingePosRel0.subtract(JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos0a = this._hingePosRel0.add(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos0b = this._hingePosRel0.subtract(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
 
-		var relPos1a = _hingePosRel1.add(JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
-		var relPos1b = _hingePosRel1.subtract(JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos1a = _hingePosRel1.add(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos1b = _hingePosRel1.subtract(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
 
 		var timescale = 1 / 20;
 		var allowedDistanceMid = 0.005;
 		var allowedDistanceSide = sidewaysSlack * hingeHalfWidth;
 
 		this.sidePointConstraints = [];
-		this.sidePointConstraints[0] = new JConstraintMaxDistance(this._body0, relPos0a, this._body1, relPos1a, allowedDistanceSide);
-		this.sidePointConstraints[1] = new JConstraintMaxDistance(this._body0, relPos0b, this._body1, relPos1b, allowedDistanceSide);
+		this.sidePointConstraints[0] = new JigLib.JConstraintMaxDistance(this._body0, relPos0a, this._body1, relPos1a, allowedDistanceSide);
+		this.sidePointConstraints[1] = new JigLib.JConstraintMaxDistance(this._body0, relPos0b, this._body1, relPos1b, allowedDistanceSide);
 
-		this.midPointConstraint = new JConstraintPoint(this._body0, this._hingePosRel0, this._body1, _hingePosRel1, allowedDistanceMid, timescale);
+		this.midPointConstraint = new JigLib.JConstraintPoint(this._body0, this._hingePosRel0, this._body1, _hingePosRel1, allowedDistanceMid, timescale);
 
 		if (hingeFwdAngle <= this.MAX_HINGE_ANGLE_LIMIT)
 		{
-			var perpDir = Vector3D.Y_AXIS;
+			var perpDir = JigLib.Vector3D.Y_AXIS;
 			if (perpDir.dotProduct(this._hingeAxis) > 0.1)
 			{
 				perpDir.x = 1;
@@ -76,9 +60,9 @@
 			perpDir.normalize();
 
 			var len = 10 * hingeHalfWidth;
-			var hingeRelAnchorPos0 = JNumber3D.getScaleVector(perpDir, len);
+			var hingeRelAnchorPos0 = JigLib.JNumber3D.getScaleVector(perpDir, len);
 			var angleToMiddle = 0.5 * (hingeFwdAngle - hingeBckAngle);
-			var hingeRelAnchorPos1 = JMatrix3D.getRotationMatrix(this._hingeAxis.x, this._hingeAxis.y, this._hingeAxis.z, -angleToMiddle).transformVector(hingeRelAnchorPos0);
+			var hingeRelAnchorPos1 = JigLib.JMatrix3D.getRotationMatrix(this._hingeAxis.x, this._hingeAxis.y, this._hingeAxis.z, -angleToMiddle).transformVector(hingeRelAnchorPos0);
 
 			var hingeHalfAngle = 0.5 * (hingeFwdAngle + hingeBckAngle);
 			var allowedDistance = len * 2 * Math.sin(0.5 * hingeHalfAngle * Math.PI / 180);
@@ -87,7 +71,7 @@
 			var relPos0c = hingePos.add(hingeRelAnchorPos0.subtract(this._body0.get_currentState().position));
 			var relPos1c = hingePos.add(hingeRelAnchorPos1.subtract(this._body1.get_currentState().position));
 
-			this.maxDistanceConstraint = new JConstraintMaxDistance(this._body0, relPos0c, this._body1, relPos1c, allowedDistance);
+			this.maxDistanceConstraint = new JigLib.JConstraintMaxDistance(this._body0, relPos0c, this._body1, relPos1c, allowedDistance);
 			this._usingLimit = true;
 		}
 		if (this._damping <= 0)
@@ -96,14 +80,14 @@
 		}
 		else
 		{
-			this._damping = JMath3D.getLimiteNumber(this._damping, 0, 1);
+			this._damping = JigLib.JMath3D.getLimiteNumber(this._damping, 0, 1);
 		}
 
 		this.enableController();
 		
 	}
 
-	jiglib.extend(HingeJoint, PhysicsController);
+	JigLib.extend(HingeJoint, JigLib.PhysicsController);
 
 	HingeJoint.prototype.enableController = function()
 	{
@@ -120,7 +104,7 @@
 			this.maxDistanceConstraint.enableConstraint();
 		}
 		this._controllerEnabled = true;
-		PhysicsSystem.getInstance().addController(this);
+		JigLib.PhysicsSystem.getInstance().addController(this);
 		
 	}
 
@@ -139,7 +123,7 @@
 			this.maxDistanceConstraint.disableConstraint();
 		}
 		this._controllerEnabled = false;
-		PhysicsSystem.getInstance().removeController(this);
+		JigLib.PhysicsSystem.getInstance().removeController(this);
 		
 	}
 
@@ -213,8 +197,8 @@
 			newAngRot1 = avAngRot + (angRot1 - avAngRot) * frac;
 			newAngRot2 = avAngRot + (angRot2 - avAngRot) * frac;
 
-			newAngVel1 = this._body0.get_currentState().rotVelocity.add(JNumber3D.getScaleVector(hingeAxis, newAngRot1 - angRot1));
-			newAngVel2 = this._body1.get_currentState().rotVelocity.add(JNumber3D.getScaleVector(hingeAxis, newAngRot2 - angRot2));
+			newAngVel1 = this._body0.get_currentState().rotVelocity.add(JigLib.JNumber3D.getScaleVector(hingeAxis, newAngRot1 - angRot1));
+			newAngVel2 = this._body1.get_currentState().rotVelocity.add(JigLib.JNumber3D.getScaleVector(hingeAxis, newAngRot2 - angRot2));
 
 			this._body0.setAngleVelocity(newAngVel1);
 			this._body1.setAngleVelocity(newAngVel2);
@@ -223,17 +207,17 @@
 		if (this._extraTorque != 0)
 		{
 			var torque1 = this._body0.get_currentState().orientation.transformVector(this._hingeAxis);
-			torque1 = JNumber3D.getScaleVector(torque1, this._extraTorque);
+			torque1 = JigLib.JNumber3D.getScaleVector(torque1, this._extraTorque);
 
 			this._body0.addWorldTorque(torque1);
-			this._body1.addWorldTorque(JNumber3D.getScaleVector(torque1, -1));
+			this._body1.addWorldTorque(JigLib.JNumber3D.getScaleVector(torque1, -1));
 		}
 		
 	}
 
 
 
-	jiglib.HingeJoint = HingeJoint; 
+	JigLib.HingeJoint = HingeJoint; 
 
-})(jiglib);
+})(JigLib);
 

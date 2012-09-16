@@ -1,22 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JOctree = jiglib.JOctree;
-	var JCapsule = jiglib.JCapsule;
-	var JBox = jiglib.JBox;
-	var JRay = jiglib.JRay;
-	var JAABox = jiglib.JAABox;
-	var JTerrain = jiglib.JTerrain;
-	var JPlane = jiglib.JPlane;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JTriangle = jiglib.JTriangle;
-	var JSphere = jiglib.JSphere;
-	var Vector3D = jiglib.Vector3D;
-	var CollOutData = jiglib.CollOutData;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
-	var PhysicsState = jiglib.PhysicsState;
 
 	var JSegment = function(_origin, _delta)
 	{
@@ -31,7 +15,7 @@
 	JSegment.prototype.getPoint = function(t)
 	{
 
-		return this.origin.add(JNumber3D.getScaleVector(this.delta, t));
+		return this.origin.add(JigLib.JNumber3D.getScaleVector(this.delta, t));
 		
 	}
 
@@ -45,7 +29,7 @@
 	JSegment.prototype.clone = function()
 	{
 
-		return new JSegment(this.origin, this.delta);
+		return new JigLib.JSegment(this.origin, this.delta);
 		
 	}
 
@@ -62,7 +46,7 @@
 		fC = kDiff.get_lengthSquared();
 		fDet = Math.abs(fA00 * fA11 - fA01 * fA01);
 
-		if (fDet >= JMath3D.NUM_TINY)
+		if (fDet >= JigLib.JMath3D.NUM_TINY)
 		{
 			fB1 = -kDiff.dotProduct(seg.delta);
 			fS = fA01 * fB1 - fA11 * fB0;
@@ -415,7 +399,7 @@
 			else
 			{
 				fT /= fSqrLen;
-				kDiff = kDiff.subtract(JNumber3D.getScaleVector(this.delta, fT));
+				kDiff = kDiff.subtract(JigLib.JNumber3D.getScaleVector(this.delta, fT));
 			}
 		}
 
@@ -433,7 +417,7 @@
 		out[2] = 0;
 
 		var obj = [];
-		var kRay = new JRay(this.origin, this.delta);
+		var kRay = new JigLib.JRay(this.origin, this.delta);
 		var fSqrDistance = this.sqrDistanceLine(obj, kRay, rkBox, boxState);
 		if (obj[3] >= 0)
 		{
@@ -472,16 +456,16 @@
 		out[2] = 0;
 
 		kDiff = rkLine.origin.subtract(boxState.position);
-		kPnt = new Vector3D(kDiff.dotProduct(orientationCols[0]),
+		kPnt = new JigLib.Vector3D(kDiff.dotProduct(orientationCols[0]),
 			kDiff.dotProduct(orientationCols[1]),
 			kDiff.dotProduct(orientationCols[2]));
 
-		kDir = new Vector3D(rkLine.dir.dotProduct(orientationCols[0]),
+		kDir = new JigLib.Vector3D(rkLine.dir.dotProduct(orientationCols[0]),
 			rkLine.dir.dotProduct(orientationCols[1]),
 			rkLine.dir.dotProduct(orientationCols[2]));
 		
-		var kPntArr = JNumber3D.toArray(kPnt);
-		var kDirArr = JNumber3D.toArray(kDir);
+		var kPntArr = JigLib.JNumber3D.toArray(kPnt);
+		var kDirArr = JigLib.JNumber3D.toArray(kDir);
 
 		var bReflect = [];
 		for (var i = 0; i < 3; i++)
@@ -498,8 +482,8 @@
 			}
 		}
 
-		JNumber3D.copyFromArray(kPnt, kPntArr);
-		JNumber3D.copyFromArray(kDir, kDirArr);
+		JigLib.JNumber3D.copyFromArray(kPnt, kPntArr);
+		JigLib.JNumber3D.copyFromArray(kDir, kDirArr);
 
 		var obj = new SegmentInfo(kPnt.clone(), 0, 0);
 
@@ -562,13 +546,13 @@
 			}
 		}
 
-		kPntArr = JNumber3D.toArray(obj.rkPnt);
+		kPntArr = JigLib.JNumber3D.toArray(obj.rkPnt);
 		for (i = 0; i < 3; i++)
 		{
 			if (bReflect[i])
 				kPntArr[i] = -kPntArr[i];
 		}
-		JNumber3D.copyFromArray(obj.rkPnt, kPntArr);
+		JigLib.JNumber3D.copyFromArray(obj.rkPnt, kPntArr);
 
 		out[0] = obj.rkPnt.x;
 		out[1] = obj.rkPnt.y;
@@ -586,7 +570,7 @@
 		
 		var orientationVector = boxState.getOrientationCols();
 		kDiff = rkPoint.subtract(boxState.position);
-		kClosest = new Vector3D(kDiff.dotProduct(orientationVector[0]),
+		kClosest = new JigLib.Vector3D(kDiff.dotProduct(orientationVector[0]),
 			kDiff.dotProduct(orientationVector[1]),
 			kDiff.dotProduct(orientationVector[2]));
 
@@ -645,19 +629,19 @@
 		
 		var fLSqr, fInv, fTmp, fParam, fT, fDelta;
 
-		var kPpE = new Vector3D();
+		var kPpE = new JigLib.Vector3D();
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		
 		var boxHalfArr, rkPntArr, rkDirArr, kPpEArr, rkPmEArr;
-		boxHalfArr = JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JNumber3D.toArray(rkDir);
-		kPpEArr = JNumber3D.toArray(kPpE);
-		rkPmEArr = JNumber3D.toArray(rkPmE);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
+		kPpEArr = JigLib.JNumber3D.toArray(kPpE);
+		rkPmEArr = JigLib.JNumber3D.toArray(rkPmE);
 
 		kPpEArr[i1] = rkPntArr[i1] + boxHalfArr[i1];
 		kPpEArr[i2] = rkPntArr[i2] + boxHalfArr[i2];
-		JNumber3D.copyFromArray(rkPmE, kPpEArr);
+		JigLib.JNumber3D.copyFromArray(rkPmE, kPpEArr);
 
 		if (rkDirArr[i0] * kPpEArr[i1] >= rkDirArr[i1] * rkPmEArr[i0])
 		{
@@ -668,7 +652,7 @@
 				rkPntArr[i1] -= (rkDirArr[i1] * rkPmEArr[i0] * fInv);
 				rkPntArr[i2] -= (rkDirArr[i2] * rkPmEArr[i0] * fInv);
 				out.pfLParam = -rkPmEArr[i0] * fInv;
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 			}
 			else
 			{
@@ -687,7 +671,7 @@
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = fT - boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -700,7 +684,7 @@
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 			}
 		}
@@ -723,7 +707,7 @@
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = fT - boxHalfArr[i2];
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -736,7 +720,7 @@
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = boxHalfArr[i2];
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 			}
 			else
@@ -758,7 +742,7 @@
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = fT - boxHalfArr[i1];
 					rkPntArr[i2] = -boxHalfArr[i2];
-					JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -771,7 +755,7 @@
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = boxHalfArr[i1];
 					rkPntArr[i2] = -boxHalfArr[i2];
-					JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				return;
 				}
@@ -793,7 +777,7 @@
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = -boxHalfArr[i1];
 					rkPntArr[i2] = fT - boxHalfArr[i2];
-					JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -806,7 +790,7 @@
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = -boxHalfArr[i1];
 					rkPntArr[i2] = boxHalfArr[i2];
-					JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				return;
 				}
@@ -820,7 +804,7 @@
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 			}
 		}
 		
@@ -830,7 +814,7 @@
 	{
 
 		var boxHalfSide = rkBox.getHalfSideLengths();
-		var kPmE = new Vector3D(out.rkPnt.x - boxHalfSide.x, out.rkPnt.y - boxHalfSide.y, out.rkPnt.z - boxHalfSide.z);
+		var kPmE = new JigLib.Vector3D(out.rkPnt.x - boxHalfSide.x, out.rkPnt.y - boxHalfSide.y, out.rkPnt.z - boxHalfSide.z);
 
 		var fProdDxPy = rkDir.x * kPmE.y, fProdDyPx = rkDir.y * kPmE.x, fProdDzPx, fProdDxPz, fProdDzPy, fProdDyPz;
 
@@ -868,9 +852,9 @@
 
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		var boxHalfArr, rkPntArr, rkDirArr;
-		boxHalfArr = JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JNumber3D.toArray(rkDir);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
 		
 		var fPmE0 = rkPntArr[i0] - boxHalfArr[i0], fPmE1 = rkPntArr[i1] - boxHalfArr[i1], fProd0 = rkDirArr[i1] * fPmE0, fProd1 = rkDirArr[i0] * fPmE1, fDelta, fInvLSqr, fInv, fPpE1, fPpE0;
 
@@ -894,7 +878,7 @@
 				rkPntArr[i1] -= (fProd0 * fInv);
 				out.pfLParam = -fPmE0 * fInv;
 			}
-			JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+			JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		}
 		else
 		{
@@ -916,7 +900,7 @@
 				rkPntArr[i0] -= (fProd1 * fInv);
 				out.pfLParam = -fPmE1 * fInv;
 			}
-			JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+			JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		}
 
 		if (rkPntArr[i2] < -boxHalfArr[i2])
@@ -931,7 +915,7 @@
 			out.rfSqrDistance += (fDelta * fDelta);
 			rkPntArr[i2] = boxHalfArr[i2];
 		}
-		JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+		JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		
 	}
 
@@ -942,9 +926,9 @@
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		
 		var boxHalfArr, rkPntArr, rkDirArr;
-		boxHalfArr = JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JNumber3D.toArray(rkDir);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
 		out.pfLParam = (boxHalfArr[i0] - rkPntArr[i0]) / rkDirArr[i0];
 
 		rkPntArr[i0] = boxHalfArr[i0];
@@ -975,7 +959,7 @@
 			rkPntArr[i2] = boxHalfArr[i2];
 		}
 
-		JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+		JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		
 	}
 
@@ -1028,7 +1012,7 @@
 
 
 
-	jiglib.JSegment = JSegment; 
+	JigLib.JSegment = JSegment; 
 
-})(jiglib);
+})(JigLib);
 

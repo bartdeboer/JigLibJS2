@@ -1,21 +1,18 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JCar = jiglib.JCar;
-	var JWheel = jiglib.JWheel;
-	var JBox = jiglib.JBox;
 
 	var JChassis = function(car, skin, width, depth, height)
 	{
 		this._car = null; // JCar
 
-		jiglib.JBox.apply(this, [ skin, width, depth, height ]);
+		JigLib.JBox.apply(this, [ skin, width, depth, height ]);
 
 		this._car = car;
 		
 	}
 
-	jiglib.extend(JChassis, JBox);
+	JigLib.extend(JChassis, JigLib.JBox);
 
 	JChassis.prototype.get_car = function()
 	{
@@ -27,7 +24,7 @@
 	JChassis.prototype.postPhysics = function(dt)
 	{
 
-		jiglib.JBox.prototype.postPhysics.apply(this, [ dt ]);
+		JigLib.JBox.prototype.postPhysics.apply(this, [ dt ]);
 		this._car.addExternalForces(dt);
 		this._car.postPhysics(dt);
 		
@@ -35,7 +32,7 @@
 
 
 
-	jiglib.JChassis = JChassis; 
+	JigLib.JChassis = JChassis; 
 
-})(jiglib);
+})(JigLib);
 

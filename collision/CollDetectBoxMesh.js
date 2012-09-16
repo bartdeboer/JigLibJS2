@@ -1,42 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var CollDetectBoxPlane = jiglib.CollDetectBoxPlane;
-	var CollDetectBoxBox = jiglib.CollDetectBoxBox;
-	var CollDetectSphereTerrain = jiglib.CollDetectSphereTerrain;
-	var CollDetectSphereBox = jiglib.CollDetectSphereBox;
-	var CollDetectCapsuleTerrain = jiglib.CollDetectCapsuleTerrain;
-	var CollDetectSphereCapsule = jiglib.CollDetectSphereCapsule;
-	var CollisionSystemBrute = jiglib.CollisionSystemBrute;
-	var CollDetectCapsuleBox = jiglib.CollDetectCapsuleBox;
-	var CollDetectSphereMesh = jiglib.CollDetectSphereMesh;
-	var CollDetectBoxTerrain = jiglib.CollDetectBoxTerrain;
-	var CollisionSystemGrid = jiglib.CollisionSystemGrid;
-	var CollDetectCapsuleCapsule = jiglib.CollDetectCapsuleCapsule;
-	var CollPointInfo = jiglib.CollPointInfo;
-	var CollisionInfo = jiglib.CollisionInfo;
-	var CollisionSystemAbstract = jiglib.CollisionSystemAbstract;
-	var CollDetectCapsulePlane = jiglib.CollDetectCapsulePlane;
-	var CollDetectInfo = jiglib.CollDetectInfo;
-	var CollDetectSphereSphere = jiglib.CollDetectSphereSphere;
-	var CollisionSystemGridEntry = jiglib.CollisionSystemGridEntry;
-	var CollDetectSpherePlane = jiglib.CollDetectSpherePlane;
-	var CollDetectFunctor = jiglib.CollDetectFunctor;
-	var Matrix3D = jiglib.Matrix3D;
-	var Vector3D = jiglib.Vector3D;
-	var JConfig = jiglib.JConfig;
-	var CollOutData = jiglib.CollOutData;
-	var EdgeData = jiglib.EdgeData;
-	var SpanData = jiglib.SpanData;
-	var JBox = jiglib.JBox;
-	var JIndexedTriangle = jiglib.JIndexedTriangle;
-	var JSegment = jiglib.JSegment;
-	var JTriangle = jiglib.JTriangle;
-	var JTriangleMesh = jiglib.JTriangleMesh;
-	var JNumber3D = jiglib.JNumber3D;
-	var JMath3D = jiglib.JMath3D;
-	var MaterialProperties = jiglib.MaterialProperties;
-	var RigidBody = jiglib.RigidBody;
 
 	var CollDetectBoxMesh = function()
 	{
@@ -47,16 +11,16 @@
 		
 	}
 
-	jiglib.extend(CollDetectBoxMesh, CollDetectFunctor);
+	JigLib.extend(CollDetectBoxMesh, JigLib.CollDetectFunctor);
 
 	CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
 	{
 
 		var obj0 = box.getSpan(axis);
 		var obj1 = triangle.getSpan(axis);
-		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JMath3D.NUM_TINY;
+		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib.JMath3D.NUM_TINY;
 		
-		if (obj0Min > (obj1Max + JConfig.collToll + tiny) || obj1Min > (obj0Max + JConfig.collToll + tiny))
+		if (obj0Min > (obj1Max + JigLib.JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib.JConfig.collToll + tiny))
 		{
 			out.flag = true;
 			return true;
@@ -86,7 +50,7 @@
 		{
 			if (contactPoint.subtract(pt).get_lengthSquared() < combinationDistanceSq)
 			{
-				contactPoint = JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
+				contactPoint = JigLib.JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
 				return false;
 			}
 		}
@@ -106,8 +70,8 @@
 		var seg;
 		for(var i=0;i<12;i++){
 			edge=edges[i];
-			data=new CollOutData();
-			seg=new JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
+			data=new JigLib.CollOutData();
+			seg=new JigLib.JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
 			if(triangle.segmentTriangleIntersection(data,seg)){
 				this.addPoint(pts,seg.getPoint(data.frac),combinationDistanceSq);
 				if(pts.length>8) return pts.length;
@@ -118,12 +82,12 @@
 		for(i=0;i<3;i++){
 			pt0=triangle.getVertex(i);
 			pt1=triangle.getVertex((i+1)%3);
-			data=new CollOutData();
-			if(box.segmentIntersect(data,new JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
+			data=new JigLib.CollOutData();
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
-			if(box.segmentIntersect(data,new JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
@@ -138,7 +102,7 @@
 		
 		var triEdge0, triEdge1, triEdge2, triNormal, D, N, boxOldPos, boxNewPos, meshPos, delta;
 		var dirs0=box.get_currentState().getOrientationCols();
-		var tri=new JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
+		var tri=new JigLib.JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
 		triEdge0=tri.getVertex(1).subtract(tri.getVertex(0));
 		triEdge0.normalize();
 		triEdge1=tri.getVertex(2).subtract(tri.getVertex(1));
@@ -161,14 +125,14 @@
 		
 		var overlapDepths=[];
 		for(var i=0;i<numAxes;i++){
-			overlapDepths[i]=new SpanData();
+			overlapDepths[i]=new JigLib.SpanData();
 			if(this.disjoint(overlapDepths[i],axes[i],box,tri)){
 				return false;
 			}
 		}
 		
 		var minAxis=-1;
-		var tiny=JMath3D.NUM_TINY, minDepth=JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
+		var tiny=JigLib.JMath3D.NUM_TINY, minDepth=JigLib.JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
 
 		for(i = 0; i < numAxes; i++){
 			l2=axes[i].get_lengthSquared();
@@ -212,19 +176,19 @@
 		if(numPts>0){
 			var cpInfo;
 			for (i=0; i<numPts; i++){
-				cpInfo = new CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0=pts[i].subtract(boxNewPos);
 				cpInfo.r1=pts[i].subtract(meshPos);
 				cpInfo.initialPenetration=oldDepth;
 				collPts[i]=cpInfo;
 			}
 			
-			var collInfo = new CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = N;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + mesh.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + mesh.get_material().friction);
 			collInfo.mat = mat;
@@ -290,7 +254,7 @@
 
 
 
-	jiglib.CollDetectBoxMesh = CollDetectBoxMesh; 
+	JigLib.CollDetectBoxMesh = CollDetectBoxMesh; 
 
-})(jiglib);
+})(JigLib);
 

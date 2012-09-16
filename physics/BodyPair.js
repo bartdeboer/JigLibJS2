@@ -1,14 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var MaterialProperties = jiglib.MaterialProperties;
-	var PhysicsController = jiglib.PhysicsController;
-	var CachedImpulse = jiglib.CachedImpulse;
-	var PhysicsState = jiglib.PhysicsState;
-	var RigidBody = jiglib.RigidBody;
-	var HingeJoint = jiglib.HingeJoint;
-	var PhysicsSystem = jiglib.PhysicsSystem;
-	var Vector3D = jiglib.Vector3D;
 
 	var BodyPair = function(_body0, _body1, r0, r1)
 	{
@@ -37,7 +29,7 @@
 
 
 
-	jiglib.BodyPair = BodyPair; 
+	JigLib.BodyPair = BodyPair; 
 
-})(jiglib);
+})(JigLib);
 

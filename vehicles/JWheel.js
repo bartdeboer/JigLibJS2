@@ -1,18 +1,6 @@
 
-(function(jiglib) {
+(function(JigLib) {
 
-	var JCar = jiglib.JCar;
-	var JChassis = jiglib.JChassis;
-	var Vector3D = jiglib.Vector3D;
-	var CollisionSystemAbstract = jiglib.CollisionSystemAbstract;
-	var CollOutBodyData = jiglib.CollOutBodyData;
-	var JSegment = jiglib.JSegment;
-	var JMatrix3D = jiglib.JMatrix3D;
-	var Matrix3D = jiglib.Matrix3D;
-	var JMath3D = jiglib.JMath3D;
-	var JNumber3D = jiglib.JNumber3D;
-	var PhysicsSystem = jiglib.PhysicsSystem;
-	var RigidBody = jiglib.RigidBody;
 
 	var JWheel = function(car)
 	{
@@ -125,7 +113,7 @@
 	JWheel.prototype.getActualPos = function()
 	{
 
-		return this._pos.add(JNumber3D.getScaleVector(this._axisUp, this._displacement));
+		return this._pos.add(JigLib.JNumber3D.getScaleVector(this._axisUp, this._displacement));
 		
 	}
 
@@ -181,7 +169,7 @@
 	JWheel.prototype.addForcesToCar = function(dt)
 	{
 
-		var force = new Vector3D();
+		var force = new JigLib.Vector3D();
 		this._lastDisplacement = this._displacement;
 		this._displacement = 0;
 
@@ -190,17 +178,17 @@
 		this.worldPos = carBody.get_currentState().position.add(this.worldPos);
 		this.worldAxis = carBody.get_currentState().orientation.transformVector(this._axisUp);
 
-		this.wheelFwd = JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
+		this.wheelFwd = JigLib.JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
 		this.wheelUp = this.worldAxis;
 		this.wheelLeft = this.wheelUp.crossProduct(this.wheelFwd);
 		this.wheelLeft.normalize();
 
 		var rayLen = 2 * this._radius + this._travel;
-		this.wheelRayEnd = this.worldPos.subtract(JNumber3D.getScaleVector(this.worldAxis, this._radius));
-		this.wheelRay = new JSegment(this.wheelRayEnd.add(JNumber3D.getScaleVector(this.worldAxis, rayLen)), JNumber3D.getScaleVector(this.worldAxis, -rayLen));
+		this.wheelRayEnd = this.worldPos.subtract(JigLib.JNumber3D.getScaleVector(this.worldAxis, this._radius));
+		this.wheelRay = new JigLib.JSegment(this.wheelRayEnd.add(JigLib.JNumber3D.getScaleVector(this.worldAxis, rayLen)), JigLib.JNumber3D.getScaleVector(this.worldAxis, -rayLen));
 
 		if(!this._collisionSystem)
-			this._collisionSystem = PhysicsSystem.getInstance().getCollisionSystem();
+			this._collisionSystem = JigLib.PhysicsSystem.getInstance().getCollisionSystem();
 
 		var maxNumRays = 10;
 		var numRays = Math.min(this._numRays, maxNumRays);
@@ -221,11 +209,11 @@
 		var segment;
 		for (iRay = 0; iRay < numRays; iRay++)
 		{
-			collOutBodyData = objArr[iRay] = new CollOutBodyData();
+			collOutBodyData = objArr[iRay] = new JigLib.CollOutBodyData();
 			distFwd = (deltaFwdStart + iRay * deltaFwd) - this._radius;
 			yOffset = this._radius * (1 - Math.cos(90 * (distFwd / this._radius) * Math.PI / 180));
 			segment = segments[iRay] = this.wheelRay.clone();
-			segment.origin = segment.origin.add(JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JNumber3D.getScaleVector(this.wheelUp, yOffset)));
+			segment.origin = segment.origin.add(JigLib.JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JigLib.JNumber3D.getScaleVector(this.wheelUp, yOffset)));
 			if (this._collisionSystem.segmentIntersect(collOutBodyData, segment, carBody))
 			{
 				this._lastOnFloor = true;
@@ -252,7 +240,7 @@
 			{
 				collOutBodyData = objArr[iRay];
 				if (collOutBodyData.frac <= 1)
-				groundNormal = groundNormal.add(JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
+				groundNormal = groundNormal.add(JigLib.JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
 			}
 			
 			groundNormal.normalize();
@@ -277,7 +265,7 @@
 		if (totalForceMag < 0)
 			totalForceMag = 0;
 		
-		var extraForce = JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
+		var extraForce = JigLib.JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
 		force = force.add(extraForce);
 
 		this.groundUp = groundNormal;
@@ -288,7 +276,7 @@
 		var tempv = carBody.get_currentState().orientation.transformVector(this._pos);
 		this.wheelPointVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
 
-		this.rimVel = JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
+		this.rimVel = JigLib.JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
 		this.wheelPointVel = this.wheelPointVel.add(this.rimVel);
 
 		if (otherBody.get_movable())
@@ -315,7 +303,7 @@
 		}
 
 		var sideForce = -friction * totalForceMag;
-		extraForce = JNumber3D.getScaleVector(this.groundLeft, sideForce);
+		extraForce = JigLib.JNumber3D.getScaleVector(this.groundLeft, sideForce);
 		force = force.add(extraForce);
 
 		friction = this._fwdFriction;
@@ -337,7 +325,7 @@
 			friction *= (Math.abs(fwdVel) / this.smallVel);
 		}
 		var fwdForce = -friction * totalForceMag;
-		extraForce = JNumber3D.getScaleVector(this.groundFwd, fwdForce);
+		extraForce = JigLib.JNumber3D.getScaleVector(this.groundFwd, fwdForce);
 		force = force.add(extraForce);
 
 		this.wheelCentreVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
@@ -351,9 +339,9 @@
 			var maxOtherBodyForce = maxOtherBodyAcc * otherBody.get_mass();
 			if (force.get_lengthSquared() > maxOtherBodyForce * maxOtherBodyForce)
 			{
-				force = JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
+				force = JigLib.JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
 			}
-			otherBody.addWorldForce(JNumber3D.getScaleVector(force, -1), groundPos, false);
+			otherBody.addWorldForce(JigLib.JNumber3D.getScaleVector(force, -1), groundPos, false);
 		}
 		return true;
 		
@@ -367,7 +355,7 @@
 			return;
 		}
 		var origAngVel = this._angVel;
-		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JMath3D.NUM_TINY);
+		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JigLib.JMath3D.NUM_TINY);
 
 		if (this._locked)
 		{
@@ -422,7 +410,7 @@
 
 
 
-	jiglib.JWheel = JWheel; 
+	JigLib.JWheel = JWheel; 
 
-})(jiglib);
+})(JigLib);
 
