@@ -13,7 +13,8 @@ Other links:
 * [Original c++ JigLib](http://www.rowlhouse.co.uk/jiglib/)
 * [The original Javascript port](http://www.jiglibjs.org/)
 * [glmatrix](http://code.google.com/p/glmatrix/)
-* [three.js](https://github.com/mrdoob/three.js)
+* [three.js](http://github.com/mrdoob/three.js)
+* [webstunts](http://github.com/cobbpg/webstunts)
 
 ### Change log ###
 
