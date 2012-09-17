@@ -18,6 +18,10 @@ Other links:
 
 ### Change log ###
 
+2012 09 17
+
+* Introducing new namespace scheme for better performance and less dependency hassle
+
 2012 09 16
 
 * Ported latest JigLibFlash (But nothing changed).
