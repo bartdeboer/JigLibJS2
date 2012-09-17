@@ -1,28 +1,22 @@
 
-(function(JigLib) {
+var JigLib_JConfig = function()
+{
+}
+
+JigLib_JConfig.solverType =  "ACCUMULATED"; // String
+JigLib_JConfig.rotationType =  "DEGREES"; // String
+JigLib_JConfig.doShockStep =  false; // Boolean
+JigLib_JConfig.allowedPenetration =  0.01; // Number
+JigLib_JConfig.collToll =  0.05; // Number
+JigLib_JConfig.velThreshold =  0.5; // Number
+JigLib_JConfig.angVelThreshold =  0.5; // Number
+JigLib_JConfig.posThreshold =  0.2; // Number
+JigLib_JConfig.orientThreshold =  0.2; // Number
+JigLib_JConfig.deactivationTime =  0.5; // Number
+JigLib_JConfig.numPenetrationRelaxationTimesteps =  10; // Number
+JigLib_JConfig.numCollisionIterations =  1; // Number
+JigLib_JConfig.numContactIterations =  2; // Number
+JigLib_JConfig.numConstraintIterations =  2; // Number
 
 
-	var JConfig = function()
-	{
-	}
-
-	JConfig.solverType =  "ACCUMULATED"; // String
-	JConfig.rotationType =  "DEGREES"; // String
-	JConfig.doShockStep =  false; // Boolean
-	JConfig.allowedPenetration =  0.01; // Number
-	JConfig.collToll =  0.05; // Number
-	JConfig.velThreshold =  0.5; // Number
-	JConfig.angVelThreshold =  0.5; // Number
-	JConfig.posThreshold =  0.2; // Number
-	JConfig.orientThreshold =  0.2; // Number
-	JConfig.deactivationTime =  0.5; // Number
-	JConfig.numPenetrationRelaxationTimesteps =  10; // Number
-	JConfig.numCollisionIterations =  1; // Number
-	JConfig.numContactIterations =  2; // Number
-	JConfig.numConstraintIterations =  2; // Number
-
-
-	JigLib.JConfig = JConfig; 
-
-})(JigLib);
-
+JigLib.JConfig = JigLib_JConfig; 

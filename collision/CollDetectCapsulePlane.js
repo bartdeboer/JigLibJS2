@@ -1,20 +1,17 @@
 
-(function(JigLib) {
-
-
-	var CollDetectCapsulePlane = function()
-	{
+var JigLib_CollDetectCapsulePlane = function()
+{
 
 		this.name = "CapsulePlane";
 		this.type0 = "CAPSULE";
 		this.type1 = "PLANE";
 		
-	}
+}
 
-	JigLib.extend(CollDetectCapsulePlane, JigLib.CollDetectFunctor);
+JigLib.extend(JigLib_CollDetectCapsulePlane, JigLib_CollDetectFunctor);
 
-	CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
-	{
+JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
+{
 
 		var tempBody;
 		if (info.body0.get_type() == "PLANE")
@@ -35,12 +32,12 @@
 		var newPos = capsule.getBottomPos(capsule.get_currentState());
 		var newDist = plane.pointPlaneDistance(newPos);
 
-		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib.JConfig.collToll)
+		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib_JConfig.collToll)
 		{
 			var oldDepth = capsule.get_radius() - oldDist;
-			var worldPos = oldPos.subtract(JigLib.JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
+			var worldPos = oldPos.subtract(JigLib_JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
 
-			cpInfo = new JigLib.CollPointInfo();
+			cpInfo = new JigLib_CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(plane.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -51,12 +48,12 @@
 		newPos = capsule.getEndPos(capsule.get_currentState());
 		oldDist = plane.pointPlaneDistance(oldPos);
 		newDist = plane.pointPlaneDistance(newPos);
-		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib.JConfig.collToll)
+		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib_JConfig.collToll)
 		{
 			oldDepth = capsule.get_radius() - oldDist;
-			worldPos = oldPos.subtract(JigLib.JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
+			worldPos = oldPos.subtract(JigLib_JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
 
-			cpInfo = new JigLib.CollPointInfo();
+			cpInfo = new JigLib_CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(plane.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -65,12 +62,12 @@
 
 		if (collPts.length > 0)
 		{
-			var collInfo = new JigLib.CollisionInfo();
+			var collInfo = new JigLib_CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = plane.get_normal().clone();
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib.MaterialProperties();
+			var mat = new JigLib_MaterialProperties();
 			mat.restitution = 0.5*(capsule.get_material().restitution + plane.get_material().restitution);
 			mat.friction = 0.5*(capsule.get_material().friction + plane.get_material().friction);
 			collInfo.mat = mat;
@@ -84,11 +81,8 @@
 			info.body1.removeCollideBodies(info.body0);
 		}
 		
-	}
+}
 
 
 
-	JigLib.CollDetectCapsulePlane = CollDetectCapsulePlane; 
-
-})(JigLib);
-
+JigLib.CollDetectCapsulePlane = JigLib_CollDetectCapsulePlane; 

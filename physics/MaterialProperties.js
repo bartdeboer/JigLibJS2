@@ -1,20 +1,14 @@
 
-(function(JigLib) {
-
-
-	var MaterialProperties = function(_restitution, _friction)
-	{
-		this.restitution = null; // Number
-		this.friction = null; // Number
+var JigLib_MaterialProperties = function(_restitution, _friction)
+{
+	this.restitution = null; // Number
+	this.friction = null; // Number
 
 		this.restitution = _restitution;
 		this.friction = _friction;
 		
-	}
+}
 
 
 
-	JigLib.MaterialProperties = MaterialProperties; 
-
-})(JigLib);
-
+JigLib.MaterialProperties = JigLib_MaterialProperties; 

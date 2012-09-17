@@ -1,12 +1,9 @@
 
-(function(JigLib) {
-
-
-	var BodyPair = function(_body0, _body1, r0, r1)
-	{
-		this.body0 = null; // RigidBody
-		this.body1 = null; // RigidBody
-		this.r = null; // Vector3D
+var JigLib_BodyPair = function(_body0, _body1, r0, r1)
+{
+	this.body0 = null; // RigidBody
+	this.body1 = null; // RigidBody
+	this.r = null; // Vector3D
 
 
 		var id1 = -1;
@@ -25,11 +22,8 @@
 			this.r = r1;
 		}
 		
-	}
+}
 
 
 
-	JigLib.BodyPair = BodyPair; 
-
-})(JigLib);
-
+JigLib.BodyPair = JigLib_BodyPair; 

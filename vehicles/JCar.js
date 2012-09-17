@@ -1,93 +1,90 @@
 
-(function(JigLib) {
+var JigLib_JCar = function(skin)
+{
+	this._maxSteerAngle = null; // Number
+	this._steerRate = null; // Number
+	this._driveTorque = null; // Number
+	this._destSteering = null; // Number
+	this._destAccelerate = null; // Number
+	this._steering = null; // Number
+	this._accelerate = null; // Number
+	this._HBrake = null; // Number
+	this._chassis = null; // JChassis
+	this._wheels = null; // Array
+	this._steerWheels = null; // Array
 
-
-	var JCar = function(skin)
-	{
-		this._maxSteerAngle = null; // Number
-		this._steerRate = null; // Number
-		this._driveTorque = null; // Number
-		this._destSteering = null; // Number
-		this._destAccelerate = null; // Number
-		this._steering = null; // Number
-		this._accelerate = null; // Number
-		this._HBrake = null; // Number
-		this._chassis = null; // JChassis
-		this._wheels = null; // Array
-		this._steerWheels = null; // Array
-
-		this._chassis = new JigLib.JChassis(this, skin);
+		this._chassis = new JigLib_JChassis(this, skin);
 		this._wheels = [];
 		this._steerWheels = [];
 		this._destSteering = this._destAccelerate = this._steering = this._accelerate = this._HBrake = 0;
 		this.setCar();
 		
-	}
+}
 
-	JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
-	{
-		if (maxSteerAngle == null) maxSteerAngle = 45;
-		if (steerRate == null) steerRate = 1;
-		if (driveTorque == null) driveTorque = 500;
+JigLib_JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
+{
+	if (maxSteerAngle == null) maxSteerAngle = 45;
+	if (steerRate == null) steerRate = 1;
+	if (driveTorque == null) driveTorque = 500;
 
 		this._maxSteerAngle = maxSteerAngle;
 		this._steerRate = steerRate;
 		this._driveTorque = driveTorque;
 		
-	}
+}
 
-	JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
-	{
-		if (wheelSideFriction == null) wheelSideFriction = 2;
-		if (wheelFwdFriction == null) wheelFwdFriction = 2;
-		if (wheelTravel == null) wheelTravel = 3;
-		if (wheelRadius == null) wheelRadius = 10;
-		if (wheelRestingFrac == null) wheelRestingFrac = 0.5;
-		if (wheelDampingFrac == null) wheelDampingFrac = 0.5;
-		if (wheelNumRays == null) wheelNumRays = 1;
+JigLib_JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
+{
+	if (wheelSideFriction == null) wheelSideFriction = 2;
+	if (wheelFwdFriction == null) wheelFwdFriction = 2;
+	if (wheelTravel == null) wheelTravel = 3;
+	if (wheelRadius == null) wheelRadius = 10;
+	if (wheelRestingFrac == null) wheelRestingFrac = 0.5;
+	if (wheelDampingFrac == null) wheelDampingFrac = 0.5;
+	if (wheelNumRays == null) wheelNumRays = 1;
 
 		var mass = this._chassis.get_mass();
 		var mass4 = 0.25 * mass;
 		
-		var gravity = JigLib.PhysicsSystem.getInstance().get_gravity().clone();
-		var gravityLen = JigLib.PhysicsSystem.getInstance().get_gravity().get_length();
+		var gravity = JigLib_PhysicsSystem.getInstance().get_gravity().clone();
+		var gravityLen = JigLib_PhysicsSystem.getInstance().get_gravity().get_length();
 		gravity.normalize();
-		var axis = JigLib.JNumber3D.getScaleVector(gravity, -1);
+		var axis = JigLib_JNumber3D.getScaleVector(gravity, -1);
 		var spring = mass4 * gravityLen / (wheelRestingFrac * wheelTravel);
 		var inertia = 0.015 * wheelRadius * wheelRadius * mass;
 		var damping = 2 * Math.sqrt(spring * mass);
 		damping *= (0.25 * wheelDampingFrac);
 
-		this._wheels[_name] = new JigLib.JWheel(this);
+		this._wheels[_name] = new JigLib_JWheel(this);
 		this._wheels[_name].setup(pos, axis, spring, wheelTravel, inertia,
 			wheelRadius, wheelSideFriction, wheelFwdFriction,
 			damping, wheelNumRays);
 		
-	}
+}
 
-	JCar.prototype.get_chassis = function()
-	{
+JigLib_JCar.prototype.get_chassis = function()
+{
 
 		return this._chassis;
 		
-	}
+}
 
-	JCar.prototype.get_wheels = function()
-	{
+JigLib_JCar.prototype.get_wheels = function()
+{
 
 		return this._wheels;
 		
-	}
+}
 
-	JCar.prototype.setAccelerate = function(val)
-	{
+JigLib_JCar.prototype.setAccelerate = function(val)
+{
 
 		this._destAccelerate = val;
 		
-	}
+}
 
-	JCar.prototype.setSteer = function(wheels, val)
-	{
+JigLib_JCar.prototype.setSteer = function(wheels, val)
+{
 
 		this._destSteering = val;
 		this._steerWheels = [];
@@ -99,10 +96,10 @@
 			}
 		}
 		
-	}
+}
 
-	JCar.prototype.findWheel = function(_name)
-	{
+JigLib_JCar.prototype.findWheel = function(_name)
+{
 
 		for (var i in this._wheels)
 		{
@@ -113,27 +110,27 @@
 		}
 		return false;
 		
-	}
+}
 
-	JCar.prototype.setHBrake = function(val)
-	{
+JigLib_JCar.prototype.setHBrake = function(val)
+{
 
 		this._HBrake = val;
 		
-	}
+}
 
-	JCar.prototype.addExternalForces = function(dt)
-	{
+JigLib_JCar.prototype.addExternalForces = function(dt)
+{
 
 		for (var wheels_i = 0, wheels_l = this.get_wheels().length, wheel; (wheels_i < wheels_l) && (wheel = this.get_wheels()[wheels_i]); wheels_i++)
 		{
 			wheel.addForcesToCar(dt);
 		}
 		
-	}
+}
 
-	JCar.prototype.postPhysics = function(dt)
-	{
+JigLib_JCar.prototype.postPhysics = function(dt)
+{
 
 		var wheel;
 		for (var wheels_i = 0, wheels_l = this.get_wheels().length, wheel; (wheels_i < wheels_l) && (wheel = this.get_wheels()[wheels_i]); wheels_i++)
@@ -179,10 +176,10 @@
 			_steerWheel.setSteerAngle(angleSgn * alpha);
 		}
 		
-	}
+}
 
-	JCar.prototype.getNumWheelsOnFloor = function()
-	{
+JigLib_JCar.prototype.getNumWheelsOnFloor = function()
+{
 
 		var count = 0;
 		for (var wheels_i = 0, wheels_l = this.get_wheels().length, wheel; (wheels_i < wheels_l) && (wheel = this.get_wheels()[wheels_i]); wheels_i++)
@@ -194,11 +191,8 @@
 		}
 		return count;
 		
-	}
+}
 
 
 
-	JigLib.JCar = JCar; 
-
-})(JigLib);
-
+JigLib.JCar = JigLib_JCar; 

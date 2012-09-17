@@ -1,63 +1,60 @@
 
-(function(JigLib) {
+var JigLib_JPlane = function(skin, initNormal)
+{
+	this._initNormal = null; // Vector3D
+	this._normal = null; // Vector3D
+	this._distance = null; // Number
 
+		JigLib_RigidBody.apply(this, [ skin ]);
 
-	var JPlane = function(skin, initNormal)
-	{
-		this._initNormal = null; // Vector3D
-		this._normal = null; // Vector3D
-		this._distance = null; // Number
-
-		JigLib.RigidBody.apply(this, [ skin ]);
-
-		this._initNormal = initNormal ? initNormal.clone() : new JigLib.Vector3D(0, 0, -1);
+		this._initNormal = initNormal ? initNormal.clone() : new JigLib_Vector3D(0, 0, -1);
 		this._normal = this._initNormal.clone();
 
 		this._distance = 0;
 		this.set_movable(false);
 		
-		var huge=JigLib.JMath3D.NUM_HUGE;
-		this._boundingBox.minPos = new JigLib.Vector3D(-huge, -huge, -huge);
-		this._boundingBox.maxPos = new JigLib.Vector3D(huge, huge, huge);
+		var huge=JigLib_JMath3D.NUM_HUGE;
+		this._boundingBox.minPos = new JigLib_Vector3D(-huge, -huge, -huge);
+		this._boundingBox.maxPos = new JigLib_Vector3D(huge, huge, huge);
 
 		this._type = "PLANE";
 		
-	}
+}
 
-	JigLib.extend(JPlane, JigLib.RigidBody);
+JigLib.extend(JigLib_JPlane, JigLib_RigidBody);
 
-	JPlane.prototype.get_normal = function()
-	{
+JigLib_JPlane.prototype.get_normal = function()
+{
 
 		return this._normal;
 		
-	}
+}
 
-	JPlane.prototype.get_distance = function()
-	{
+JigLib_JPlane.prototype.get_distance = function()
+{
 
 		return this._distance;
 		
-	}
+}
 
-	JPlane.prototype.pointPlaneDistance = function(pt)
-	{
+JigLib_JPlane.prototype.pointPlaneDistance = function(pt)
+{
 
 		return this._normal.dotProduct(pt) - this._distance;
 		
-	}
+}
 
-	JPlane.prototype.segmentIntersect = function(out, seg, state)
-	{
+JigLib_JPlane.prototype.segmentIntersect = function(out, seg, state)
+{
 
 		out.frac = 0;
-		out.position = new JigLib.Vector3D();
-		out.normal = new JigLib.Vector3D();
+		out.position = new JigLib_Vector3D();
+		out.normal = new JigLib_Vector3D();
 
 		var frac = 0, t, denom;
 
 		denom = this._normal.dotProduct(seg.delta);
-		if (Math.abs(denom) > JigLib.JMath3D.NUM_TINY)
+		if (Math.abs(denom) > JigLib_JMath3D.NUM_TINY)
 		{
 			t = -1 * (this._normal.dotProduct(seg.origin) - this._distance) / denom;
 
@@ -80,21 +77,18 @@
 			return false;
 		}
 		
-	}
+}
 
-	JPlane.prototype.updateState = function()
-	{
+JigLib_JPlane.prototype.updateState = function()
+{
 
-		JigLib.RigidBody.prototype.updateState.apply(this, [  ]);
+		JigLib_RigidBody.prototype.updateState.apply(this, [  ]);
 
 		this._normal = this._currState.orientation.transformVector(this._initNormal);
 		this._distance = this._currState.position.dotProduct(this._normal);
 		
-	}
+}
 
 
 
-	JigLib.JPlane = JPlane; 
-
-})(JigLib);
-
+JigLib.JPlane = JigLib_JPlane; 

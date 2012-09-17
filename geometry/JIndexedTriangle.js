@@ -1,26 +1,23 @@
 
-(function(JigLib) {
-
-
-	var JIndexedTriangle = function()
-	{
-		this.counter = null; // int
-		this._vertexIndices = null; // uint
-		this._plane = null; // PlaneData
-		this._boundingBox = null; // JAABox
+var JigLib_JIndexedTriangle = function()
+{
+	this.counter = null; // int
+	this._vertexIndices = null; // uint
+	this._plane = null; // PlaneData
+	this._boundingBox = null; // JAABox
 
 		this.counter = 0;
 		this._vertexIndices = [];
 		this._vertexIndices[0] = -1;
 		this._vertexIndices[1] = -1;
 		this._vertexIndices[2] = -1;
-		this._plane = new JigLib.PlaneData();
-		this._boundingBox = new JigLib.JAABox();
+		this._plane = new JigLib_PlaneData();
+		this._boundingBox = new JigLib_JAABox();
 		
-	}
+}
 
-	JIndexedTriangle.prototype.setVertexIndices = function(i0, i1, i2, vertexArray)
-	{
+JigLib_JIndexedTriangle.prototype.setVertexIndices = function(i0, i1, i2, vertexArray)
+{
 
 		this._vertexIndices[0] = i0;
 		this._vertexIndices[1] = i1;
@@ -33,10 +30,10 @@
 		this._boundingBox.addPoint(vertexArray[i1]);
 		this._boundingBox.addPoint(vertexArray[i2]);
 		
-	}
+}
 
-	JIndexedTriangle.prototype.updateVertexIndices = function(vertexArray)
-	{
+JigLib_JIndexedTriangle.prototype.updateVertexIndices = function(vertexArray)
+{
 
 		var i0, i1, i2;
 		i0=this._vertexIndices[0];
@@ -50,39 +47,36 @@
 		this._boundingBox.addPoint(vertexArray[i1]);
 		this._boundingBox.addPoint(vertexArray[i2]);
 		
-	}
+}
 
-	JIndexedTriangle.prototype.get_vertexIndices = function()
-	{
+JigLib_JIndexedTriangle.prototype.get_vertexIndices = function()
+{
 
 		return this._vertexIndices;
 		
-	}
+}
 
-	JIndexedTriangle.prototype.getVertexIndex = function(iCorner)
-	{
+JigLib_JIndexedTriangle.prototype.getVertexIndex = function(iCorner)
+{
 
 		return this._vertexIndices[iCorner];
 		
-	}
+}
 
-	JIndexedTriangle.prototype.get_plane = function()
-	{
+JigLib_JIndexedTriangle.prototype.get_plane = function()
+{
 
 		return this._plane;
 		
-	}
+}
 
-	JIndexedTriangle.prototype.get_boundingBox = function()
-	{
+JigLib_JIndexedTriangle.prototype.get_boundingBox = function()
+{
 
 		return this._boundingBox;
 		
-	}
+}
 
 
 
-	JigLib.JIndexedTriangle = JIndexedTriangle; 
-
-})(JigLib);
-
+JigLib.JIndexedTriangle = JigLib_JIndexedTriangle; 

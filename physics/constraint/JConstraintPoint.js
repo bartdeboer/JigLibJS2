@@ -1,43 +1,40 @@
 
-(function(JigLib) {
+var JigLib_JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowedDistance, timescale)
+{
+	this._maxVelMag =  20; // Number
+	this._minVelForProcessing =  0.01; // Number
+	this._body0 = null; // RigidBody
+	this._body1 = null; // RigidBody
+	this._body0Pos = null; // Vector3D
+	this._body1Pos = null; // Vector3D
+	this._timescale = null; // Number
+	this._allowedDistance = null; // Number
+	this.r0 = null; // Vector3D
+	this.r1 = null; // Vector3D
+	this._worldPos = null; // Vector3D
+	this._vrExtra = null; // Vector3D
 
-
-	var JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowedDistance, timescale)
-	{
-		this._maxVelMag =  20; // Number
-		this._minVelForProcessing =  0.01; // Number
-		this._body0 = null; // RigidBody
-		this._body1 = null; // RigidBody
-		this._body0Pos = null; // Vector3D
-		this._body1Pos = null; // Vector3D
-		this._timescale = null; // Number
-		this._allowedDistance = null; // Number
-		this.r0 = null; // Vector3D
-		this.r1 = null; // Vector3D
-		this._worldPos = null; // Vector3D
-		this._vrExtra = null; // Vector3D
-
-		JigLib.JConstraint.apply(this, [  ]);
+		JigLib_JConstraint.apply(this, [  ]);
 		this._body0 = body0;
 		this._body0Pos = body0Pos;
 		this._body1 = body1;
 		this._body1Pos = body1Pos;
 		this._allowedDistance = allowedDistance;
 		this._timescale = timescale;
-		if (this._timescale < JigLib.JMath3D.NUM_TINY)
+		if (this._timescale < JigLib_JMath3D.NUM_TINY)
 		{
-			this._timescale = JigLib.JMath3D.NUM_TINY;
+			this._timescale = JigLib_JMath3D.NUM_TINY;
 		}
 		
 		this._constraintEnabled = false;
 		this.enableConstraint();
 		
-	}
+}
 
-	JigLib.extend(JConstraintPoint, JigLib.JConstraint);
+JigLib.extend(JigLib_JConstraintPoint, JigLib_JConstraint);
 
-	JConstraintPoint.prototype.enableConstraint = function()
-	{
+JigLib_JConstraintPoint.prototype.enableConstraint = function()
+{
 
 		if (this._constraintEnabled)
 		{
@@ -46,12 +43,12 @@
 		this._constraintEnabled = true;
 		this._body0.addConstraint(this);
 		this._body1.addConstraint(this);
-		JigLib.PhysicsSystem.getInstance().addConstraint(this);
+		JigLib_PhysicsSystem.getInstance().addConstraint(this);
 		
-	}
+}
 
-	JConstraintPoint.prototype.disableConstraint = function()
-	{
+JigLib_JConstraintPoint.prototype.disableConstraint = function()
+{
 
 		if (!this._constraintEnabled)
 		{
@@ -60,12 +57,12 @@
 		this._constraintEnabled = false;
 		this._body0.removeConstraint(this);
 		this._body1.removeConstraint(this);
-		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib_PhysicsSystem.getInstance().removeConstraint(this);
 		
-	}
+}
 
-	JConstraintPoint.prototype.preApply = function(dt)
-	{
+JigLib_JConstraintPoint.prototype.preApply = function(dt)
+{
 
 		this.satisfied = false;
 
@@ -75,23 +72,23 @@
 		var worldPos0, worldPos1, deviation, deviationAmount;
 		worldPos0 = this._body0.get_currentState().position.add(this.r0);
 		worldPos1 = this._body1.get_currentState().position.add(this.r1);
-		this._worldPos = JigLib.JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
+		this._worldPos = JigLib_JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
 
 		deviation = worldPos0.subtract(worldPos1);
 		deviationAmount = deviation.get_length();
 		if (deviationAmount > this._allowedDistance)
 		{
-			this._vrExtra = JigLib.JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
+			this._vrExtra = JigLib_JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
 		}
 		else
 		{
-			this._vrExtra = new JigLib.Vector3D();
+			this._vrExtra = new JigLib_Vector3D();
 		}
 		
-	}
+}
 
-	JConstraintPoint.prototype.apply = function(dt)
-	{
+JigLib_JConstraintPoint.prototype.apply = function(dt)
+{
 
 		this.satisfied = true;
 
@@ -114,35 +111,32 @@
 
 		if (normalVel > this._maxVelMag)
 		{
-			Vr = JigLib.JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
+			Vr = JigLib_JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
 			normalVel = this._maxVelMag;
 		}
 
-		N = JigLib.JNumber3D.getDivideVector(Vr, normalVel);
+		N = JigLib_JNumber3D.getDivideVector(Vr, normalVel);
 		tempVec1 = this.r0.crossProduct(N);
 		tempVec1 = this._body0.get_worldInvInertia().transformVector(tempVec1);
 		tempVec2 = this.r1.crossProduct(N);
 		tempVec2 = this._body1.get_worldInvInertia().transformVector(tempVec2);
 		denominator = this._body0.get_invMass() + this._body1.get_invMass() + N.dotProduct(tempVec1.crossProduct(this.r0)) + N.dotProduct(tempVec2.crossProduct(this.r1));
-		if (denominator < JigLib.JMath3D.NUM_TINY)
+		if (denominator < JigLib_JMath3D.NUM_TINY)
 		{
 			return false;
 		}
 
-		normalImpulse = JigLib.JNumber3D.getScaleVector(N, -normalVel / denominator);
+		normalImpulse = JigLib_JNumber3D.getScaleVector(N, -normalVel / denominator);
 		this._body0.applyWorldImpulse(normalImpulse, this._worldPos, false);
-		this._body1.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
+		this._body1.applyWorldImpulse(JigLib_JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
 
 		this._body0.setConstraintsAndCollisionsUnsatisfied();
 		this._body1.setConstraintsAndCollisionsUnsatisfied();
 		this.satisfied = true;
 		return true;
 		
-	}
+}
 
 
 
-	JigLib.JConstraintPoint = JConstraintPoint; 
-
-})(JigLib);
-
+JigLib.JConstraintPoint = JigLib_JConstraintPoint; 

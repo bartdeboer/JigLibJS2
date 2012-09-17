@@ -1,18 +1,15 @@
 
-(function(JigLib) {
+var JigLib_CollisionSystemBrute = function()
+{
 
-
-	var CollisionSystemBrute = function()
-	{
-
-		JigLib.CollisionSystemAbstract.apply(this, [  ]);
+		JigLib_CollisionSystemAbstract.apply(this, [  ]);
 		
-	}
+}
 
-	JigLib.extend(CollisionSystemBrute, JigLib.CollisionSystemAbstract);
+JigLib.extend(JigLib_CollisionSystemBrute, JigLib_CollisionSystemAbstract);
 
-	CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
-	{
+JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
+{
 
 		var info;
 		var fu;
@@ -39,7 +36,7 @@
 				
 				if (this.checkCollidables(_body, _collBody) && this.detectionFunctors[bodyType + "_" + _collBody.get_type()] != undefined)
 				{
-				info = new JigLib.CollDetectInfo();
+				info = new JigLib_CollDetectInfo();
 				info.body0 = _body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -49,11 +46,8 @@
 			}
 		}
 		
-	}
+}
 
 
 
-	JigLib.CollisionSystemBrute = CollisionSystemBrute; 
-
-})(JigLib);
-
+JigLib.CollisionSystemBrute = JigLib_CollisionSystemBrute; 

@@ -1,77 +1,74 @@
 
-(function(JigLib) {
-
-
-	var JOctree = function()
-	{
-		this._cells = null; // OctreeCell
-		this._vertices = null; // Vector3D
-		this._triangles = null; // JIndexedTriangle
-		this._boundingBox = null; // JAABox
-		this._cellsToTest = null; // int
-		this._testCounter = null; // int
+var JigLib_JOctree = function()
+{
+	this._cells = null; // OctreeCell
+	this._vertices = null; // Vector3D
+	this._triangles = null; // JIndexedTriangle
+	this._boundingBox = null; // JAABox
+	this._cellsToTest = null; // int
+	this._testCounter = null; // int
 
 		this._testCounter = 0;
 		this._cells = [];
 		this._vertices = [];
 		this._triangles = [];
 		this._cellsToTest = [];
-		this._boundingBox = new JigLib.JAABox();
+		this._boundingBox = new JigLib_JAABox();
 		
-	}
+}
 
-	JOctree.prototype.get_trianglesData = function()
-	{
+JigLib_JOctree.prototype.get_trianglesData = function()
+{
 
 		return this._triangles;
 		
-	}
+}
 
-	JOctree.prototype.getTriangle = function(iTriangle)
-	{
+JigLib_JOctree.prototype.getTriangle = function(iTriangle)
+{
 
 		return this._triangles[iTriangle];
 		
-	}
+}
 
-	JOctree.prototype.get_verticesData = function()
-	{
+JigLib_JOctree.prototype.get_verticesData = function()
+{
 
 		return this._vertices;
 		
-	}
+}
 
-	JOctree.prototype.getVertex = function(iVertex)
-	{
+JigLib_JOctree.prototype.getVertex = function(iVertex)
+{
 
 		return this._vertices[iVertex];
 		
-	}
+}
 
-	JOctree.prototype.boundingBox = function()
-	{
+JigLib_JOctree.prototype.boundingBox = function()
+{
 
 		return this._boundingBox;
 		
-	}
+}
 
-	JOctree.prototype.clear = function()
-	{
+JigLib_JOctree.prototype.clear = function()
+{
 
 		this._cells.length=0;
 		this._vertices.length=0;
 		this._triangles.length=0;
 		
-	}
+}
 
-	JOctree.prototype.addTriangles = function(vertices, numVertices, triangleVertexIndices, numTriangles)
-	{
+JigLib_JOctree.prototype.addTriangles = function(vertices, numVertices, triangleVertexIndices, numTriangles)
+{
 
 		this.clear();
 		
 		this._vertices = vertices.concat();
 		
-		var NLen, tiny=JigLib.JMath3D.NUM_TINY;
+		var NLen, tiny=JigLib_JMath3D.NUM_TINY;
 		var i0, i1, i2;
 		var dr1, dr2, N;
 		var indexedTriangle;
@@ -87,16 +84,16 @@
 			
 			if (NLen > tiny)
 			{
-				indexedTriangle = new JigLib.JIndexedTriangle();
+				indexedTriangle = new JigLib_JIndexedTriangle();
 				indexedTriangle.setVertexIndices(i0, i1, i2, this._vertices);
 				this._triangles.push(indexedTriangle);
 			}
 		}
 		
-	}
+}
 
-	JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize)
-	{
+JigLib_JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize)
+{
 
 		this._boundingBox.clear();
 		
@@ -105,7 +102,7 @@
 		}
 		
 		this._cells.length=0;
-		this._cells.push(new JigLib.OctreeCell(this._boundingBox));
+		this._cells.push(new JigLib_OctreeCell(this._boundingBox));
 		
 		var numTriangles = this._triangles.length;
 		for (var i = 0; i < numTriangles; i++ ) {
@@ -124,10 +121,10 @@
 			if (this._cells[cellIndex].triangleIndices.length <= maxTrianglesPerCell || this._cells[cellIndex].AABox.getRadiusAboutCentre() < minCellSize) {
 				continue;
 			}
-			for (i = 0; i < JigLib.OctreeCell.NUM_CHILDREN; i++ ) {
+			for (i = 0; i < JigLib_OctreeCell.NUM_CHILDREN; i++ ) {
 				this._cells[cellIndex].childCellIndices[i] = this._cells.length;
 				cellsToProcess.push(this._cells.length);
-				this._cells.push(new JigLib.OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
+				this._cells.push(new JigLib_OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
 				
 				childCell = this._cells[this._cells.length - 1];
 				numTriangles = this._cells[cellIndex].triangleIndices.length;
@@ -142,10 +139,10 @@
 			this._cells[cellIndex].triangleIndices.length=0;
 		}
 		
-	}
+}
 
-	JOctree.prototype.updateTriangles = function(vertices)
-	{
+JigLib_JOctree.prototype.updateTriangles = function(vertices)
+{
 
 		this._vertices = vertices.concat();
 		
@@ -153,10 +150,10 @@
 			triangle.updateVertexIndices(this._vertices);
 		}
 		
-	}
+}
 
-	JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aabb)
-	{
+JigLib_JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aabb)
+{
 
 		if (this._cells.length == 0) return 0;
 		
@@ -188,17 +185,17 @@
 				}
 				}
 			}else {
-				for (i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
+				for (i = 0 ; i < JigLib_OctreeCell.NUM_CHILDREN ; i++) {
 				this._cellsToTest.push(cell.childCellIndices[i]);
 				}
 			}
 		}
 		return triangles.length;
 		
-	}
+}
 
-	JOctree.prototype.dumpStats = function()
-	{
+JigLib_JOctree.prototype.dumpStats = function()
+{
 
 		var maxTris = 0, numTris, cellIndex, cell;
 		
@@ -216,7 +213,7 @@
 				maxTris = numTris;
 				}
 			}else {
-				for (var i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
+				for (var i = 0 ; i < JigLib_OctreeCell.NUM_CHILDREN ; i++) {
 				if ((cell.childCellIndices[i] >= 0) && (cell.childCellIndices[i] < this._cells.length)) {
 					cellsToProcess.push(cell.childCellIndices[i]);
 				}
@@ -224,45 +221,45 @@
 			}
 		}
 		
-	}
+}
 
-	JOctree.prototype.createAABox = function(aabb, _id)
-	{
+JigLib_JOctree.prototype.createAABox = function(aabb, _id)
+{
 
-		var dims = JigLib.JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
+		var dims = JigLib_JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
 		var offset;
 		switch(_id) {
 			case 0:
-				offset = new JigLib.Vector3D(1, 1, 1);
+				offset = new JigLib_Vector3D(1, 1, 1);
 				break;
 			case 1:
-				offset = new JigLib.Vector3D(1, 1, 0);
+				offset = new JigLib_Vector3D(1, 1, 0);
 				break;
 			case 2:
-				offset = new JigLib.Vector3D(1, 0, 1);
+				offset = new JigLib_Vector3D(1, 0, 1);
 				break;
 			case 3:
-				offset = new JigLib.Vector3D(1, 0, 0);
+				offset = new JigLib_Vector3D(1, 0, 0);
 				break;
 			case 4:
-				offset = new JigLib.Vector3D(0, 1, 1);
+				offset = new JigLib_Vector3D(0, 1, 1);
 				break;
 			case 5:
-				offset = new JigLib.Vector3D(0, 1, 0);
+				offset = new JigLib_Vector3D(0, 1, 0);
 				break;
 			case 6:
-				offset = new JigLib.Vector3D(0, 0, 1);
+				offset = new JigLib_Vector3D(0, 0, 1);
 				break;
 			case 7:
-				offset = new JigLib.Vector3D(0, 0, 0);
+				offset = new JigLib_Vector3D(0, 0, 0);
 				break;
 			default:
-				offset = new JigLib.Vector3D(0, 0, 0);
+				offset = new JigLib_Vector3D(0, 0, 0);
 				break;
 		}
 		
-		var result = new JigLib.JAABox();
-		result.minPos = aabb.minPos.add(new JigLib.Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
+		var result = new JigLib_JAABox();
+		result.minPos = aabb.minPos.add(new JigLib_Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
 		result.maxPos = result.minPos.add(dims);
 		
 		dims.scaleBy(0.00001);
@@ -271,10 +268,10 @@
 		
 		return result;
 		
-	}
+}
 
-	JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
-	{
+JigLib_JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
+{
 
 		if (!triangle.get_boundingBox().overlapTest(cell.AABox)) {
 			return false;
@@ -285,14 +282,14 @@
 				return true;
 			}
 			
-		var tri = new JigLib.JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
+		var tri = new JigLib_JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
 		var edge;
 		var seg;
 		var edges = cell.get_egdes();
 		var pts = cell.get_points();
 		for (var i = 0; i < 12; i++ ) {
 			edge = edges[i];
-			seg = new JigLib.JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
+			seg = new JigLib_JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
 			if (tri.segmentTriangleIntersection(null, seg)) {
 				return true;
 			}
@@ -303,16 +300,16 @@
 		for (i = 0; i < 3; i++ ) {
 			pt0 = tri.getVertex(i);
 			pt1 = tri.getVertex((i + 1) % 3);
-			if (cell.AABox.segmentAABoxOverlap(new JigLib.JSegment(pt0, pt1.subtract(pt0)))) {
+			if (cell.AABox.segmentAABoxOverlap(new JigLib_JSegment(pt0, pt1.subtract(pt0)))) {
 				return true;
 			}
 		}
 		return false;
 		
-	}
+}
 
-	JOctree.prototype.incrementTestCounter = function()
-	{
+JigLib_JOctree.prototype.incrementTestCounter = function()
+{
 
 		++this._testCounter;
 		if (this._testCounter == 0) {
@@ -323,11 +320,8 @@
 			this._testCounter = 1;
 		}
 		
-	}
+}
 
 
 
-	JigLib.JOctree = JOctree; 
-
-})(JigLib);
-
+JigLib.JOctree = JigLib_JOctree; 

@@ -1,20 +1,17 @@
 
-(function(JigLib) {
-
-
-	var CollDetectCapsuleTerrain = function()
-	{
+var JigLib_CollDetectCapsuleTerrain = function()
+{
 
 		this.name = "BoxTerrain";
 		this.type0 = "CAPSULE";
 		this.type1 = "TERRAIN";
 		
-	}
+}
 
-	JigLib.extend(CollDetectCapsuleTerrain, JigLib.CollDetectFunctor);
+JigLib.extend(JigLib_CollDetectCapsuleTerrain, JigLib_CollDetectFunctor);
 
-	CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
-	{
+JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
+{
 
 		var tempBody;
 		if (info.body0.get_type() == "TERRAIN")
@@ -30,15 +27,15 @@
 		var collPts = [];
 		var cpInfo;
 		
-		var averageNormal = new JigLib.Vector3D();
+		var averageNormal = new JigLib_Vector3D();
 		var pos1 = capsule.getBottomPos(capsule.get_oldState());
 		var pos2 = capsule.getBottomPos(capsule.get_currentState());
 		var obj1 = terrain.getHeightAndNormalByPoint(pos1);
 		var obj2 = terrain.getHeightAndNormalByPoint(pos2);
-		if (Math.min(obj1.height, obj2.height) < JigLib.JConfig.collToll + capsule.get_radius()) {
+		if (Math.min(obj1.height, obj2.height) < JigLib_JConfig.collToll + capsule.get_radius()) {
 			var oldDepth = capsule.get_radius() - obj1.height;
-			var worldPos = pos1.subtract(JigLib.JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
-			cpInfo = new JigLib.CollPointInfo();
+			var worldPos = pos1.subtract(JigLib_JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
+			cpInfo = new JigLib_CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(terrain.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -50,10 +47,10 @@
 		pos2 = capsule.getEndPos(capsule.get_currentState());
 		obj1 = terrain.getHeightAndNormalByPoint(pos1);
 		obj2 = terrain.getHeightAndNormalByPoint(pos2);
-		if (Math.min(obj1.height, obj2.height) < JigLib.JConfig.collToll + capsule.get_radius()) {
+		if (Math.min(obj1.height, obj2.height) < JigLib_JConfig.collToll + capsule.get_radius()) {
 			oldDepth = capsule.get_radius() - obj1.height;
-			worldPos = pos1.subtract(JigLib.JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
-			cpInfo = new JigLib.CollPointInfo();
+			worldPos = pos1.subtract(JigLib_JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
+			cpInfo = new JigLib_CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(terrain.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -65,12 +62,12 @@
 		{
 			averageNormal.normalize();
 			
-			var collInfo = new JigLib.CollisionInfo();
+			var collInfo = new JigLib_CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = averageNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib.MaterialProperties();
+			var mat = new JigLib_MaterialProperties();
 			mat.restitution = 0.5*(capsule.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(capsule.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -84,11 +81,8 @@
 			info.body1.removeCollideBodies(info.body0);
 		}
 		
-	}
+}
 
 
 
-	JigLib.CollDetectCapsuleTerrain = CollDetectCapsuleTerrain; 
-
-})(JigLib);
-
+JigLib.CollDetectCapsuleTerrain = JigLib_CollDetectCapsuleTerrain; 

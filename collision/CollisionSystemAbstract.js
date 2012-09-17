@@ -1,69 +1,66 @@
 
-(function(JigLib) {
-
-
-	var CollisionSystemAbstract = function()
-	{
-		this.detectionFunctors = null; // Dictionary
-		this.collBody = null; // RigidBody
-		this._numCollisionsChecks =  0; // uint
-		this.startPoint = null; // Vector3D
+var JigLib_CollisionSystemAbstract = function()
+{
+	this.detectionFunctors = null; // Dictionary
+	this.collBody = null; // RigidBody
+	this._numCollisionsChecks =  0; // uint
+	this.startPoint = null; // Vector3D
 
 		this.collBody = [];
 		this.detectionFunctors = [];
-		this.detectionFunctors["BOX_BOX"] = new JigLib.CollDetectBoxBox();
-		this.detectionFunctors["BOX_SPHERE"] = new JigLib.CollDetectSphereBox();
-		this.detectionFunctors["BOX_CAPSULE"] = new JigLib.CollDetectCapsuleBox();
-		this.detectionFunctors["BOX_PLANE"] = new JigLib.CollDetectBoxPlane();
-		this.detectionFunctors["BOX_TERRAIN"] = new JigLib.CollDetectBoxTerrain();
-		this.detectionFunctors["BOX_TRIANGLEMESH"] = new JigLib.CollDetectBoxMesh();
-		this.detectionFunctors["SPHERE_BOX"] = new JigLib.CollDetectSphereBox();
-		this.detectionFunctors["SPHERE_SPHERE"] = new JigLib.CollDetectSphereSphere();
-		this.detectionFunctors["SPHERE_CAPSULE"] = new JigLib.CollDetectSphereCapsule();
-		this.detectionFunctors["SPHERE_PLANE"] = new JigLib.CollDetectSpherePlane();
-		this.detectionFunctors["SPHERE_TERRAIN"] = new JigLib.CollDetectSphereTerrain();
-		this.detectionFunctors["SPHERE_TRIANGLEMESH"] = new JigLib.CollDetectSphereMesh();
-		this.detectionFunctors["CAPSULE_CAPSULE"] = new JigLib.CollDetectCapsuleCapsule();
-		this.detectionFunctors["CAPSULE_BOX"] = new JigLib.CollDetectCapsuleBox();
-		this.detectionFunctors["CAPSULE_SPHERE"] = new JigLib.CollDetectSphereCapsule();
-		this.detectionFunctors["CAPSULE_PLANE"] = new JigLib.CollDetectCapsulePlane();
-		this.detectionFunctors["CAPSULE_TERRAIN"] = new JigLib.CollDetectCapsuleTerrain();
-		this.detectionFunctors["PLANE_BOX"] = new JigLib.CollDetectBoxPlane();
-		this.detectionFunctors["PLANE_SPHERE"] = new JigLib.CollDetectSpherePlane();
-		this.detectionFunctors["PLANE_CAPSULE"] = new JigLib.CollDetectCapsulePlane();
-		this.detectionFunctors["TERRAIN_SPHERE"] = new JigLib.CollDetectSphereTerrain();
-		this.detectionFunctors["TERRAIN_BOX"] = new JigLib.CollDetectBoxTerrain();
-		this.detectionFunctors["TERRAIN_CAPSULE"] = new JigLib.CollDetectCapsuleTerrain();
-		this.detectionFunctors["TRIANGLEMESH_SPHERE"] = new JigLib.CollDetectSphereMesh();
-		this.detectionFunctors["TRIANGLEMESH_BOX"] = new JigLib.CollDetectBoxMesh();
+		this.detectionFunctors["BOX_BOX"] = new JigLib_CollDetectBoxBox();
+		this.detectionFunctors["BOX_SPHERE"] = new JigLib_CollDetectSphereBox();
+		this.detectionFunctors["BOX_CAPSULE"] = new JigLib_CollDetectCapsuleBox();
+		this.detectionFunctors["BOX_PLANE"] = new JigLib_CollDetectBoxPlane();
+		this.detectionFunctors["BOX_TERRAIN"] = new JigLib_CollDetectBoxTerrain();
+		this.detectionFunctors["BOX_TRIANGLEMESH"] = new JigLib_CollDetectBoxMesh();
+		this.detectionFunctors["SPHERE_BOX"] = new JigLib_CollDetectSphereBox();
+		this.detectionFunctors["SPHERE_SPHERE"] = new JigLib_CollDetectSphereSphere();
+		this.detectionFunctors["SPHERE_CAPSULE"] = new JigLib_CollDetectSphereCapsule();
+		this.detectionFunctors["SPHERE_PLANE"] = new JigLib_CollDetectSpherePlane();
+		this.detectionFunctors["SPHERE_TERRAIN"] = new JigLib_CollDetectSphereTerrain();
+		this.detectionFunctors["SPHERE_TRIANGLEMESH"] = new JigLib_CollDetectSphereMesh();
+		this.detectionFunctors["CAPSULE_CAPSULE"] = new JigLib_CollDetectCapsuleCapsule();
+		this.detectionFunctors["CAPSULE_BOX"] = new JigLib_CollDetectCapsuleBox();
+		this.detectionFunctors["CAPSULE_SPHERE"] = new JigLib_CollDetectSphereCapsule();
+		this.detectionFunctors["CAPSULE_PLANE"] = new JigLib_CollDetectCapsulePlane();
+		this.detectionFunctors["CAPSULE_TERRAIN"] = new JigLib_CollDetectCapsuleTerrain();
+		this.detectionFunctors["PLANE_BOX"] = new JigLib_CollDetectBoxPlane();
+		this.detectionFunctors["PLANE_SPHERE"] = new JigLib_CollDetectSpherePlane();
+		this.detectionFunctors["PLANE_CAPSULE"] = new JigLib_CollDetectCapsulePlane();
+		this.detectionFunctors["TERRAIN_SPHERE"] = new JigLib_CollDetectSphereTerrain();
+		this.detectionFunctors["TERRAIN_BOX"] = new JigLib_CollDetectBoxTerrain();
+		this.detectionFunctors["TERRAIN_CAPSULE"] = new JigLib_CollDetectCapsuleTerrain();
+		this.detectionFunctors["TRIANGLEMESH_SPHERE"] = new JigLib_CollDetectSphereMesh();
+		this.detectionFunctors["TRIANGLEMESH_BOX"] = new JigLib_CollDetectBoxMesh();
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.addCollisionBody = function(body)
-	{
+JigLib_CollisionSystemAbstract.prototype.addCollisionBody = function(body)
+{
 
 		if (this.collBody.indexOf(body) < 0)
 			this.collBody.push(body);
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.removeCollisionBody = function(body)
-	{
+JigLib_CollisionSystemAbstract.prototype.removeCollisionBody = function(body)
+{
 
 		if (this.collBody.indexOf(body) >= 0)
 			this.collBody.splice(this.collBody.indexOf(body), 1);
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.removeAllCollisionBodies = function()
-	{
+JigLib_CollisionSystemAbstract.prototype.removeAllCollisionBodies = function()
+{
 
 		this.collBody.length=0;
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.detectCollisions = function(body, collArr)
-	{
+JigLib_CollisionSystemAbstract.prototype.detectCollisions = function(body, collArr)
+{
 
 		if (!body.isActive)
 			return;
@@ -79,7 +76,7 @@
 			}
 			if (this.checkCollidables(body, _collBody) && this.detectionFunctors[body.get_type() + "_" + _collBody.get_type()] != undefined)
 			{
-				info = new JigLib.CollDetectInfo();
+				info = new JigLib_CollDetectInfo();
 				info.body0 = body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -87,29 +84,29 @@
 			}
 		}
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.detectAllCollisions = function(bodies, collArr)
-	{
+JigLib_CollisionSystemAbstract.prototype.detectAllCollisions = function(bodies, collArr)
+{
 
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.collisionSkinMoved = function(colBody)
-	{
+JigLib_CollisionSystemAbstract.prototype.collisionSkinMoved = function(colBody)
+{
 
 		// used for grid
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.segmentIntersect = function(out, seg, ownerBody)
-	{
+JigLib_CollisionSystemAbstract.prototype.segmentIntersect = function(out, seg, ownerBody)
+{
 
-		out.frac = JigLib.JMath3D.NUM_HUGE;
-		out.position = new JigLib.Vector3D();
-		out.normal = new JigLib.Vector3D();
+		out.frac = JigLib_JMath3D.NUM_HUGE;
+		out.position = new JigLib_Vector3D();
+		out.normal = new JigLib_Vector3D();
 		
-		var obj = new JigLib.CollOutBodyData();
+		var obj = new JigLib_CollOutBodyData();
 		for (var collBody_i = 0, collBody_l = this.collBody.length, _collBody; (collBody_i < collBody_l) && (_collBody = this.collBody[collBody_i]); collBody_i++)
 		{
 			if (_collBody != ownerBody && this.segmentBounding(seg, _collBody))
@@ -141,10 +138,10 @@
 		
 		return true;
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.segmentBounding = function(seg, obj)
-	{
+JigLib_CollisionSystemAbstract.prototype.segmentBounding = function(seg, obj)
+{
 
 		var pos = seg.getPoint(0.5);
 		var r = seg.delta.get_length() / 2;
@@ -157,17 +154,17 @@
 		else
 			return false;
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.get_numCollisionsChecks = function()
-	{
+JigLib_CollisionSystemAbstract.prototype.get_numCollisionsChecks = function()
+{
 
 		return this._numCollisionsChecks;	
 		
-	}
+}
 
-	CollisionSystemAbstract.prototype.checkCollidables = function(body0, body1)
-	{
+JigLib_CollisionSystemAbstract.prototype.checkCollidables = function(body0, body1)
+{
 
 		if (body0.get_nonCollidables().length == 0 && body1.get_nonCollidables().length == 0)
 			return true;
@@ -180,11 +177,8 @@
 		
 		return true;
 		
-	}
+}
 
 
 
-	JigLib.CollisionSystemAbstract = CollisionSystemAbstract; 
-
-})(JigLib);
-
+JigLib.CollisionSystemAbstract = JigLib_CollisionSystemAbstract; 

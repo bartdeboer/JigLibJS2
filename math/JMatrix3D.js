@@ -1,81 +1,78 @@
 
-(function(JigLib) {
+var JigLib_JMatrix3D = function()
+{
+}
 
 
-	var JMatrix3D = function()
-	{
-	}
+JigLib_JMatrix3D.getTranslationMatrix = function(x, y, z)
+{
 
-
-	JMatrix3D.getTranslationMatrix = function(x, y, z)
-	{
-
-			var matrix3D = new JigLib.Matrix3D();
+			var matrix3D = new JigLib_Matrix3D();
 			matrix3D.appendTranslation(x, y, z);
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getScaleMatrix = function(x, y, z)
-	{
+JigLib_JMatrix3D.getScaleMatrix = function(x, y, z)
+{
 
-			var matrix3D = new JigLib.Matrix3D();
+			var matrix3D = new JigLib_Matrix3D();
 			matrix3D.prependScale(x, y, z);
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getRotationMatrix = function(x, y, z, degree, pivotPoint)
-	{
+JigLib_JMatrix3D.getRotationMatrix = function(x, y, z, degree, pivotPoint)
+{
 
-			var matrix3D = new JigLib.Matrix3D();
-			matrix3D.appendRotation(degree, new JigLib.Vector3D(x,y,z),pivotPoint);
+			var matrix3D = new JigLib_Matrix3D();
+			matrix3D.appendRotation(degree, new JigLib_Vector3D(x,y,z),pivotPoint);
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getInverseMatrix = function(m)
-	{
+JigLib_JMatrix3D.getInverseMatrix = function(m)
+{
 
 			var matrix3D = m.clone();
 			matrix3D.invert();
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getTransposeMatrix = function(m)
-	{
+JigLib_JMatrix3D.getTransposeMatrix = function(m)
+{
 
 			var matrix3D = m.clone();
 			matrix3D.transpose();
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getAppendMatrix3D = function(a, b)
-	{
+JigLib_JMatrix3D.getAppendMatrix3D = function(a, b)
+{
 
 			var matrix3D = a.clone();
 			matrix3D.append(b);
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getPrependMatrix = function(a, b)
-	{
+JigLib_JMatrix3D.getPrependMatrix = function(a, b)
+{
 
 			var matrix3D = a.clone();
 			matrix3D.prepend(b);
 			return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getSubMatrix = function(a, b)
-	{
+JigLib_JMatrix3D.getSubMatrix = function(a, b)
+{
 
 			var ar = a.get_rawData();
 			var br = b.get_rawData();
-			return new JigLib.Matrix3D([[
+			return new JigLib_Matrix3D([[
 				ar[0] - br[0],
 				ar[1] - br[1],
 				ar[2] - br[2],
@@ -94,33 +91,33 @@
 				ar[15] - br[15]
 			]]);
 		
-	}
+}
 
-	JMatrix3D.getRotationMatrixAxis = function(degree, rotateAxis)
-	{
+JigLib_JMatrix3D.getRotationMatrixAxis = function(degree, rotateAxis)
+{
 
-    		var matrix3D = new JigLib.Matrix3D();
-    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:JigLib.Vector3D.X_AXIS);
+    		var matrix3D = new JigLib_Matrix3D();
+    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:JigLib_Vector3D.X_AXIS);
     		return matrix3D;
 		
-	}
+}
 
-	JMatrix3D.getCols = function(matrix3D)
-	{
+JigLib_JMatrix3D.getCols = function(matrix3D)
+{
 
 			var rawData =  matrix3D.get_rawData();
 			var cols = [];
 			
-			cols[0] = new JigLib.Vector3D(rawData[0], rawData[4], rawData[8]);
-			cols[1] = new JigLib.Vector3D(rawData[1], rawData[5], rawData[9]);
-			cols[2] = new JigLib.Vector3D(rawData[2], rawData[6], rawData[10]);
+			cols[0] = new JigLib_Vector3D(rawData[0], rawData[4], rawData[8]);
+			cols[1] = new JigLib_Vector3D(rawData[1], rawData[5], rawData[9]);
+			cols[2] = new JigLib_Vector3D(rawData[2], rawData[6], rawData[10]);
 			
 			return cols;
 		
-	}
+}
 
-	JMatrix3D.multiplyVector = function(matrix3D, v)
-	{
+JigLib_JMatrix3D.multiplyVector = function(matrix3D, v)
+{
 
 			v = matrix3D.transformVector(v);
 			
@@ -138,10 +135,7 @@
 			v.z = vx * _rawData[2] + vy * _rawData[6] + vz * _rawData[10] + _rawData[14];
 			*/
 		
-	}
+}
 
 
-	JigLib.JMatrix3D = JMatrix3D; 
-
-})(JigLib);
-
+JigLib.JMatrix3D = JigLib_JMatrix3D; 

@@ -1,43 +1,37 @@
 
-(function(JigLib) {
-
-
-	var PhysicsController = function()
-	{
-		this._controllerEnabled = null; // Boolean
+var JigLib_PhysicsController = function()
+{
+	this._controllerEnabled = null; // Boolean
 
 		this._controllerEnabled = false;
 		
-	}
+}
 
-	PhysicsController.prototype.updateController = function(dt)
-	{
-
-		
-	}
-
-	PhysicsController.prototype.enableController = function()
-	{
+JigLib_PhysicsController.prototype.updateController = function(dt)
+{
 
 		
-	}
+}
 
-	PhysicsController.prototype.disableController = function()
-	{
+JigLib_PhysicsController.prototype.enableController = function()
+{
 
 		
-	}
+}
 
-	PhysicsController.prototype.get_controllerEnabled = function()
-	{
+JigLib_PhysicsController.prototype.disableController = function()
+{
+
+		
+}
+
+JigLib_PhysicsController.prototype.get_controllerEnabled = function()
+{
 
 		return this._controllerEnabled;
 		
-	}
+}
 
 
 
-	JigLib.PhysicsController = PhysicsController; 
-
-})(JigLib);
-
+JigLib.PhysicsController = JigLib_PhysicsController; 

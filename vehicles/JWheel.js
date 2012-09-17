@@ -1,58 +1,55 @@
 
-(function(JigLib) {
-
-
-	var JWheel = function(car)
-	{
-		this.noslipVel =  0.2; // Number
-		this.slipVel =  0.4; // Number
-		this.slipFactor =  0.7; // Number
-		this.smallVel =  3; // Number
-		this._car = null; // JCar
-		this._pos = null; // Vector3D
-		this._axisUp = null; // Vector3D
-		this._spring = null; // Number
-		this._travel = null; // Number
-		this._inertia = null; // Number
-		this._radius = null; // Number
-		this._sideFriction = null; // Number
-		this._fwdFriction = null; // Number
-		this._damping = null; // Number
-		this._numRays = null; // int
-		this._angVel = null; // Number
-		this._steerAngle = null; // Number
-		this._torque = null; // Number
-		this._driveTorque = null; // Number
-		this._axisAngle = null; // Number
-		this._displacement = null; // Number
-		this._upSpeed = null; // Number
-		this._rotDamping = null; // Number
-		this._locked = null; // Boolean
-		this._lastDisplacement = null; // Number
-		this._lastOnFloor = null; // Boolean
-		this._angVelForGrip = null; // Number
-		this.worldPos = null; // Vector3D
-		this.worldAxis = null; // Vector3D
-		this.wheelFwd = null; // Vector3D
-		this.wheelUp = null; // Vector3D
-		this.wheelLeft = null; // Vector3D
-		this.wheelRayEnd = null; // Vector3D
-		this.wheelRay = null; // JSegment
-		this.groundUp = null; // Vector3D
-		this.groundLeft = null; // Vector3D
-		this.groundFwd = null; // Vector3D
-		this.wheelPointVel = null; // Vector3D
-		this.rimVel = null; // Vector3D
-		this.worldVel = null; // Vector3D
-		this.wheelCentreVel = null; // Vector3D
-		this._collisionSystem = null; // CollisionSystemAbstract
+var JigLib_JWheel = function(car)
+{
+	this.noslipVel =  0.2; // Number
+	this.slipVel =  0.4; // Number
+	this.slipFactor =  0.7; // Number
+	this.smallVel =  3; // Number
+	this._car = null; // JCar
+	this._pos = null; // Vector3D
+	this._axisUp = null; // Vector3D
+	this._spring = null; // Number
+	this._travel = null; // Number
+	this._inertia = null; // Number
+	this._radius = null; // Number
+	this._sideFriction = null; // Number
+	this._fwdFriction = null; // Number
+	this._damping = null; // Number
+	this._numRays = null; // int
+	this._angVel = null; // Number
+	this._steerAngle = null; // Number
+	this._torque = null; // Number
+	this._driveTorque = null; // Number
+	this._axisAngle = null; // Number
+	this._displacement = null; // Number
+	this._upSpeed = null; // Number
+	this._rotDamping = null; // Number
+	this._locked = null; // Boolean
+	this._lastDisplacement = null; // Number
+	this._lastOnFloor = null; // Boolean
+	this._angVelForGrip = null; // Number
+	this.worldPos = null; // Vector3D
+	this.worldAxis = null; // Vector3D
+	this.wheelFwd = null; // Vector3D
+	this.wheelUp = null; // Vector3D
+	this.wheelLeft = null; // Vector3D
+	this.wheelRayEnd = null; // Vector3D
+	this.wheelRay = null; // JSegment
+	this.groundUp = null; // Vector3D
+	this.groundLeft = null; // Vector3D
+	this.groundFwd = null; // Vector3D
+	this.wheelPointVel = null; // Vector3D
+	this.rimVel = null; // Vector3D
+	this.worldVel = null; // Vector3D
+	this.wheelCentreVel = null; // Vector3D
+	this._collisionSystem = null; // CollisionSystemAbstract
 
 		this._car = car;
 		
-	}
+}
 
-	JWheel.prototype.setup = function(pos, axisUp, spring, travel, inertia, radius, sideFriction, fwdFriction, damping, numRays)
-	{
+JigLib_JWheel.prototype.setup = function(pos, axisUp, spring, travel, inertia, radius, sideFriction, fwdFriction, damping, numRays)
+{
 
 		this._pos = pos;
 		this._axisUp = axisUp;
@@ -66,110 +63,110 @@
 		this._numRays = numRays;
 		this.reset();
 		
-	}
+}
 
-	JWheel.prototype.addTorque = function(torque)
-	{
+JigLib_JWheel.prototype.addTorque = function(torque)
+{
 
 		this._driveTorque += torque;
 		
-	}
+}
 
-	JWheel.prototype.setLock = function(lock)
-	{
+JigLib_JWheel.prototype.setLock = function(lock)
+{
 
 		this._locked = lock;
 		
-	}
+}
 
-	JWheel.prototype.setSteerAngle = function(steer)
-	{
+JigLib_JWheel.prototype.setSteerAngle = function(steer)
+{
 
 		this._steerAngle = steer;
 		
-	}
+}
 
-	JWheel.prototype.getSteerAngle = function()
-	{
+JigLib_JWheel.prototype.getSteerAngle = function()
+{
 
 		return this._steerAngle;
 		
-	}
+}
 
-	JWheel.prototype.getPos = function()
-	{
+JigLib_JWheel.prototype.getPos = function()
+{
 
 		return this._pos;
 		
-	}
+}
 
-	JWheel.prototype.getLocalAxisUp = function()
-	{
+JigLib_JWheel.prototype.getLocalAxisUp = function()
+{
 
 		return this._axisUp;
 		
-	}
+}
 
-	JWheel.prototype.getActualPos = function()
-	{
+JigLib_JWheel.prototype.getActualPos = function()
+{
 
-		return this._pos.add(JigLib.JNumber3D.getScaleVector(this._axisUp, this._displacement));
+		return this._pos.add(JigLib_JNumber3D.getScaleVector(this._axisUp, this._displacement));
 		
-	}
+}
 
-	JWheel.prototype.getRadius = function()
-	{
+JigLib_JWheel.prototype.getRadius = function()
+{
 
 		return this._radius;
 		
-	}
+}
 
-	JWheel.prototype.getDisplacement = function()
-	{
+JigLib_JWheel.prototype.getDisplacement = function()
+{
 
 		return this._displacement;
 		
-	}
+}
 
-	JWheel.prototype.getAxisAngle = function()
-	{
+JigLib_JWheel.prototype.getAxisAngle = function()
+{
 
 		return this._axisAngle;
 		
-	}
+}
 
-	JWheel.prototype.getRollAngle = function()
-	{
+JigLib_JWheel.prototype.getRollAngle = function()
+{
 
 		return 0.1 * this._angVel * 180 / Math.PI;
 		
-	}
+}
 
-	JWheel.prototype.setRotationDamping = function(vel)
-	{
+JigLib_JWheel.prototype.setRotationDamping = function(vel)
+{
 
 		this._rotDamping = vel;
 		
-	}
+}
 
-	JWheel.prototype.getRotationDamping = function()
-	{
+JigLib_JWheel.prototype.getRotationDamping = function()
+{
 
 		return this._rotDamping;
 		
-	}
+}
 
-	JWheel.prototype.getOnFloor = function()
-	{
+JigLib_JWheel.prototype.getOnFloor = function()
+{
 
 		return this._lastOnFloor;
 		
-	}
+}
 
-	JWheel.prototype.addForcesToCar = function(dt)
-	{
+JigLib_JWheel.prototype.addForcesToCar = function(dt)
+{
 
-		var force = new JigLib.Vector3D();
+		var force = new JigLib_Vector3D();
 		this._lastDisplacement = this._displacement;
 		this._displacement = 0;
 
@@ -178,17 +175,17 @@
 		this.worldPos = carBody.get_currentState().position.add(this.worldPos);
 		this.worldAxis = carBody.get_currentState().orientation.transformVector(this._axisUp);
 
-		this.wheelFwd = JigLib.JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
+		this.wheelFwd = JigLib_JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
 		this.wheelUp = this.worldAxis;
 		this.wheelLeft = this.wheelUp.crossProduct(this.wheelFwd);
 		this.wheelLeft.normalize();
 
 		var rayLen = 2 * this._radius + this._travel;
-		this.wheelRayEnd = this.worldPos.subtract(JigLib.JNumber3D.getScaleVector(this.worldAxis, this._radius));
-		this.wheelRay = new JigLib.JSegment(this.wheelRayEnd.add(JigLib.JNumber3D.getScaleVector(this.worldAxis, rayLen)), JigLib.JNumber3D.getScaleVector(this.worldAxis, -rayLen));
+		this.wheelRayEnd = this.worldPos.subtract(JigLib_JNumber3D.getScaleVector(this.worldAxis, this._radius));
+		this.wheelRay = new JigLib_JSegment(this.wheelRayEnd.add(JigLib_JNumber3D.getScaleVector(this.worldAxis, rayLen)), JigLib_JNumber3D.getScaleVector(this.worldAxis, -rayLen));
 
 		if(!this._collisionSystem)
-			this._collisionSystem = JigLib.PhysicsSystem.getInstance().getCollisionSystem();
+			this._collisionSystem = JigLib_PhysicsSystem.getInstance().getCollisionSystem();
 
 		var maxNumRays = 10;
 		var numRays = Math.min(this._numRays, maxNumRays);
@@ -209,11 +206,11 @@
 		var segment;
 		for (iRay = 0; iRay < numRays; iRay++)
 		{
-			collOutBodyData = objArr[iRay] = new JigLib.CollOutBodyData();
+			collOutBodyData = objArr[iRay] = new JigLib_CollOutBodyData();
 			distFwd = (deltaFwdStart + iRay * deltaFwd) - this._radius;
 			yOffset = this._radius * (1 - Math.cos(90 * (distFwd / this._radius) * Math.PI / 180));
 			segment = segments[iRay] = this.wheelRay.clone();
-			segment.origin = segment.origin.add(JigLib.JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JigLib.JNumber3D.getScaleVector(this.wheelUp, yOffset)));
+			segment.origin = segment.origin.add(JigLib_JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JigLib_JNumber3D.getScaleVector(this.wheelUp, yOffset)));
 			if (this._collisionSystem.segmentIntersect(collOutBodyData, segment, carBody))
 			{
 				this._lastOnFloor = true;
@@ -240,7 +237,7 @@
 			{
 				collOutBodyData = objArr[iRay];
 				if (collOutBodyData.frac <= 1)
-				groundNormal = groundNormal.add(JigLib.JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
+				groundNormal = groundNormal.add(JigLib_JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
 			}
 			
 			groundNormal.normalize();
@@ -265,7 +262,7 @@
 		if (totalForceMag < 0)
 			totalForceMag = 0;
 		
-		var extraForce = JigLib.JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
+		var extraForce = JigLib_JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
 		force = force.add(extraForce);
 
 		this.groundUp = groundNormal;
@@ -276,7 +273,7 @@
 		var tempv = carBody.get_currentState().orientation.transformVector(this._pos);
 		this.wheelPointVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
 
-		this.rimVel = JigLib.JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
+		this.rimVel = JigLib_JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
 		this.wheelPointVel = this.wheelPointVel.add(this.rimVel);
 
 		if (otherBody.get_movable())
@@ -303,7 +300,7 @@
 		}
 
 		var sideForce = -friction * totalForceMag;
-		extraForce = JigLib.JNumber3D.getScaleVector(this.groundLeft, sideForce);
+		extraForce = JigLib_JNumber3D.getScaleVector(this.groundLeft, sideForce);
 		force = force.add(extraForce);
 
 		friction = this._fwdFriction;
@@ -325,7 +322,7 @@
 			friction *= (Math.abs(fwdVel) / this.smallVel);
 		}
 		var fwdForce = -friction * totalForceMag;
-		extraForce = JigLib.JNumber3D.getScaleVector(this.groundFwd, fwdForce);
+		extraForce = JigLib_JNumber3D.getScaleVector(this.groundFwd, fwdForce);
 		force = force.add(extraForce);
 
 		this.wheelCentreVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
@@ -339,23 +336,23 @@
 			var maxOtherBodyForce = maxOtherBodyAcc * otherBody.get_mass();
 			if (force.get_lengthSquared() > maxOtherBodyForce * maxOtherBodyForce)
 			{
-				force = JigLib.JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
+				force = JigLib_JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
 			}
-			otherBody.addWorldForce(JigLib.JNumber3D.getScaleVector(force, -1), groundPos, false);
+			otherBody.addWorldForce(JigLib_JNumber3D.getScaleVector(force, -1), groundPos, false);
 		}
 		return true;
 		
-	}
+}
 
-	JWheel.prototype.update = function(dt)
-	{
+JigLib_JWheel.prototype.update = function(dt)
+{
 
 		if (dt <= 0)
 		{
 			return;
 		}
 		var origAngVel = this._angVel;
-		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JigLib.JMath3D.NUM_TINY);
+		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JigLib_JMath3D.NUM_TINY);
 
 		if (this._locked)
 		{
@@ -388,10 +385,10 @@
 		}
 
 		
-	}
+}
 
-	JWheel.prototype.reset = function()
-	{
+JigLib_JWheel.prototype.reset = function()
+{
 
 		this._angVel = 0;
 		this._steerAngle = 0;
@@ -406,11 +403,8 @@
 		this._angVelForGrip = 0;
 		this._rotDamping = 0.99;
 		
-	}
+}
 
 
 
-	JigLib.JWheel = JWheel; 
-
-})(JigLib);
-
+JigLib.JWheel = JigLib_JWheel; 

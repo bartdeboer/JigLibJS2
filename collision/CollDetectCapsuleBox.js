@@ -1,26 +1,20 @@
 
-(function(JigLib) {
-
-
-	var CollDetectCapsuleBox = function()
-	{
+var JigLib_CollDetectCapsuleBox = function()
+{
 
 		this.name = "CapsuleBox";
 		this.type0 = "CAPSULE";
 		this.type1 = "BOX";
 		
-	}
+}
 
-	JigLib.extend(CollDetectCapsuleBox, JigLib.CollDetectFunctor);
+JigLib.extend(JigLib_CollDetectCapsuleBox, JigLib_CollDetectFunctor);
 
-	CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
-	{
+JigLib_CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
+{
 
-	}
+}
 
 
 
-	JigLib.CollDetectCapsuleBox = CollDetectCapsuleBox; 
-
-})(JigLib);
-
+JigLib.CollDetectCapsuleBox = JigLib_CollDetectCapsuleBox; 

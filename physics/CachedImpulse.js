@@ -1,22 +1,16 @@
 
-(function(JigLib) {
-
-
-	var CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
-	{
-		this.normalImpulse = null; // Number
-		this.normalImpulseAux = null; // Number
-		this.frictionImpulse = null; // Vector3D
+var JigLib_CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
+{
+	this.normalImpulse = null; // Number
+	this.normalImpulseAux = null; // Number
+	this.frictionImpulse = null; // Vector3D
 
 		this.normalImpulse = _normalImpulse;
 		this.normalImpulseAux = _normalImpulseAux;
 		this.frictionImpulse = _frictionImpulse;
 		
-	}
+}
 
 
 
-	JigLib.CachedImpulse = CachedImpulse; 
-
-})(JigLib);
-
+JigLib.CachedImpulse = JigLib_CachedImpulse; 

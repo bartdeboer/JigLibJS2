@@ -1,27 +1,24 @@
 
-(function(JigLib) {
+var JigLib_PhysicsSystem = function()
+{
+	this._maxVelMag =  0.5; // Number
+	this._minVelForProcessing =  0.001; // Number
+	this._bodies = null; // RigidBody
+	this._activeBodies = null; // RigidBody
+	this._collisions = null; // CollisionInfo
+	this._constraints = null; // JConstraint
+	this._controllers = null; // PhysicsController
+	this._gravityAxis = null; // int
+	this._gravity = null; // Vector3D
+	this._doingIntegration = null; // Boolean
+	this.preProcessCollisionFn = null; // Function
+	this.preProcessContactFn = null; // Function
+	this.processCollisionFn = null; // Function
+	this.processContactFn = null; // Function
+	this._cachedContacts = null; // ContactData
+	this._collisionSystem = null; // CollisionSystemAbstract
 
-
-	var PhysicsSystem = function()
-	{
-		this._maxVelMag =  0.5; // Number
-		this._minVelForProcessing =  0.001; // Number
-		this._bodies = null; // RigidBody
-		this._activeBodies = null; // RigidBody
-		this._collisions = null; // CollisionInfo
-		this._constraints = null; // JConstraint
-		this._controllers = null; // PhysicsController
-		this._gravityAxis = null; // int
-		this._gravity = null; // Vector3D
-		this._doingIntegration = null; // Boolean
-		this.preProcessCollisionFn = null; // Function
-		this.preProcessContactFn = null; // Function
-		this.processCollisionFn = null; // Function
-		this.processContactFn = null; // Function
-		this._cachedContacts = null; // ContactData
-		this._collisionSystem = null; // CollisionSystemAbstract
-
-		this.setSolverType(JigLib.JConfig.solverType);
+		this.setSolverType(JigLib_JConfig.solverType);
 		this._doingIntegration = false;
 		this._bodies = [];
 		this._collisions = [];
@@ -31,40 +28,40 @@
 		
 		this._cachedContacts = [];
 		
-		this.setGravity(JigLib.JNumber3D.getScaleVector(JigLib.Vector3D.Y_AXIS, -10));
+		this.setGravity(JigLib_JNumber3D.getScaleVector(JigLib_Vector3D.Y_AXIS, -10));
 		
-	}
+}
 
-	PhysicsSystem.prototype.setCollisionSystem = function(collisionSystemGrid, sx, sy, sz, nx, ny, nz, dx, dy, dz)
-	{
-		if (collisionSystemGrid == null) collisionSystemGrid = false;
-		if (nx == null) nx = 20;
-		if (ny == null) ny = 20;
-		if (nz == null) nz = 20;
-		if (dx == null) dx = 200;
-		if (dy == null) dy = 200;
-		if (dz == null) dz = 200;
+JigLib_PhysicsSystem.prototype.setCollisionSystem = function(collisionSystemGrid, sx, sy, sz, nx, ny, nz, dx, dy, dz)
+{
+	if (collisionSystemGrid == null) collisionSystemGrid = false;
+	if (nx == null) nx = 20;
+	if (ny == null) ny = 20;
+	if (nz == null) nz = 20;
+	if (dx == null) dx = 200;
+	if (dy == null) dy = 200;
+	if (dz == null) dz = 200;
 
 		// which collisionsystem to use grid / brute
 		if (collisionSystemGrid)
 		{
-			this._collisionSystem = new JigLib.CollisionSystemGrid(sx, sy, sz, nx, ny, nz, dx, dy, dz);
+			this._collisionSystem = new JigLib_CollisionSystemGrid(sx, sy, sz, nx, ny, nz, dx, dy, dz);
 		}
 		else {
-			this._collisionSystem = new JigLib.CollisionSystemBrute(); // brute by default	
+			this._collisionSystem = new JigLib_CollisionSystemBrute(); // brute by default	
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.getCollisionSystem = function()
-	{
+JigLib_PhysicsSystem.prototype.getCollisionSystem = function()
+{
 
 		return this._collisionSystem;
 		
-	}
+}
 
-	PhysicsSystem.prototype.setGravity = function(gravity)
-	{
+JigLib_PhysicsSystem.prototype.setGravity = function(gravity)
+{
 
 		this._gravity = gravity;
 		if (this._gravity.x == this._gravity.y && this._gravity.y == this._gravity.z)
@@ -74,52 +71,52 @@
 		if (Math.abs(this._gravity.y) > Math.abs(this._gravity.z))
 			this._gravityAxis = 1;
 		
-		if (Math.abs(this._gravity.z) > Math.abs(JigLib.JNumber3D.toArray(this._gravity)[this._gravityAxis]))
+		if (Math.abs(this._gravity.z) > Math.abs(JigLib_JNumber3D.toArray(this._gravity)[this._gravityAxis]))
 			this._gravityAxis = 2;
 		
 		// do update only when dirty, faster than call every time in step
 		for (var _bodies_i = 0, _bodies_l = this._bodies.length, body; (_bodies_i < _bodies_l) && (body = this._bodies[_bodies_i]); _bodies_i++)
 			body.updateGravity(this._gravity, this._gravityAxis);
 		
-	}
+}
 
-	PhysicsSystem.prototype.get_gravity = function()
-	{
+JigLib_PhysicsSystem.prototype.get_gravity = function()
+{
 
 		return this._gravity;
 		
-	}
+}
 
-	PhysicsSystem.prototype.get_gravityAxis = function()
-	{
+JigLib_PhysicsSystem.prototype.get_gravityAxis = function()
+{
 
 		return this._gravityAxis;
 		
-	}
+}
 
-	PhysicsSystem.prototype.get_bodies = function()
-	{
+JigLib_PhysicsSystem.prototype.get_bodies = function()
+{
 
 		return this._bodies;
 		
-	}
+}
 
-	PhysicsSystem.prototype.get_activeBodies = function()
-	{
+JigLib_PhysicsSystem.prototype.get_activeBodies = function()
+{
 
 		return this._activeBodies;
 		
-	}
+}
 
-	PhysicsSystem.prototype.get_constraints = function()
-	{
+JigLib_PhysicsSystem.prototype.get_constraints = function()
+{
 
 		return this._constraints;
 		
-	}
+}
 
-	PhysicsSystem.prototype.addBody = function(body)
-	{
+JigLib_PhysicsSystem.prototype.addBody = function(body)
+{
 
 		if (this._bodies.indexOf(body) < 0)
 		{
@@ -130,10 +127,10 @@
 			body.updateGravity(this._gravity, this._gravityAxis);
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeBody = function(body)
-	{
+JigLib_PhysicsSystem.prototype.removeBody = function(body)
+{
 
 		if (this._bodies.indexOf(body) >= 0)
 		{
@@ -141,70 +138,70 @@
 			this._collisionSystem.removeCollisionBody(body);
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeAllBodies = function()
-	{
+JigLib_PhysicsSystem.prototype.removeAllBodies = function()
+{
 
 		this._bodies.length=0;
 		this._collisionSystem.removeAllCollisionBodies();
 		
-	}
+}
 
-	PhysicsSystem.prototype.addConstraint = function(constraint)
-	{
+JigLib_PhysicsSystem.prototype.addConstraint = function(constraint)
+{
 
 		if (this._constraints.indexOf(constraint) < 0)
 			this._constraints.push(constraint);
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeConstraint = function(constraint)
-	{
+JigLib_PhysicsSystem.prototype.removeConstraint = function(constraint)
+{
 
 		if (this._constraints.indexOf(constraint) >= 0)
 			this._constraints.splice(this._constraints.indexOf(constraint), 1);
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeAllConstraints = function()
-	{
+JigLib_PhysicsSystem.prototype.removeAllConstraints = function()
+{
 
 		for (var _constraints_i = 0, _constraints_l = this._constraints.length, constraint; (_constraints_i < _constraints_l) && (constraint = this._constraints[_constraints_i]); _constraints_i++) {
 			constraint.disableConstraint();
 		}
 		this._constraints.length = 0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.addController = function(controller)
-	{
+JigLib_PhysicsSystem.prototype.addController = function(controller)
+{
 
 		if (this._controllers.indexOf(controller) < 0)
 			this._controllers.push(controller);
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeController = function(controller)
-	{
+JigLib_PhysicsSystem.prototype.removeController = function(controller)
+{
 
 		if (this._controllers.indexOf(controller) >= 0)
 			this._controllers.splice(this._controllers.indexOf(controller), 1);
 		
-	}
+}
 
-	PhysicsSystem.prototype.removeAllControllers = function()
-	{
+JigLib_PhysicsSystem.prototype.removeAllControllers = function()
+{
 
 		for (var _controllers_i = 0, _controllers_l = this._controllers.length, controller; (_controllers_i < _controllers_l) && (controller = this._controllers[_controllers_i]); _controllers_i++) {
 			controller.disableController();
 		}
 		this._controllers.length=0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.setSolverType = function(type)
-	{
+JigLib_PhysicsSystem.prototype.setSolverType = function(type)
+{
 
 		switch (type)
 		{
@@ -234,10 +231,10 @@
 				return;
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.moreCollPtPenetration = function(info0, info1)
-	{
+JigLib_PhysicsSystem.prototype.moreCollPtPenetration = function(info0, info1)
+{
 
 		if (info0.initialPenetration < info1.initialPenetration)
 			return 1;
@@ -246,10 +243,10 @@
 		else
 			return 0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
+{
 
 		collision.satisfied = false;
 		
@@ -259,7 +256,7 @@
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib.JMath3D.NUM_TINY, allowedPenetration=JigLib.JConfig.allowedPenetration;
+		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib_JMath3D.NUM_TINY, allowedPenetration=JigLib_JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -318,10 +315,10 @@
 				ptInfo.minSeparationVel = this._maxVelMag;
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, dt)
+{
 
 		collision.satisfied = false;
 		
@@ -331,7 +328,7 @@
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib.JMath3D.NUM_TINY, allowedPenetration=JigLib.JConfig.allowedPenetration;
+		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib_JMath3D.NUM_TINY, allowedPenetration=JigLib_JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -381,10 +378,10 @@
 				ptInfo.minSeparationVel = this._maxVelMag;
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collision, dt)
+{
 
 		collision.satisfied = false;
 		
@@ -394,7 +391,7 @@
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, numTiny = JigLib.JMath3D.NUM_TINY, allowedPenetration = JigLib.JConfig.allowedPenetration;
+		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, numTiny = JigLib_JMath3D.NUM_TINY, allowedPenetration = JigLib_JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -445,10 +442,10 @@
 			
 			ptInfo.accumulatedNormalImpulse = 0;
 			ptInfo.accumulatedNormalImpulseAux = 0;
-			ptInfo.accumulatedFrictionImpulse = new JigLib.Vector3D();
+			ptInfo.accumulatedFrictionImpulse = new JigLib_Vector3D();
 			
 			var bestDistSq = 0.04;
-			var bp = new JigLib.BodyPair(body0, body1, new JigLib.Vector3D(), new JigLib.Vector3D());
+			var bp = new JigLib_BodyPair(body0, body1, new JigLib_Vector3D(), new JigLib_Vector3D());
 			
 			for (var _cachedContacts_i = 0, _cachedContacts_l = this._cachedContacts.length, cachedContact; (_cachedContacts_i < _cachedContacts_l) && (cachedContact = this._cachedContacts[_cachedContacts_i]); _cachedContacts_i++)
 			{
@@ -465,32 +462,32 @@
 				ptInfo.accumulatedFrictionImpulse = cachedContact.impulse.frictionImpulse;
 				
 				if (cachedContact.pair.body0 != body0)
-					ptInfo.accumulatedFrictionImpulse = JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+					ptInfo.accumulatedFrictionImpulse = JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
 				}
 			}
 			
 			if (ptInfo.accumulatedNormalImpulse != 0)
 			{
-				var impulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulse);
+				var impulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulse);
 				impulse = impulse.add(ptInfo.accumulatedFrictionImpulse);
 				body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
 				if (body1)
-				body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			}
 			
 			if (ptInfo.accumulatedNormalImpulseAux != 0)
 			{
-				impulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux);
+				impulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux);
 				body0.applyBodyWorldImpulseAux(impulse, ptInfo.r0, false);
 				if (body1)
-				body1.applyBodyWorldImpulseAux(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				body1.applyBodyWorldImpulseAux(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			}
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
+{
 
 		collision.satisfied = true;
 		
@@ -500,7 +497,7 @@
 		body1 = collision.objInfo.body1;
 		
 		var gotOne=false;
-		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, impulseFromNormalImpulse, frictionImpulse, tiny=JigLib.JMath3D.NUM_TINY;
+		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, impulseFromNormalImpulse, frictionImpulse, tiny=JigLib_JMath3D.NUM_TINY;
 		var N = collision.dirToBody, impulse, Vr0, Vr1, tempV, VR, tangent_vel, T;
 		var ptInfo;
 		
@@ -531,19 +528,19 @@
 			normalImpulse = deltaVel / ptInfo.denominator;
 			
 			gotOne = true;
-			impulse = JigLib.JNumber3D.getScaleVector(N, normalImpulse);
+			impulse = JigLib_JNumber3D.getScaleVector(N, normalImpulse);
 			
 			body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-			if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+			if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			
 			VR = Vr0.clone();
 			if (body1) VR = VR.subtract(Vr1);
-			tangent_vel = VR.subtract(JigLib.JNumber3D.getScaleVector(N, VR.dotProduct(N)));
+			tangent_vel = VR.subtract(JigLib_JNumber3D.getScaleVector(N, VR.dotProduct(N)));
 			tangent_speed = tangent_vel.get_length();
 			
 			if (tangent_speed > this._minVelForProcessing)
 			{
-				T = JigLib.JNumber3D.getDivideVector(tangent_vel, -tangent_speed);
+				T = JigLib_JNumber3D.getDivideVector(tangent_vel, -tangent_speed);
 				denominator = 0;
 				
 				if (body0.get_movable())
@@ -572,7 +569,7 @@
 				}
 				T.scaleBy(frictionImpulse);
 				body0.applyBodyWorldImpulse(T, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
 				}
 			}
 		}
@@ -585,10 +582,10 @@
 		
 		return gotOne;
 		
-	}
+}
 
-	PhysicsSystem.prototype.processCollisionAccumulated = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision, dt)
+{
 
 		collision.satisfied = true;
 		
@@ -597,7 +594,7 @@
 		body1 = collision.objInfo.body1;
 		
 		var gotOne=false;
-		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, AFIMag, maxAllowedAFIMag, tiny=JigLib.JMath3D.NUM_TINY;
+		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, AFIMag, maxAllowedAFIMag, tiny=JigLib_JMath3D.NUM_TINY;
 		var N = collision.dirToBody, impulse, Vr0, Vr1, tempV, VR, tangent_vel, T, frictionImpulseVec, origAccumulatedFrictionImpulse, actualFrictionImpulse;
 		var ptInfo;
 		
@@ -624,9 +621,9 @@
 				ptInfo.accumulatedNormalImpulse = Math.max(ptInfo.accumulatedNormalImpulse + normalImpulse, 0);
 				var actualImpulse = ptInfo.accumulatedNormalImpulse - origAccumulatedNormalImpulse;
 				
-				impulse = JigLib.JNumber3D.getScaleVector(N, actualImpulse);
+				impulse = JigLib_JNumber3D.getScaleVector(N, actualImpulse);
 				body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 				
 				gotOne = true;
 			}
@@ -651,9 +648,9 @@
 				ptInfo.accumulatedNormalImpulseAux = Math.max(ptInfo.accumulatedNormalImpulseAux + normalImpulse, 0);
 				actualImpulse = ptInfo.accumulatedNormalImpulseAux - origAccumulatedNormalImpulse;
 				
-				impulse = JigLib.JNumber3D.getScaleVector(N, actualImpulse);
+				impulse = JigLib_JNumber3D.getScaleVector(N, actualImpulse);
 				body0.applyBodyWorldImpulseAux(impulse, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulseAux(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulseAux(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 				
 				gotOne = true;
 			}
@@ -666,13 +663,13 @@
 				Vr1 = body1.getVelocity(ptInfo.r1);
 				VR = VR.subtract(Vr1);
 				} 
-				tangent_vel = VR.subtract(JigLib.JNumber3D.getScaleVector(N, VR.dotProduct(N)));
+				tangent_vel = VR.subtract(JigLib_JNumber3D.getScaleVector(N, VR.dotProduct(N)));
 				tangent_speed = tangent_vel.get_length();
 				
 				if (tangent_speed > this._minVelForProcessing)
 				{
 				
-				T = JigLib.JNumber3D.getScaleVector(JigLib.JNumber3D.getDivideVector(tangent_vel, tangent_speed), -1);
+				T = JigLib_JNumber3D.getScaleVector(JigLib_JNumber3D.getDivideVector(tangent_vel, tangent_speed), -1);
 				denominator = 0;
 				if (body0.get_movable())
 				{
@@ -691,7 +688,7 @@
 				if (denominator > tiny)
 				{
 					impulseToReverse = tangent_speed / denominator;
-					frictionImpulseVec = JigLib.JNumber3D.getScaleVector(T, impulseToReverse);
+					frictionImpulseVec = JigLib_JNumber3D.getScaleVector(T, impulseToReverse);
 					
 					origAccumulatedFrictionImpulse = ptInfo.accumulatedFrictionImpulse.clone();
 					ptInfo.accumulatedFrictionImpulse = ptInfo.accumulatedFrictionImpulse.add(frictionImpulseVec);
@@ -700,12 +697,12 @@
 					maxAllowedAFIMag = collision.mat.friction * ptInfo.accumulatedNormalImpulse;
 					
 					if (AFIMag > tiny && AFIMag > maxAllowedAFIMag)
-						ptInfo.accumulatedFrictionImpulse = JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, maxAllowedAFIMag / AFIMag);
+						ptInfo.accumulatedFrictionImpulse = JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, maxAllowedAFIMag / AFIMag);
 					
 					actualFrictionImpulse = ptInfo.accumulatedFrictionImpulse.subtract(origAccumulatedFrictionImpulse);
 					
 					body0.applyBodyWorldImpulse(actualFrictionImpulse, ptInfo.r0, false);
-					if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
+					if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
 				}
 				}
 			}
@@ -719,16 +716,16 @@
 		
 		return gotOne;
 		
-	}
+}
 
-	PhysicsSystem.prototype.processCollisionForShock = function(collision, dt)
-	{
+JigLib_PhysicsSystem.prototype.processCollisionForShock = function(collision, dt)
+{
 
 		
 		collision.satisfied = true;
 		var N = collision.dirToBody;
 		
-		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt;
+		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt;
 		var body0 = collision.objInfo.body0;
 		var body1 = collision.objInfo.body1;
 		
@@ -756,27 +753,27 @@
 				normalVel -= (body1.getVelocity(ptInfo.r1).dotProduct(N) + body1.getVelocityAux(ptInfo.r1).dotProduct(N));
 			}
 			
-			finalNormalVel = (ptInfo.initialPenetration - JigLib.JConfig.allowedPenetration) / timescale;
+			finalNormalVel = (ptInfo.initialPenetration - JigLib_JConfig.allowedPenetration) / timescale;
 			if (finalNormalVel < 0) {
 				continue;
 			}
 			impulse = (finalNormalVel - normalVel) / ptInfo.denominator;
 			orig = ptInfo.accumulatedNormalImpulseAux;
 			ptInfo.accumulatedNormalImpulseAux = Math.max(ptInfo.accumulatedNormalImpulseAux + impulse, 0);
-			actualImpulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux - orig);
+			actualImpulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux - orig);
 			
 			if (body0)body0.applyBodyWorldImpulse(actualImpulse, ptInfo.r0, false);
-			if (body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
+			if (body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
 		}
 		
 		if (body0)body0.setConstraintsAndCollisionsUnsatisfied();
 		if (body1)body1.setConstraintsAndCollisionsUnsatisfied();
 		return true;
 		
-	}
+}
 
-	PhysicsSystem.prototype.sortPositionX = function(body0, body1)
-	{
+JigLib_PhysicsSystem.prototype.sortPositionX = function(body0, body1)
+{
 
 		if (body0.get_currentState().position.x < body1.get_currentState().position.x)
 			return -1;
@@ -785,10 +782,10 @@
 		else
 			return 0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.sortPositionY = function(body0, body1)
-	{
+JigLib_PhysicsSystem.prototype.sortPositionY = function(body0, body1)
+{
 
 		if (body0.get_currentState().position.y < body1.get_currentState().position.y)
 			return -1;
@@ -797,10 +794,10 @@
 		else
 			return 0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.sortPositionZ = function(body0, body1)
-	{
+JigLib_PhysicsSystem.prototype.sortPositionZ = function(body0, body1)
+{
 
 		if (body0.get_currentState().position.z < body1.get_currentState().position.z)
 			return -1;
@@ -809,10 +806,10 @@
 		else
 			return 0;
 		
-	}
+}
 
-	PhysicsSystem.prototype.doShockStep = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.doShockStep = function(dt)
+{
 
 		if (Math.abs(this._gravity.x) > Math.abs(this._gravity.y) && Math.abs(this._gravity.x) > Math.abs(this._gravity.z))
 		{
@@ -871,10 +868,10 @@
 			body.internalRestoreImmovable();
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.updateContactCache = function()
-	{
+JigLib_PhysicsSystem.prototype.updateContactCache = function()
+{
 
 		this._cachedContacts = [];
 		
@@ -895,20 +892,20 @@
 			{
 				id1=-1;
 				if (body1) id1=body1.get_id();
-				fricImpulse = (body0.get_id() > id1) ? ptInfo.accumulatedFrictionImpulse : JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+				fricImpulse = (body0.get_id() > id1) ? ptInfo.accumulatedFrictionImpulse : JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
 				
-				this._cachedContacts[i++] = contact = new JigLib.ContactData();
-				contact.pair = new JigLib.BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
-				contact.impulse = new JigLib.CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
+				this._cachedContacts[i++] = contact = new JigLib_ContactData();
+				contact.pair = new JigLib_BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
+				contact.impulse = new JigLib_CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
 			}
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.handleAllConstraints = function(dt, iter, forceInelastic)
-	{
+JigLib_PhysicsSystem.prototype.handleAllConstraints = function(dt, iter, forceInelastic)
+{
 
-		var origNumCollisions = this._collisions.length, iteration = JigLib.JConfig.numConstraintIterations, step, i, len;
+		var origNumCollisions = this._collisions.length, iteration = JigLib_JConfig.numConstraintIterations, step, i, len;
 		var collInfo;
 		var constraint;
 		var flag, gotOne;
@@ -989,10 +986,10 @@
 				break;
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.activateObject = function(body)
-	{
+JigLib_PhysicsSystem.prototype.activateObject = function(body)
+{
 
 		if (!body.get_movable() || body.isActive) return;
 		
@@ -1003,10 +1000,10 @@
 			this._activeBodies.fixed = true;
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.tryToActivateAllFrozenObjects = function()
-	{
+JigLib_PhysicsSystem.prototype.tryToActivateAllFrozenObjects = function()
+{
 
 		for (var _bodies_i = 0, _bodies_l = this._bodies.length, body; (_bodies_i < _bodies_l) && (body = this._bodies[_bodies_i]); _bodies_i++)
 		{
@@ -1018,26 +1015,26 @@
 				}
 				else
 				{
-				body.setLineVelocity(new JigLib.Vector3D());
-				body.setAngleVelocity(new JigLib.Vector3D());
+				body.setLineVelocity(new JigLib_Vector3D());
+				body.setAngleVelocity(new JigLib_Vector3D());
 				}
 			}
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.tryToFreezeAllObjects = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.tryToFreezeAllObjects = function(dt)
+{
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++){
 			activeBody.dampForDeactivation();
 			activeBody.tryToFreeze(dt);
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.activateAllFrozenObjectsLeftHanging = function()
-	{
+JigLib_PhysicsSystem.prototype.activateAllFrozenObjectsLeftHanging = function()
+{
 
 		var other_body;
 		var body_collisions;
@@ -1060,34 +1057,34 @@
 			}
 		}
 		
-	}
+}
 
-	PhysicsSystem.prototype.updateAllController = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.updateAllController = function(dt)
+{
 
 		for (var _controllers_i = 0, _controllers_l = this._controllers.length, controller; (_controllers_i < _controllers_l) && (controller = this._controllers[_controllers_i]); _controllers_i++)
 		controller.updateController(dt);
 		
-	}
+}
 
-	PhysicsSystem.prototype.updateAllVelocities = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.updateAllVelocities = function(dt)
+{
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++)
 			activeBody.updateVelocity(dt);
 		
-	}
+}
 
-	PhysicsSystem.prototype.notifyAllPostPhysics = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.notifyAllPostPhysics = function(dt)
+{
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++)
 			activeBody.postPhysics(dt);
 		
-	}
+}
 
-	PhysicsSystem.prototype.detectAllCollisions = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.detectAllCollisions = function(dt)
+{
 
 		for (var _bodies_i = 0, _bodies_l = this._bodies.length, body; (_bodies_i < _bodies_l) && (body = this._bodies[_bodies_i]); _bodies_i++) {
 			if (body.isActive) {
@@ -1104,10 +1101,10 @@
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++)
 			activeBody.restoreState();
 		
-	}
+}
 
-	PhysicsSystem.prototype.findAllActiveBodiesAndCopyStates = function()
-	{
+JigLib_PhysicsSystem.prototype.findAllActiveBodiesAndCopyStates = function()
+{
 
 		this._activeBodies = [];
 		var i = 0;
@@ -1130,21 +1127,21 @@
 		// fixed is faster
 		this._activeBodies.fixed = true;
 		
-	}
+}
 
-	PhysicsSystem.prototype.integrate = function(dt)
-	{
+JigLib_PhysicsSystem.prototype.integrate = function(dt)
+{
 
 		this._doingIntegration = true;
 		
 		this.findAllActiveBodiesAndCopyStates();
 		this.updateAllController(dt);
 		this.detectAllCollisions(dt);
-		this.handleAllConstraints(dt, JigLib.JConfig.numCollisionIterations, false);
+		this.handleAllConstraints(dt, JigLib_JConfig.numCollisionIterations, false);
 		this.updateAllVelocities(dt);
-		this.handleAllConstraints(dt, JigLib.JConfig.numContactIterations, true);
+		this.handleAllConstraints(dt, JigLib_JConfig.numContactIterations, true);
 		
-		if (JigLib.JConfig.doShockStep) this.doShockStep(dt);
+		if (JigLib_JConfig.doShockStep) this.doShockStep(dt);
 		
 		this.tryToActivateAllFrozenObjects();
 		this.tryToFreezeAllObjects(dt);
@@ -1152,29 +1149,26 @@
 		
 		this.notifyAllPostPhysics(dt);
 		
-		if (JigLib.JConfig.solverType == "ACCUMULATED")
+		if (JigLib_JConfig.solverType == "ACCUMULATED")
 			this.updateContactCache();
 		
 		this._doingIntegration = false;
 		
-	}
+}
 
-	PhysicsSystem._currentPhysicsSystem = null ; // PhysicsSystem
+JigLib_PhysicsSystem._currentPhysicsSystem = null ; // PhysicsSystem
 
-	PhysicsSystem.getInstance = function()
-	{
+JigLib_PhysicsSystem.getInstance = function()
+{
 
-			if (!JigLib.PhysicsSystem._currentPhysicsSystem)
+			if (!JigLib_PhysicsSystem._currentPhysicsSystem)
 			{
 				trace("version: JigLibFlash fp11 (2011-10-31)");
-				JigLib.PhysicsSystem._currentPhysicsSystem = new JigLib.PhysicsSystem();
+				JigLib_PhysicsSystem._currentPhysicsSystem = new JigLib_PhysicsSystem();
 			}
-			return JigLib.PhysicsSystem._currentPhysicsSystem;
+			return JigLib_PhysicsSystem._currentPhysicsSystem;
 		
-	}
+}
 
 
-	JigLib.PhysicsSystem = PhysicsSystem; 
-
-})(JigLib);
-
+JigLib.PhysicsSystem = JigLib_PhysicsSystem; 

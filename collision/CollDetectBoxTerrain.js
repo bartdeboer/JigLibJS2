@@ -1,20 +1,17 @@
 
-(function(JigLib) {
-
-
-	var CollDetectBoxTerrain = function()
-	{
+var JigLib_CollDetectBoxTerrain = function()
+{
 
 		this.name = "BoxTerrain";
 		this.type0 = "BOX";
 		this.type1 = "TERRAIN";
 		
-	}
+}
 
-	JigLib.extend(CollDetectBoxTerrain, JigLib.CollDetectFunctor);
+JigLib.extend(JigLib_CollDetectBoxTerrain, JigLib_CollDetectFunctor);
 
-	CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
-	{
+JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
+{
 
 		var tempBody;
 		if (info.body0.get_type() == "TERRAIN")
@@ -29,7 +26,7 @@
 				
 		var oldPts = box.getCornerPoints(box.get_oldState());
 		var newPts = box.getCornerPoints(box.get_currentState());
-		var collNormal = new JigLib.Vector3D();
+		var collNormal = new JigLib_Vector3D();
 		
 		var obj;
 		var dist;
@@ -43,11 +40,11 @@
 			newPt = newPts[i];
 			obj = terrain.getHeightAndNormalByPoint(newPt);
 			
-			if (obj.height < JigLib.JConfig.collToll) {
+			if (obj.height < JigLib_JConfig.collToll) {
 				oldPt = oldPts[i];
 				dist = terrain.getHeightByPoint(oldPt);
 				collNormal = collNormal.add(obj.normal);
-				cpInfo = new JigLib.CollPointInfo();
+				cpInfo = new JigLib_CollPointInfo();
 				cpInfo.r0 = oldPt.subtract(box.get_oldState().position);
 				cpInfo.r1 = oldPt.subtract(terrain.get_oldState().position);
 				cpInfo.initialPenetration = -dist;
@@ -58,12 +55,12 @@
 		if (collPts.length > 0) {
 			collNormal.normalize();
 			
-			var collInfo = new JigLib.CollisionInfo();
+			var collInfo = new JigLib_CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = collNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib.MaterialProperties();
+			var mat = new JigLib_MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -77,11 +74,8 @@
 			info.body1.removeCollideBodies(info.body0);
 		}
 		
-	}
+}
 
 
 
-	JigLib.CollDetectBoxTerrain = CollDetectBoxTerrain; 
-
-})(JigLib);
-
+JigLib.CollDetectBoxTerrain = JigLib_CollDetectBoxTerrain; 

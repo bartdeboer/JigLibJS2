@@ -1,16 +1,10 @@
 
-(function(JigLib) {
-
-
-	var ContactData = function()
-	{
-		this.pair = null; // BodyPair
-		this.impulse = null; // CachedImpulse
-	}
+var JigLib_ContactData = function()
+{
+	this.pair = null; // BodyPair
+	this.impulse = null; // CachedImpulse
+}
 
 
 
-	JigLib.ContactData = ContactData; 
-
-})(JigLib);
-
+JigLib.ContactData = JigLib_ContactData; 

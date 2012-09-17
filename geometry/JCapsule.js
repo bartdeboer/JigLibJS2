@@ -1,13 +1,10 @@
 
-(function(JigLib) {
+var JigLib_JCapsule = function(skin, r, l)
+{
+	this._length = null; // Number
+	this._radius = null; // Number
 
-
-	var JCapsule = function(skin, r, l)
-	{
-		this._length = null; // Number
-		this._radius = null; // Number
-
-		JigLib.RigidBody.apply(this, [ skin ]);
+		JigLib_RigidBody.apply(this, [ skin ]);
 		this._type = "CAPSULE";
 		this._radius = r;
 		this._length = l;
@@ -15,12 +12,12 @@
 		this.set_mass(1);
 		this.updateBoundingBox();
 		
-	}
+}
 
-	JigLib.extend(JCapsule, JigLib.RigidBody);
+JigLib.extend(JigLib_JCapsule, JigLib_RigidBody);
 
-	JCapsule.prototype.set_radius = function(r)
-	{
+JigLib_JCapsule.prototype.set_radius = function(r)
+{
 
 		this._radius = r;
 		this._boundingSphere = this.getBoundingSphere(this._radius, this._length);
@@ -28,17 +25,17 @@
 		this.updateBoundingBox();
 		this.setActive();
 		
-	}
+}
 
-	JCapsule.prototype.get_radius = function()
-	{
+JigLib_JCapsule.prototype.get_radius = function()
+{
 
 		return this._radius;
 		
-	}
+}
 
-	JCapsule.prototype.set_length = function(l)
-	{
+JigLib_JCapsule.prototype.set_length = function(l)
+{
 
 		this._length = l;
 		this._boundingSphere = this.getBoundingSphere(this._radius, this._length);
@@ -46,36 +43,36 @@
 		this.updateBoundingBox();
 		this.setActive();
 		
-	}
+}
 
-	JCapsule.prototype.get_length = function()
-	{
+JigLib_JCapsule.prototype.get_length = function()
+{
 
 		return this._length;
 		
-	}
+}
 
-	JCapsule.prototype.getBottomPos = function(state)
-	{
+JigLib_JCapsule.prototype.getBottomPos = function(state)
+{
 
-		return state.position.add(JigLib.JNumber3D.getScaleVector(state.getOrientationCols()[1], -this._length / 2));
+		return state.position.add(JigLib_JNumber3D.getScaleVector(state.getOrientationCols()[1], -this._length / 2));
 		
-	}
+}
 
-	JCapsule.prototype.getEndPos = function(state)
-	{
+JigLib_JCapsule.prototype.getEndPos = function(state)
+{
 
-		return state.position.add(JigLib.JNumber3D.getScaleVector(state.getOrientationCols()[1], this._length / 2));
+		return state.position.add(JigLib_JNumber3D.getScaleVector(state.getOrientationCols()[1], this._length / 2));
 		
-	}
+}
 
-	JCapsule.prototype.segmentIntersect = function(out, seg, state)
-	{
+JigLib_JCapsule.prototype.segmentIntersect = function(out, seg, state)
+{
 
-	}
+}
 
-	JCapsule.prototype.getInertiaProperties = function(m)
-	{
+JigLib_JCapsule.prototype.getInertiaProperties = function(m)
+{
 
 		var cylinderMass, Ixx, Iyy, Izz, endMass;
 		cylinderMass = m * Math.PI * this._radius * this._radius * this._length / this.getVolume();
@@ -88,35 +85,32 @@
 		Iyy += (0.2 * endMass * this._radius * this._radius);
 		Izz += (0.4 * endMass * this._radius * this._radius + endMass * Math.pow(0.5 * this._length, 2));
 		
-		return JigLib.JMatrix3D.getScaleMatrix(Ixx, Iyy, Izz);
+		return JigLib_JMatrix3D.getScaleMatrix(Ixx, Iyy, Izz);
 		
-	}
+}
 
-	JCapsule.prototype.updateBoundingBox = function()
-	{
+JigLib_JCapsule.prototype.updateBoundingBox = function()
+{
 
 		this._boundingBox.clear();
 		this._boundingBox.addCapsule(this);
 		
-	}
+}
 
-	JCapsule.prototype.getBoundingSphere = function(r, l)
-	{
+JigLib_JCapsule.prototype.getBoundingSphere = function(r, l)
+{
 
 		return Math.sqrt(Math.pow(l / 2, 2) + r * r) + r;
 		
-	}
+}
 
-	JCapsule.prototype.getVolume = function()
-	{
+JigLib_JCapsule.prototype.getVolume = function()
+{
 
 		return (4 / 3) * Math.PI * this._radius * this._radius * this._radius + this._length * Math.PI * this._radius * this._radius;
 		
-	}
+}
 
 
 
-	JigLib.JCapsule = JCapsule; 
-
-})(JigLib);
-
+JigLib.JCapsule = JigLib_JCapsule; 

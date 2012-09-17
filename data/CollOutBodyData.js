@@ -1,21 +1,15 @@
 
-(function(JigLib) {
+var JigLib_CollOutBodyData = function(frac, position, normal, rigidBody)
+{
+	this.rigidBody = null; // RigidBody
 
-
-	var CollOutBodyData = function(frac, position, normal, rigidBody)
-	{
-		this.rigidBody = null; // RigidBody
-
-		JigLib.CollOutData.apply(this, [ frac, position, normal ]);
+		JigLib_CollOutData.apply(this, [ frac, position, normal ]);
 		this.rigidBody = rigidBody;
 		
-	}
+}
 
-	JigLib.extend(CollOutBodyData, JigLib.CollOutData);
+JigLib.extend(JigLib_CollOutBodyData, JigLib_CollOutData);
 
 
 
-	JigLib.CollOutBodyData = CollOutBodyData; 
-
-})(JigLib);
-
+JigLib.CollOutBodyData = JigLib_CollOutBodyData; 
