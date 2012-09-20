@@ -1,5 +1,5 @@
 
-var JigLib_JTriangle = function(pt0, pt1, pt2)
+JigLib.JTriangle = function(pt0, pt1, pt2)
 {
 	this.origin = null; // Vector3D
 	this.edge0 = null; // Vector3D
@@ -11,14 +11,14 @@ var JigLib_JTriangle = function(pt0, pt1, pt2)
 		
 }
 
-JigLib_JTriangle.prototype.get_edge2 = function()
+JigLib.JTriangle.prototype.get_edge2 = function()
 {
 
 		return this.edge1.subtract(this.edge0);
 		
 }
 
-JigLib_JTriangle.prototype.get_normal = function()
+JigLib.JTriangle.prototype.get_normal = function()
 {
 
 		var N = this.edge0.crossProduct(this.edge1);
@@ -28,17 +28,17 @@ JigLib_JTriangle.prototype.get_normal = function()
 		
 }
 
-JigLib_JTriangle.prototype.get_plane = function()
+JigLib.JTriangle.prototype.get_plane = function()
 {
 
-		var pl = new JigLib_PlaneData();
+		var pl = new JigLib.PlaneData();
 		pl.setWithNormal(this.origin, this.get_normal());
 		
 		return pl;
 		
 }
 
-JigLib_JTriangle.prototype.getPoint = function(t0, t1)
+JigLib.JTriangle.prototype.getPoint = function(t0, t1)
 {
 
 		var d0, d1;
@@ -52,7 +52,7 @@ JigLib_JTriangle.prototype.getPoint = function(t0, t1)
 		
 }
 
-JigLib_JTriangle.prototype.getCentre = function()
+JigLib.JTriangle.prototype.getCentre = function()
 {
 
 		var result = this.edge0.add(this.edge1);
@@ -62,7 +62,7 @@ JigLib_JTriangle.prototype.getCentre = function()
 		
 }
 
-JigLib_JTriangle.prototype.getVertex = function(_id)
+JigLib.JTriangle.prototype.getVertex = function(_id)
 {
 
 		switch(_id) {
@@ -76,7 +76,7 @@ JigLib_JTriangle.prototype.getVertex = function(_id)
 		
 }
 
-JigLib_JTriangle.prototype.getSpan = function(axis)
+JigLib.JTriangle.prototype.getSpan = function(axis)
 {
 
 		var d0, d1, d2;
@@ -84,7 +84,7 @@ JigLib_JTriangle.prototype.getSpan = function(axis)
 		d1 = this.getVertex(1).dotProduct(axis);
 		d2 = this.getVertex(2).dotProduct(axis);
 		
-		var result = new JigLib_SpanData();
+		var result = new JigLib.SpanData();
 		result.min = Math.min(d0, d1, d2);
 		result.max = Math.max(d0, d1, d2);
 		
@@ -92,7 +92,7 @@ JigLib_JTriangle.prototype.getSpan = function(axis)
 		
 }
 
-JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
+JigLib.JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 {
 
 		
@@ -102,7 +102,7 @@ JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 		p = seg.delta.crossProduct(this.edge1);
 		a = this.edge0.dotProduct(p);
 		
-		if (a > -JigLib_JMath3D.NUM_TINY && a < JigLib_JMath3D.NUM_TINY) {
+		if (a > -JigLib.JMath3D.NUM_TINY && a < JigLib.JMath3D.NUM_TINY) {
 			return false;
 		}
 		f = 1 / a;
@@ -123,7 +123,7 @@ JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 		
 }
 
-JigLib_JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
+JigLib.JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
 {
 
 		
@@ -350,4 +350,3 @@ JigLib_JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
 
 
 
-JigLib.JTriangle = JigLib_JTriangle; 

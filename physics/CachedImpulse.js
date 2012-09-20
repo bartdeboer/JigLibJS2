@@ -1,5 +1,5 @@
 
-var JigLib_CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
+JigLib.CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
 {
 	this.normalImpulse = null; // Number
 	this.normalImpulseAux = null; // Number
@@ -13,4 +13,3 @@ var JigLib_CachedImpulse = function(_normalImpulse, _normalImpulseAux, _friction
 
 
 
-JigLib.CachedImpulse = JigLib_CachedImpulse; 

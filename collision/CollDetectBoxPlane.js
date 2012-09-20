@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectBoxPlane = function()
+JigLib.CollDetectBoxPlane = function()
 {
 
 		this.name = "BoxPlane";
@@ -8,9 +8,9 @@ var JigLib_CollDetectBoxPlane = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxPlane, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxPlane, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -25,7 +25,7 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 		var plane = info.body1;
 
 		var centreDist = plane.pointPlaneDistance(box.get_currentState().position);
-		if (centreDist > box.get_boundingSphere() + JigLib_JConfig.collToll)
+		if (centreDist > box.get_boundingSphere() + JigLib.JConfig.collToll)
 			return;
 
 		var newPts = box.getCornerPoints(box.get_currentState());
@@ -43,9 +43,9 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 			newDepth = -1 * plane.pointPlaneDistance(newPt);
 			oldDepth = -1 * plane.pointPlaneDistance(oldPt);
 			
-			if (Math.max(newDepth, oldDepth) > -JigLib_JConfig.collToll)
+			if (Math.max(newDepth, oldDepth) > -JigLib.JConfig.collToll)
 			{
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0 = oldPt.subtract(box.get_oldState().position);
 				cpInfo.r1 = oldPt.subtract(plane.get_oldState().position);
 				cpInfo.initialPenetration = oldDepth;
@@ -55,12 +55,12 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 		
 		if (collPts.length > 0)
 		{
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = plane.get_normal().clone();
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + plane.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + plane.get_material().friction);
 			collInfo.mat = mat;
@@ -78,4 +78,3 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxPlane = JigLib_CollDetectBoxPlane; 

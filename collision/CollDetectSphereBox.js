@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectSphereBox = function()
+JigLib.CollDetectSphereBox = function()
 {
 
 		this.name = "SphereBox";
@@ -8,9 +8,9 @@ var JigLib_CollDetectSphereBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -36,10 +36,10 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 		//var spherePos = sphere.get_oldState().position;
 		//var boxPos = box.get_oldState().position;
 		
-		var oldBoxPoint = [new JigLib_Vector3D()];
-		var newBoxPoint = [new JigLib_Vector3D()];
+		var oldBoxPoint = [new JigLib.Vector3D()];
+		var newBoxPoint = [new JigLib.Vector3D()];
 		
-		var oldDist, newDist, oldDepth, newDepth, tiny=JigLib_JMath3D.NUM_TINY;
+		var oldDist, newDist, oldDepth, newDepth, tiny=JigLib.JMath3D.NUM_TINY;
 		oldDist = box.getDistanceToPoint(box.get_oldState(), oldBoxPoint, sphere.get_oldState().position);
 		newDist = box.getDistanceToPoint(box.get_currentState(), newBoxPoint, sphere.get_currentState().position);
 		
@@ -47,7 +47,7 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 		
 		oldDepth = sphere.get_radius() - oldDist;
 		newDepth = sphere.get_radius() - newDist;
-		if (Math.max(oldDepth, newDepth) > -JigLib_JConfig.collToll)
+		if (Math.max(oldDepth, newDepth) > -JigLib.JConfig.collToll)
 		{
 			var dir;
 			var collPts = [];
@@ -67,18 +67,18 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 				dir.normalize();
 			}
 			
-			var cpInfo = new JigLib_CollPointInfo();
+			var cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = _oldBoxPosition.subtract(sphere.get_oldState().position);
 			cpInfo.r1 = _oldBoxPosition.subtract(box.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
 			collPts[0]=cpInfo;
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = dir;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere.get_material().restitution + box.get_material().restitution);
 			mat.friction = 0.5*(sphere.get_material().friction + box.get_material().friction);
 			collInfo.mat = mat;
@@ -96,4 +96,3 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSphereBox = JigLib_CollDetectSphereBox; 

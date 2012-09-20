@@ -1,5 +1,5 @@
 
-var JigLib_CollPointInfo = function()
+JigLib.CollPointInfo = function()
 {
 	this.initialPenetration = null; // Number
 	this.r0 = null; // Vector3D
@@ -9,9 +9,8 @@ var JigLib_CollPointInfo = function()
 	this.denominator =  0; // Number
 	this.accumulatedNormalImpulse =  0; // Number
 	this.accumulatedNormalImpulseAux =  0; // Number
-	this.accumulatedFrictionImpulse =  new JigLib_Vector3D(); // Vector3D
+	this.accumulatedFrictionImpulse =  new JigLib.Vector3D(); // Vector3D
 }
 
 
 
-JigLib.CollPointInfo = JigLib_CollPointInfo; 

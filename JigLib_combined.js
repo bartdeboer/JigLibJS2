@@ -12,7 +12,7 @@ JigLib.extend = function(dest, source)
 var trace = function(message) {};
 
 
-var JigLib_JCar = function(skin)
+JigLib.JCar = function(skin)
 {
 	this._maxSteerAngle = null; // Number
 	this._steerRate = null; // Number
@@ -26,7 +26,7 @@ var JigLib_JCar = function(skin)
 	this._wheels = null; // Array
 	this._steerWheels = null; // Array
 
-		this._chassis = new JigLib_JChassis(this, skin);
+		this._chassis = new JigLib.JChassis(this, skin);
 		this._wheels = [];
 		this._steerWheels = [];
 		this._destSteering = this._destAccelerate = this._steering = this._accelerate = this._HBrake = 0;
@@ -34,7 +34,7 @@ var JigLib_JCar = function(skin)
 		
 }
 
-JigLib_JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
+JigLib.JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
 {
 	if (maxSteerAngle == null) maxSteerAngle = 45;
 	if (steerRate == null) steerRate = 1;
@@ -46,7 +46,7 @@ JigLib_JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
 		
 }
 
-JigLib_JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
+JigLib.JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
 {
 	if (wheelSideFriction == null) wheelSideFriction = 2;
 	if (wheelFwdFriction == null) wheelFwdFriction = 2;
@@ -59,44 +59,44 @@ JigLib_JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheel
 		var mass = this._chassis.get_mass();
 		var mass4 = 0.25 * mass;
 		
-		var gravity = JigLib_PhysicsSystem.getInstance().get_gravity().clone();
-		var gravityLen = JigLib_PhysicsSystem.getInstance().get_gravity().get_length();
+		var gravity = JigLib.PhysicsSystem.getInstance().get_gravity().clone();
+		var gravityLen = JigLib.PhysicsSystem.getInstance().get_gravity().get_length();
 		gravity.normalize();
-		var axis = JigLib_JNumber3D.getScaleVector(gravity, -1);
+		var axis = JigLib.JNumber3D.getScaleVector(gravity, -1);
 		var spring = mass4 * gravityLen / (wheelRestingFrac * wheelTravel);
 		var inertia = 0.015 * wheelRadius * wheelRadius * mass;
 		var damping = 2 * Math.sqrt(spring * mass);
 		damping *= (0.25 * wheelDampingFrac);
 
-		this._wheels[_name] = new JigLib_JWheel(this);
+		this._wheels[_name] = new JigLib.JWheel(this);
 		this._wheels[_name].setup(pos, axis, spring, wheelTravel, inertia,
 			wheelRadius, wheelSideFriction, wheelFwdFriction,
 			damping, wheelNumRays);
 		
 }
 
-JigLib_JCar.prototype.get_chassis = function()
+JigLib.JCar.prototype.get_chassis = function()
 {
 
 		return this._chassis;
 		
 }
 
-JigLib_JCar.prototype.get_wheels = function()
+JigLib.JCar.prototype.get_wheels = function()
 {
 
 		return this._wheels;
 		
 }
 
-JigLib_JCar.prototype.setAccelerate = function(val)
+JigLib.JCar.prototype.setAccelerate = function(val)
 {
 
 		this._destAccelerate = val;
 		
 }
 
-JigLib_JCar.prototype.setSteer = function(wheels, val)
+JigLib.JCar.prototype.setSteer = function(wheels, val)
 {
 
 		this._destSteering = val;
@@ -111,7 +111,7 @@ JigLib_JCar.prototype.setSteer = function(wheels, val)
 		
 }
 
-JigLib_JCar.prototype.findWheel = function(_name)
+JigLib.JCar.prototype.findWheel = function(_name)
 {
 
 		for (var i in this._wheels)
@@ -125,14 +125,14 @@ JigLib_JCar.prototype.findWheel = function(_name)
 		
 }
 
-JigLib_JCar.prototype.setHBrake = function(val)
+JigLib.JCar.prototype.setHBrake = function(val)
 {
 
 		this._HBrake = val;
 		
 }
 
-JigLib_JCar.prototype.addExternalForces = function(dt)
+JigLib.JCar.prototype.addExternalForces = function(dt)
 {
 
 		for (var wheels_i = 0, wheels_l = this.get_wheels().length, wheel; (wheels_i < wheels_l) && (wheel = this.get_wheels()[wheels_i]); wheels_i++)
@@ -142,7 +142,7 @@ JigLib_JCar.prototype.addExternalForces = function(dt)
 		
 }
 
-JigLib_JCar.prototype.postPhysics = function(dt)
+JigLib.JCar.prototype.postPhysics = function(dt)
 {
 
 		var wheel;
@@ -191,7 +191,7 @@ JigLib_JCar.prototype.postPhysics = function(dt)
 		
 }
 
-JigLib_JCar.prototype.getNumWheelsOnFloor = function()
+JigLib.JCar.prototype.getNumWheelsOnFloor = function()
 {
 
 		var count = 0;
@@ -208,9 +208,8 @@ JigLib_JCar.prototype.getNumWheelsOnFloor = function()
 
 
 
-JigLib.JCar = JigLib_JCar; 
 
-var JigLib_JWheel = function(car)
+JigLib.JWheel = function(car)
 {
 	this.noslipVel =  0.2; // Number
 	this.slipVel =  0.4; // Number
@@ -259,7 +258,7 @@ var JigLib_JWheel = function(car)
 		
 }
 
-JigLib_JWheel.prototype.setup = function(pos, axisUp, spring, travel, inertia, radius, sideFriction, fwdFriction, damping, numRays)
+JigLib.JWheel.prototype.setup = function(pos, axisUp, spring, travel, inertia, radius, sideFriction, fwdFriction, damping, numRays)
 {
 
 		this._pos = pos;
@@ -276,108 +275,108 @@ JigLib_JWheel.prototype.setup = function(pos, axisUp, spring, travel, inertia, r
 		
 }
 
-JigLib_JWheel.prototype.addTorque = function(torque)
+JigLib.JWheel.prototype.addTorque = function(torque)
 {
 
 		this._driveTorque += torque;
 		
 }
 
-JigLib_JWheel.prototype.setLock = function(lock)
+JigLib.JWheel.prototype.setLock = function(lock)
 {
 
 		this._locked = lock;
 		
 }
 
-JigLib_JWheel.prototype.setSteerAngle = function(steer)
+JigLib.JWheel.prototype.setSteerAngle = function(steer)
 {
 
 		this._steerAngle = steer;
 		
 }
 
-JigLib_JWheel.prototype.getSteerAngle = function()
+JigLib.JWheel.prototype.getSteerAngle = function()
 {
 
 		return this._steerAngle;
 		
 }
 
-JigLib_JWheel.prototype.getPos = function()
+JigLib.JWheel.prototype.getPos = function()
 {
 
 		return this._pos;
 		
 }
 
-JigLib_JWheel.prototype.getLocalAxisUp = function()
+JigLib.JWheel.prototype.getLocalAxisUp = function()
 {
 
 		return this._axisUp;
 		
 }
 
-JigLib_JWheel.prototype.getActualPos = function()
+JigLib.JWheel.prototype.getActualPos = function()
 {
 
-		return this._pos.add(JigLib_JNumber3D.getScaleVector(this._axisUp, this._displacement));
+		return this._pos.add(JigLib.JNumber3D.getScaleVector(this._axisUp, this._displacement));
 		
 }
 
-JigLib_JWheel.prototype.getRadius = function()
+JigLib.JWheel.prototype.getRadius = function()
 {
 
 		return this._radius;
 		
 }
 
-JigLib_JWheel.prototype.getDisplacement = function()
+JigLib.JWheel.prototype.getDisplacement = function()
 {
 
 		return this._displacement;
 		
 }
 
-JigLib_JWheel.prototype.getAxisAngle = function()
+JigLib.JWheel.prototype.getAxisAngle = function()
 {
 
 		return this._axisAngle;
 		
 }
 
-JigLib_JWheel.prototype.getRollAngle = function()
+JigLib.JWheel.prototype.getRollAngle = function()
 {
 
 		return 0.1 * this._angVel * 180 / Math.PI;
 		
 }
 
-JigLib_JWheel.prototype.setRotationDamping = function(vel)
+JigLib.JWheel.prototype.setRotationDamping = function(vel)
 {
 
 		this._rotDamping = vel;
 		
 }
 
-JigLib_JWheel.prototype.getRotationDamping = function()
+JigLib.JWheel.prototype.getRotationDamping = function()
 {
 
 		return this._rotDamping;
 		
 }
 
-JigLib_JWheel.prototype.getOnFloor = function()
+JigLib.JWheel.prototype.getOnFloor = function()
 {
 
 		return this._lastOnFloor;
 		
 }
 
-JigLib_JWheel.prototype.addForcesToCar = function(dt)
+JigLib.JWheel.prototype.addForcesToCar = function(dt)
 {
 
-		var force = new JigLib_Vector3D();
+		var force = new JigLib.Vector3D();
 		this._lastDisplacement = this._displacement;
 		this._displacement = 0;
 
@@ -386,17 +385,17 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 		this.worldPos = carBody.get_currentState().position.add(this.worldPos);
 		this.worldAxis = carBody.get_currentState().orientation.transformVector(this._axisUp);
 
-		this.wheelFwd = JigLib_JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
+		this.wheelFwd = JigLib.JMatrix3D.getRotationMatrix(this.worldAxis.x, this.worldAxis.y, this.worldAxis.z, this._steerAngle).transformVector(carBody.get_currentState().getOrientationCols()[2]);
 		this.wheelUp = this.worldAxis;
 		this.wheelLeft = this.wheelUp.crossProduct(this.wheelFwd);
 		this.wheelLeft.normalize();
 
 		var rayLen = 2 * this._radius + this._travel;
-		this.wheelRayEnd = this.worldPos.subtract(JigLib_JNumber3D.getScaleVector(this.worldAxis, this._radius));
-		this.wheelRay = new JigLib_JSegment(this.wheelRayEnd.add(JigLib_JNumber3D.getScaleVector(this.worldAxis, rayLen)), JigLib_JNumber3D.getScaleVector(this.worldAxis, -rayLen));
+		this.wheelRayEnd = this.worldPos.subtract(JigLib.JNumber3D.getScaleVector(this.worldAxis, this._radius));
+		this.wheelRay = new JigLib.JSegment(this.wheelRayEnd.add(JigLib.JNumber3D.getScaleVector(this.worldAxis, rayLen)), JigLib.JNumber3D.getScaleVector(this.worldAxis, -rayLen));
 
 		if(!this._collisionSystem)
-			this._collisionSystem = JigLib_PhysicsSystem.getInstance().getCollisionSystem();
+			this._collisionSystem = JigLib.PhysicsSystem.getInstance().getCollisionSystem();
 
 		var maxNumRays = 10;
 		var numRays = Math.min(this._numRays, maxNumRays);
@@ -417,11 +416,11 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 		var segment;
 		for (iRay = 0; iRay < numRays; iRay++)
 		{
-			collOutBodyData = objArr[iRay] = new JigLib_CollOutBodyData();
+			collOutBodyData = objArr[iRay] = new JigLib.CollOutBodyData();
 			distFwd = (deltaFwdStart + iRay * deltaFwd) - this._radius;
 			yOffset = this._radius * (1 - Math.cos(90 * (distFwd / this._radius) * Math.PI / 180));
 			segment = segments[iRay] = this.wheelRay.clone();
-			segment.origin = segment.origin.add(JigLib_JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JigLib_JNumber3D.getScaleVector(this.wheelUp, yOffset)));
+			segment.origin = segment.origin.add(JigLib.JNumber3D.getScaleVector(this.wheelFwd, distFwd).add(JigLib.JNumber3D.getScaleVector(this.wheelUp, yOffset)));
 			if (this._collisionSystem.segmentIntersect(collOutBodyData, segment, carBody))
 			{
 				this._lastOnFloor = true;
@@ -448,7 +447,7 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 			{
 				collOutBodyData = objArr[iRay];
 				if (collOutBodyData.frac <= 1)
-				groundNormal = groundNormal.add(JigLib_JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
+				groundNormal = groundNormal.add(JigLib.JNumber3D.getScaleVector(this.worldPos.subtract(segments[iRay].getEnd()), 1 - collOutBodyData.frac));
 			}
 			
 			groundNormal.normalize();
@@ -473,7 +472,7 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 		if (totalForceMag < 0)
 			totalForceMag = 0;
 		
-		var extraForce = JigLib_JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
+		var extraForce = JigLib.JNumber3D.getScaleVector(this.worldAxis, totalForceMag);
 		force = force.add(extraForce);
 
 		this.groundUp = groundNormal;
@@ -484,7 +483,7 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 		var tempv = carBody.get_currentState().orientation.transformVector(this._pos);
 		this.wheelPointVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
 
-		this.rimVel = JigLib_JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
+		this.rimVel = JigLib.JNumber3D.getScaleVector(this.wheelLeft.crossProduct(groundPos.subtract(this.worldPos)), this._angVel);
 		this.wheelPointVel = this.wheelPointVel.add(this.rimVel);
 
 		if (otherBody.get_movable())
@@ -511,7 +510,7 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 		}
 
 		var sideForce = -friction * totalForceMag;
-		extraForce = JigLib_JNumber3D.getScaleVector(this.groundLeft, sideForce);
+		extraForce = JigLib.JNumber3D.getScaleVector(this.groundLeft, sideForce);
 		force = force.add(extraForce);
 
 		friction = this._fwdFriction;
@@ -533,7 +532,7 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 			friction *= (Math.abs(fwdVel) / this.smallVel);
 		}
 		var fwdForce = -friction * totalForceMag;
-		extraForce = JigLib_JNumber3D.getScaleVector(this.groundFwd, fwdForce);
+		extraForce = JigLib.JNumber3D.getScaleVector(this.groundFwd, fwdForce);
 		force = force.add(extraForce);
 
 		this.wheelCentreVel = carBody.get_currentState().linVelocity.add(carBody.get_currentState().rotVelocity.crossProduct(tempv));
@@ -547,15 +546,15 @@ JigLib_JWheel.prototype.addForcesToCar = function(dt)
 			var maxOtherBodyForce = maxOtherBodyAcc * otherBody.get_mass();
 			if (force.get_lengthSquared() > maxOtherBodyForce * maxOtherBodyForce)
 			{
-				force = JigLib_JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
+				force = JigLib.JNumber3D.getScaleVector(force, maxOtherBodyForce / force.get_length());
 			}
-			otherBody.addWorldForce(JigLib_JNumber3D.getScaleVector(force, -1), groundPos, false);
+			otherBody.addWorldForce(JigLib.JNumber3D.getScaleVector(force, -1), groundPos, false);
 		}
 		return true;
 		
 }
 
-JigLib_JWheel.prototype.update = function(dt)
+JigLib.JWheel.prototype.update = function(dt)
 {
 
 		if (dt <= 0)
@@ -563,7 +562,7 @@ JigLib_JWheel.prototype.update = function(dt)
 			return;
 		}
 		var origAngVel = this._angVel;
-		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JigLib_JMath3D.NUM_TINY);
+		this._upSpeed = (this._displacement - this._lastDisplacement) / Math.max(dt, JigLib.JMath3D.NUM_TINY);
 
 		if (this._locked)
 		{
@@ -598,7 +597,7 @@ JigLib_JWheel.prototype.update = function(dt)
 		
 }
 
-JigLib_JWheel.prototype.reset = function()
+JigLib.JWheel.prototype.reset = function()
 {
 
 		this._angVel = 0;
@@ -618,9 +617,8 @@ JigLib_JWheel.prototype.reset = function()
 
 
 
-JigLib.JWheel = JigLib_JWheel; 
 
-var JigLib_RigidBody = function(skin)
+JigLib.RigidBody = function(skin)
 {
 	this._id = null; // int
 	this._skin = null; // ISkin3D
@@ -668,30 +666,30 @@ var JigLib_RigidBody = function(skin)
 	this.collisionSystem = null; // CollisionSystemAbstract
 	this.isActive = null; // Boolean
 
-		this._useDegrees = (JigLib_JConfig.rotationType == "DEGREES") ? true : false;
+		this._useDegrees = (JigLib.JConfig.rotationType == "DEGREES") ? true : false;
 
-		this._id = JigLib_RigidBody.idCounter++;
+		this._id = JigLib.RigidBody.idCounter++;
 
 		this._skin = skin;
-		this._material = new JigLib_MaterialProperties();
+		this._material = new JigLib.MaterialProperties();
 
-		this._bodyInertia = new JigLib_Matrix3D();
-		this._bodyInvInertia = JigLib_JMatrix3D.getInverseMatrix(this._bodyInertia);
+		this._bodyInertia = new JigLib.Matrix3D();
+		this._bodyInvInertia = JigLib.JMatrix3D.getInverseMatrix(this._bodyInertia);
 
-		this._currState = new JigLib_PhysicsState();
-		this._oldState = new JigLib_PhysicsState();
-		this._storeState = new JigLib_PhysicsState();
-		this._currLinVelocityAux = new JigLib_Vector3D();
-		this._currRotVelocityAux = new JigLib_Vector3D();
+		this._currState = new JigLib.PhysicsState();
+		this._oldState = new JigLib.PhysicsState();
+		this._storeState = new JigLib.PhysicsState();
+		this._currLinVelocityAux = new JigLib.Vector3D();
+		this._currRotVelocityAux = new JigLib.Vector3D();
 
-		this._force = new JigLib_Vector3D();
-		this._torque = new JigLib_Vector3D();
+		this._force = new JigLib.Vector3D();
+		this._torque = new JigLib.Vector3D();
 
-		this._invOrientation = JigLib_JMatrix3D.getInverseMatrix(this._currState.orientation);
-		this._linVelDamping = new JigLib_Vector3D(0.999, 0.999, 0.999);
-		this._rotVelDamping = new JigLib_Vector3D(0.999, 0.999, 0.999);
-		this._maxLinVelocities = new JigLib_Vector3D(JigLib_JMath3D.NUM_HUGE,JigLib_JMath3D.NUM_HUGE,JigLib_JMath3D.NUM_HUGE);
-		this._maxRotVelocities = new JigLib_Vector3D(JigLib_JMath3D.NUM_HUGE,JigLib_JMath3D.NUM_HUGE,JigLib_JMath3D.NUM_HUGE);
+		this._invOrientation = JigLib.JMatrix3D.getInverseMatrix(this._currState.orientation);
+		this._linVelDamping = new JigLib.Vector3D(0.999, 0.999, 0.999);
+		this._rotVelDamping = new JigLib.Vector3D(0.999, 0.999, 0.999);
+		this._maxLinVelocities = new JigLib.Vector3D(JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE);
+		this._maxRotVelocities = new JigLib.Vector3D(JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE,JigLib.JMath3D.NUM_HUGE);
 
 		this._inactiveTime = 0;
 		this.isActive = true;
@@ -703,65 +701,65 @@ var JigLib_RigidBody = function(skin)
 		this._nonCollidables = [];
 		this._collideBodies = [];
 
-		this._storedPositionForActivation = new JigLib_Vector3D();
+		this._storedPositionForActivation = new JigLib.Vector3D();
 		this._bodiesToBeActivatedOnMovement = [];
 		this._lastPositionForDeactivation = this._currState.position.clone();
 		this._lastOrientationForDeactivation = this._currState.orientation.clone();
 
 		this._type = "Object3D";
-		this._boundingSphere = JigLib_JMath3D.NUM_HUGE;
-		this._boundingBox = new JigLib_JAABox();
+		this._boundingSphere = JigLib.JMath3D.NUM_HUGE;
+		this._boundingBox = new JigLib.JAABox();
 		
 		this.externalData=null;
 		
 }
 
-JigLib_RigidBody.prototype.radiansToDegrees = function(rad)
+JigLib.RigidBody.prototype.radiansToDegrees = function(rad)
 {
 
 		return rad * 180 / Math.PI;
 		
 }
 
-JigLib_RigidBody.prototype.degreesToRadians = function(deg)
+JigLib.RigidBody.prototype.degreesToRadians = function(deg)
 {
 
 		return deg * Math.PI / 180;
 		
 }
 
-JigLib_RigidBody.prototype.updateRotationValues = function()
+JigLib.RigidBody.prototype.updateRotationValues = function()
 {
 
 		var rotationVector = this._currState.orientation.decompose()[1];
-		this._rotationX = JigLib_RigidBody.formatRotation(this.radiansToDegrees(rotationVector.x));
-		this._rotationY = JigLib_RigidBody.formatRotation(this.radiansToDegrees(rotationVector.y));
-		this._rotationZ = JigLib_RigidBody.formatRotation(this.radiansToDegrees(rotationVector.z));
+		this._rotationX = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.x));
+		this._rotationY = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.y));
+		this._rotationZ = JigLib.RigidBody.formatRotation(this.radiansToDegrees(rotationVector.z));
 		
 }
 
-JigLib_RigidBody.prototype.get_rotationX = function()
+JigLib.RigidBody.prototype.get_rotationX = function()
 {
 
 		return this._rotationX; //(this._useDegrees) ? this.radiansToDegrees(this._rotationX) : this._rotationX;
 		
 }
 
-JigLib_RigidBody.prototype.get_rotationY = function()
+JigLib.RigidBody.prototype.get_rotationY = function()
 {
 
 		return this._rotationY; //(this._useDegrees) ? this.radiansToDegrees(this._rotationY) : this._rotationY;
 		
 }
 
-JigLib_RigidBody.prototype.get_rotationZ = function()
+JigLib.RigidBody.prototype.get_rotationZ = function()
 {
 
 		return this._rotationZ; //(this._useDegrees) ? this.radiansToDegrees(this._rotationZ) : this._rotationZ;
 		
 }
 
-JigLib_RigidBody.prototype.set_rotationX = function(px)
+JigLib.RigidBody.prototype.set_rotationX = function(px)
 {
 
 		//var rad = (this._useDegrees) ? this.degreesToRadians(px) : px;
@@ -770,7 +768,7 @@ JigLib_RigidBody.prototype.set_rotationX = function(px)
 		
 }
 
-JigLib_RigidBody.prototype.set_rotationY = function(py)
+JigLib.RigidBody.prototype.set_rotationY = function(py)
 {
 
 		//var rad = (this._useDegrees) ? this.degreesToRadians(py) : py;
@@ -779,7 +777,7 @@ JigLib_RigidBody.prototype.set_rotationY = function(py)
 		
 }
 
-JigLib_RigidBody.prototype.set_rotationZ = function(pz)
+JigLib.RigidBody.prototype.set_rotationZ = function(pz)
 {
 
 		//var rad = (this._useDegrees) ? this.degreesToRadians(pz) : pz;
@@ -788,39 +786,39 @@ JigLib_RigidBody.prototype.set_rotationZ = function(pz)
 		
 }
 
-JigLib_RigidBody.prototype.pitch = function(rot)
+JigLib.RigidBody.prototype.pitch = function(rot)
 {
 
-		this.setOrientation(JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib_JMatrix3D.getRotationMatrixAxis(rot, JigLib_Vector3D.X_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.X_AXIS)));
 		
 }
 
-JigLib_RigidBody.prototype.yaw = function(rot)
+JigLib.RigidBody.prototype.yaw = function(rot)
 {
 
-		this.setOrientation(JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib_JMatrix3D.getRotationMatrixAxis(rot, JigLib_Vector3D.Y_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.Y_AXIS)));
 		
 }
 
-JigLib_RigidBody.prototype.roll = function(rot)
+JigLib.RigidBody.prototype.roll = function(rot)
 {
 
-		this.setOrientation(JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib_JMatrix3D.getRotationMatrixAxis(rot, JigLib_Vector3D.Z_AXIS)));
+		this.setOrientation(JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getRotationMatrixAxis(rot, JigLib.Vector3D.Z_AXIS)));
 		
 }
 
-JigLib_RigidBody.prototype.createRotationMatrix = function()
+JigLib.RigidBody.prototype.createRotationMatrix = function()
 {
 
-		var matrix3D = new JigLib_Matrix3D();
-		matrix3D.appendRotation(this._rotationX, JigLib_Vector3D.X_AXIS);
-		matrix3D.appendRotation(this._rotationY, JigLib_Vector3D.Y_AXIS);
-		matrix3D.appendRotation(this._rotationZ, JigLib_Vector3D.Z_AXIS);
+		var matrix3D = new JigLib.Matrix3D();
+		matrix3D.appendRotation(this._rotationX, JigLib.Vector3D.X_AXIS);
+		matrix3D.appendRotation(this._rotationY, JigLib.Vector3D.Y_AXIS);
+		matrix3D.appendRotation(this._rotationZ, JigLib.Vector3D.Z_AXIS);
 		return matrix3D;
 		
 }
 
-JigLib_RigidBody.prototype.setOrientation = function(orient)
+JigLib.RigidBody.prototype.setOrientation = function(orient)
 {
 
 		this._currState.orientation = orient.clone();
@@ -829,28 +827,28 @@ JigLib_RigidBody.prototype.setOrientation = function(orient)
 		
 }
 
-JigLib_RigidBody.prototype.get_x = function()
+JigLib.RigidBody.prototype.get_x = function()
 {
 
 		return this._currState.position.x;
 		
 }
 
-JigLib_RigidBody.prototype.get_y = function()
+JigLib.RigidBody.prototype.get_y = function()
 {
 
 		return this._currState.position.y;
 		
 }
 
-JigLib_RigidBody.prototype.get_z = function()
+JigLib.RigidBody.prototype.get_z = function()
 {
 
 		return this._currState.position.z;
 		
 }
 
-JigLib_RigidBody.prototype.set_x = function(px)
+JigLib.RigidBody.prototype.set_x = function(px)
 {
 
 		this._currState.position.x = px;
@@ -858,7 +856,7 @@ JigLib_RigidBody.prototype.set_x = function(px)
 		
 }
 
-JigLib_RigidBody.prototype.set_y = function(py)
+JigLib.RigidBody.prototype.set_y = function(py)
 {
 
 		this._currState.position.y = py;
@@ -866,7 +864,7 @@ JigLib_RigidBody.prototype.set_y = function(py)
 		
 }
 
-JigLib_RigidBody.prototype.set_z = function(pz)
+JigLib.RigidBody.prototype.set_z = function(pz)
 {
 
 		this._currState.position.z = pz;
@@ -874,7 +872,7 @@ JigLib_RigidBody.prototype.set_z = function(pz)
 		
 }
 
-JigLib_RigidBody.prototype.moveTo = function(pos)
+JigLib.RigidBody.prototype.moveTo = function(pos)
 {
 
 		this._currState.position = pos.clone();
@@ -882,7 +880,7 @@ JigLib_RigidBody.prototype.moveTo = function(pos)
 		
 }
 
-JigLib_RigidBody.prototype.updateState = function()
+JigLib.RigidBody.prototype.updateState = function()
 {
 
 		this._currState.linVelocity.setTo(0,0,0);
@@ -897,45 +895,45 @@ JigLib_RigidBody.prototype.updateState = function()
 		
 }
 
-JigLib_RigidBody.prototype.setLineVelocity = function(vel)
+JigLib.RigidBody.prototype.setLineVelocity = function(vel)
 {
 
 		this._currState.linVelocity = vel.clone();
 		
 }
 
-JigLib_RigidBody.prototype.setAngleVelocity = function(angVel)
+JigLib.RigidBody.prototype.setAngleVelocity = function(angVel)
 {
 
 		this._currState.rotVelocity = angVel.clone();
 		
 }
 
-JigLib_RigidBody.prototype.setLineVelocityAux = function(vel)
+JigLib.RigidBody.prototype.setLineVelocityAux = function(vel)
 {
 
 		this._currLinVelocityAux = vel.clone();
 		
 }
 
-JigLib_RigidBody.prototype.setAngleVelocityAux = function(angVel)
+JigLib.RigidBody.prototype.setAngleVelocityAux = function(angVel)
 {
 
 		this._currRotVelocityAux = angVel.clone();
 		
 }
 
-JigLib_RigidBody.prototype.updateGravity = function(gravity, gravityAxis)
+JigLib.RigidBody.prototype.updateGravity = function(gravity, gravityAxis)
 {
 
 		this._gravity = gravity;
 		this._gravityAxis = gravityAxis;
 		
-		this._gravityForce = JigLib_JNumber3D.getScaleVector(this._gravity, this._mass);
+		this._gravityForce = JigLib.JNumber3D.getScaleVector(this._gravity, this._mass);
 		
 }
 
-JigLib_RigidBody.prototype.addWorldTorque = function(t, active)
+JigLib.RigidBody.prototype.addWorldTorque = function(t, active)
 {
 	if (active == null) active = true;
 
@@ -949,7 +947,7 @@ JigLib_RigidBody.prototype.addWorldTorque = function(t, active)
 		
 }
 
-JigLib_RigidBody.prototype.addBodyTorque = function(t, active)
+JigLib.RigidBody.prototype.addBodyTorque = function(t, active)
 {
 	if (active == null) active = true;
 
@@ -960,7 +958,7 @@ JigLib_RigidBody.prototype.addBodyTorque = function(t, active)
 		
 }
 
-JigLib_RigidBody.prototype.addWorldForce = function(f, p, active)
+JigLib.RigidBody.prototype.addWorldForce = function(f, p, active)
 {
 	if (active == null) active = true;
 
@@ -974,7 +972,7 @@ JigLib_RigidBody.prototype.addWorldForce = function(f, p, active)
 		
 }
 
-JigLib_RigidBody.prototype.addBodyForce = function(f, p, active)
+JigLib.RigidBody.prototype.addBodyForce = function(f, p, active)
 {
 	if (active == null) active = true;
 
@@ -987,7 +985,7 @@ JigLib_RigidBody.prototype.addBodyForce = function(f, p, active)
 		
 }
 
-JigLib_RigidBody.prototype.clearForces = function()
+JigLib.RigidBody.prototype.clearForces = function()
 {
 
 		this._force.setTo(0,0,0);
@@ -995,7 +993,7 @@ JigLib_RigidBody.prototype.clearForces = function()
 		
 }
 
-JigLib_RigidBody.prototype.applyWorldImpulse = function(impulse, pos, active)
+JigLib.RigidBody.prototype.applyWorldImpulse = function(impulse, pos, active)
 {
 	if (active == null) active = true;
 
@@ -1003,7 +1001,7 @@ JigLib_RigidBody.prototype.applyWorldImpulse = function(impulse, pos, active)
 		{
 			return;
 		}
-		this._currState.linVelocity = this._currState.linVelocity.add(JigLib_JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = pos.subtract(this._currState.position).crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -1013,7 +1011,7 @@ JigLib_RigidBody.prototype.applyWorldImpulse = function(impulse, pos, active)
 		
 }
 
-JigLib_RigidBody.prototype.applyWorldImpulseAux = function(impulse, pos, active)
+JigLib.RigidBody.prototype.applyWorldImpulseAux = function(impulse, pos, active)
 {
 	if (active == null) active = true;
 
@@ -1021,7 +1019,7 @@ JigLib_RigidBody.prototype.applyWorldImpulseAux = function(impulse, pos, active)
 		{
 			return;
 		}
-		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib_JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = pos.subtract(this._currState.position).crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -1031,7 +1029,7 @@ JigLib_RigidBody.prototype.applyWorldImpulseAux = function(impulse, pos, active)
 		
 }
 
-JigLib_RigidBody.prototype.applyBodyWorldImpulse = function(impulse, delta, active)
+JigLib.RigidBody.prototype.applyBodyWorldImpulse = function(impulse, delta, active)
 {
 	if (active == null) active = true;
 
@@ -1039,7 +1037,7 @@ JigLib_RigidBody.prototype.applyBodyWorldImpulse = function(impulse, delta, acti
 		{
 			return;
 		}
-		this._currState.linVelocity = this._currState.linVelocity.add(JigLib_JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = delta.crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -1049,7 +1047,7 @@ JigLib_RigidBody.prototype.applyBodyWorldImpulse = function(impulse, delta, acti
 		
 }
 
-JigLib_RigidBody.prototype.applyBodyWorldImpulseAux = function(impulse, delta, active)
+JigLib.RigidBody.prototype.applyBodyWorldImpulseAux = function(impulse, delta, active)
 {
 	if (active == null) active = true;
 
@@ -1057,7 +1055,7 @@ JigLib_RigidBody.prototype.applyBodyWorldImpulseAux = function(impulse, delta, a
 		{
 			return;
 		}
-		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib_JNumber3D.getScaleVector(impulse, this._invMass));
+		this._currLinVelocityAux = this._currLinVelocityAux.add(JigLib.JNumber3D.getScaleVector(impulse, this._invMass));
 
 		var rotImpulse = delta.crossProduct(impulse);
 		rotImpulse = this._worldInvInertia.transformVector(rotImpulse);
@@ -1067,21 +1065,21 @@ JigLib_RigidBody.prototype.applyBodyWorldImpulseAux = function(impulse, delta, a
 		
 }
 
-JigLib_RigidBody.prototype.updateVelocity = function(dt)
+JigLib.RigidBody.prototype.updateVelocity = function(dt)
 {
 
 		if (!this._movable || !this.isActive)
 			return;
 
-		this._currState.linVelocity = this._currState.linVelocity.add(JigLib_JNumber3D.getScaleVector(this._force, this._invMass * dt));
+		this._currState.linVelocity = this._currState.linVelocity.add(JigLib.JNumber3D.getScaleVector(this._force, this._invMass * dt));
 
-		var rac = JigLib_JNumber3D.getScaleVector(this._torque, dt);
+		var rac = JigLib.JNumber3D.getScaleVector(this._torque, dt);
 		rac = this._worldInvInertia.transformVector(rac);
 		this._currState.rotVelocity = this._currState.rotVelocity.add(rac);
 		
 }
 
-JigLib_RigidBody.prototype.updatePosition = function(dt)
+JigLib.RigidBody.prototype.updatePosition = function(dt)
 {
 
 		   if (!this._movable || !this.isActive)
@@ -1092,7 +1090,7 @@ JigLib_RigidBody.prototype.updatePosition = function(dt)
 		   var angMomBefore = this._currState.rotVelocity.clone();
 		   angMomBefore = this._worldInertia.transformVector(angMomBefore);
 
-		   this._currState.position = this._currState.position.add(JigLib_JNumber3D.getScaleVector(this._currState.linVelocity, dt));
+		   this._currState.position = this._currState.position.add(JigLib.JNumber3D.getScaleVector(this._currState.linVelocity, dt));
 
 		   var dir = this._currState.rotVelocity.clone();
 		   var ang = dir.get_length();
@@ -1100,8 +1098,8 @@ JigLib_RigidBody.prototype.updatePosition = function(dt)
 		   {
 		   dir.normalize();
 		   ang *= dt;
-		   var rot = JigLib_JMatrix3D.rotationMatrix(dir.x, dir.y, dir.z, ang);
-		   this._currState.orientation = JigLib_JMatrix3D.getMatrix3D(JigLib_JMatrix3D.multiply(rot, JigLib_JMatrix3D.getJMatrix3D(this._currState.orientation)));
+		   var rot = JigLib.JMatrix3D.rotationMatrix(dir.x, dir.y, dir.z, ang);
+		   this._currState.orientation = JigLib.JMatrix3D.getMatrix3D(JigLib.JMatrix3D.multiply(rot, JigLib.JMatrix3D.getJMatrix3D(this._currState.orientation)));
 		   this.updateInertia();
 		   }
 
@@ -1110,7 +1108,7 @@ JigLib_RigidBody.prototype.updatePosition = function(dt)
 		   
 }
 
-JigLib_RigidBody.prototype.updatePositionWithAux = function(dt)
+JigLib.RigidBody.prototype.updatePositionWithAux = function(dt)
 {
 
 		if (!this._movable || !this.isActive)
@@ -1123,13 +1121,13 @@ JigLib_RigidBody.prototype.updatePositionWithAux = function(dt)
 		var ga = this._gravityAxis;
 		if (ga != -1)
 		{
-			var arr = JigLib_JNumber3D.toArray(this._currLinVelocityAux);
+			var arr = JigLib.JNumber3D.toArray(this._currLinVelocityAux);
 			arr[(ga + 1) % 3] *= 0.1;
 			arr[(ga + 2) % 3] *= 0.1;
-			JigLib_JNumber3D.copyFromArray(this._currLinVelocityAux, arr);
+			JigLib.JNumber3D.copyFromArray(this._currLinVelocityAux, arr);
 		}
 
-		this._currState.position = this._currState.position.add(JigLib_JNumber3D.getScaleVector(this._currState.linVelocity.add(this._currLinVelocityAux), dt));
+		this._currState.position = this._currState.position.add(JigLib.JNumber3D.getScaleVector(this._currState.linVelocity.add(this._currLinVelocityAux), dt));
 
 		var dir = this._currState.rotVelocity.add(this._currRotVelocityAux);
 		var ang = dir.get_length() * 180 / Math.PI;
@@ -1139,8 +1137,8 @@ JigLib_RigidBody.prototype.updatePositionWithAux = function(dt)
 			ang *= dt;
 
 
-			var rot = JigLib_JMatrix3D.getRotationMatrix(dir.x, dir.y, dir.z, ang);
-			this._currState.orientation = JigLib_JMatrix3D.getAppendMatrix3D(this._currState.orientation, rot);
+			var rot = JigLib.JMatrix3D.getRotationMatrix(dir.x, dir.y, dir.z, ang);
+			this._currState.orientation = JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, rot);
 
 			this.updateInertia();
 		}
@@ -1151,7 +1149,7 @@ JigLib_RigidBody.prototype.updatePositionWithAux = function(dt)
 		
 }
 
-JigLib_RigidBody.prototype.tryToFreeze = function(dt)
+JigLib.RigidBody.prototype.tryToFreeze = function(dt)
 {
 
 		if (!this._movable || !this.isActive)
@@ -1159,17 +1157,17 @@ JigLib_RigidBody.prototype.tryToFreeze = function(dt)
 			return;
 		}
 		
-		if (this._currState.position.subtract(this._lastPositionForDeactivation).get_length() > JigLib_JConfig.posThreshold)
+		if (this._currState.position.subtract(this._lastPositionForDeactivation).get_length() > JigLib.JConfig.posThreshold)
 		{
 			this._lastPositionForDeactivation = this._currState.position.clone();
 			this._inactiveTime = 0;
 			return;
 		}
 
-		var ot = JigLib_JConfig.orientThreshold;
-		var deltaMat = JigLib_JMatrix3D.getSubMatrix(this._currState.orientation, this._lastOrientationForDeactivation);
+		var ot = JigLib.JConfig.orientThreshold;
+		var deltaMat = JigLib.JMatrix3D.getSubMatrix(this._currState.orientation, this._lastOrientationForDeactivation);
 
-		var cols = JigLib_JMatrix3D.getCols(deltaMat);
+		var cols = JigLib.JMatrix3D.getCols(deltaMat);
 
 		if (cols[0].get_length() > ot || cols[1].get_length() > ot || cols[2].get_length() > ot)
 		{
@@ -1184,7 +1182,7 @@ JigLib_RigidBody.prototype.tryToFreeze = function(dt)
 		}
 
 		this._inactiveTime += dt;
-		if (this._inactiveTime > JigLib_JConfig.deactivationTime)
+		if (this._inactiveTime > JigLib.JConfig.deactivationTime)
 		{
 			this._lastPositionForDeactivation = this._currState.position.clone();
 			this._lastOrientationForDeactivation = this._currState.orientation.clone();
@@ -1193,7 +1191,7 @@ JigLib_RigidBody.prototype.tryToFreeze = function(dt)
 		
 }
 
-JigLib_RigidBody.prototype.postPhysics = function(dt)
+JigLib.RigidBody.prototype.postPhysics = function(dt)
 {
 
 		if (!this._movable || !this.isActive)
@@ -1219,7 +1217,7 @@ JigLib_RigidBody.prototype.postPhysics = function(dt)
 		
 }
 
-JigLib_RigidBody.prototype.set_mass = function(m)
+JigLib.RigidBody.prototype.set_mass = function(m)
 {
 
 		this._mass = m;
@@ -1227,40 +1225,40 @@ JigLib_RigidBody.prototype.set_mass = function(m)
 		this.setInertia(this.getInertiaProperties(m));
 		
 		// this.get_mass() is dirty have to recalculate gravity this.get_force()
-		var physicsSystem = JigLib_PhysicsSystem.getInstance();
+		var physicsSystem = JigLib.PhysicsSystem.getInstance();
 		this.updateGravity(physicsSystem.get_gravity(), physicsSystem.get_gravityAxis());
 		
 }
 
-JigLib_RigidBody.prototype.setInertia = function(matrix3D)
+JigLib.RigidBody.prototype.setInertia = function(matrix3D)
 {
 
 		this._bodyInertia = matrix3D.clone();
-		this._bodyInvInertia = JigLib_JMatrix3D.getInverseMatrix(this._bodyInertia.clone());
+		this._bodyInvInertia = JigLib.JMatrix3D.getInverseMatrix(this._bodyInertia.clone());
 
 		this.updateInertia();
 		
 }
 
-JigLib_RigidBody.prototype.updateInertia = function()
+JigLib.RigidBody.prototype.updateInertia = function()
 {
 
-		this._invOrientation = JigLib_JMatrix3D.getTransposeMatrix(this._currState.orientation);
+		this._invOrientation = JigLib.JMatrix3D.getTransposeMatrix(this._currState.orientation);
 
-		this._worldInertia = JigLib_JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib_JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInertia));
+		this._worldInertia = JigLib.JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInertia));
 
-		this._worldInvInertia = JigLib_JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib_JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInvInertia));
+		this._worldInvInertia = JigLib.JMatrix3D.getAppendMatrix3D(this._invOrientation, JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, this._bodyInvInertia));
 		
 }
 
-JigLib_RigidBody.prototype.get_movable = function()
+JigLib.RigidBody.prototype.get_movable = function()
 {
 
 		return this._movable;
 		
 }
 
-JigLib_RigidBody.prototype.set_movable = function(mov)
+JigLib.RigidBody.prototype.set_movable = function(mov)
 {
 
 		if (this._type == "PLANE" || this._type == "TERRAIN" || this._type == "TRIANGLEMESH")
@@ -1272,7 +1270,7 @@ JigLib_RigidBody.prototype.set_movable = function(mov)
 		
 }
 
-JigLib_RigidBody.prototype.internalSetImmovable = function()
+JigLib.RigidBody.prototype.internalSetImmovable = function()
 {
 
 		this._origMovable = this._movable;
@@ -1280,14 +1278,14 @@ JigLib_RigidBody.prototype.internalSetImmovable = function()
 		
 }
 
-JigLib_RigidBody.prototype.internalRestoreImmovable = function()
+JigLib.RigidBody.prototype.internalRestoreImmovable = function()
 {
 
 		this._movable = this._origMovable;
 		
 }
 
-JigLib_RigidBody.prototype.setActive = function()
+JigLib.RigidBody.prototype.setActive = function()
 {
 
 		if (this._movable)
@@ -1299,45 +1297,45 @@ JigLib_RigidBody.prototype.setActive = function()
 		
 }
 
-JigLib_RigidBody.prototype.setInactive = function()
+JigLib.RigidBody.prototype.setInactive = function()
 {
 
 		if (this._movable) {
-			this._inactiveTime = JigLib_JConfig.deactivationTime;
+			this._inactiveTime = JigLib.JConfig.deactivationTime;
 			this.isActive = false;
 		}
 		
 }
 
-JigLib_RigidBody.prototype.getVelocity = function(relPos)
+JigLib.RigidBody.prototype.getVelocity = function(relPos)
 {
 
 		return this._currState.linVelocity.add(this._currState.rotVelocity.crossProduct(relPos));
 		
 }
 
-JigLib_RigidBody.prototype.getVelocityAux = function(relPos)
+JigLib.RigidBody.prototype.getVelocityAux = function(relPos)
 {
 
 		return this._currLinVelocityAux.add(this._currRotVelocityAux.crossProduct(relPos));
 		
 }
 
-JigLib_RigidBody.prototype.getShouldBeActive = function()
+JigLib.RigidBody.prototype.getShouldBeActive = function()
 {
 
-		return ((this._currState.linVelocity.get_length() > JigLib_JConfig.velThreshold) || (this._currState.rotVelocity.get_length() > JigLib_JConfig.angVelThreshold));
+		return ((this._currState.linVelocity.get_length() > JigLib.JConfig.velThreshold) || (this._currState.rotVelocity.get_length() > JigLib.JConfig.angVelThreshold));
 		
 }
 
-JigLib_RigidBody.prototype.getShouldBeActiveAux = function()
+JigLib.RigidBody.prototype.getShouldBeActiveAux = function()
 {
 
-		return ((this._currLinVelocityAux.get_length() > JigLib_JConfig.velThreshold) || (this._currRotVelocityAux.get_length() > JigLib_JConfig.angVelThreshold));
+		return ((this._currLinVelocityAux.get_length() > JigLib.JConfig.velThreshold) || (this._currRotVelocityAux.get_length() > JigLib.JConfig.angVelThreshold));
 		
 }
 
-JigLib_RigidBody.prototype.dampForDeactivation = function()
+JigLib.RigidBody.prototype.dampForDeactivation = function()
 {
 
 		this._currState.linVelocity.x *= this._linVelDamping.x;
@@ -1355,7 +1353,7 @@ JigLib_RigidBody.prototype.dampForDeactivation = function()
 		this._currRotVelocityAux.z *= this._rotVelDamping.z;
 
 		var r = 0.5;
-		var frac = this._inactiveTime / JigLib_JConfig.deactivationTime;
+		var frac = this._inactiveTime / JigLib.JConfig.deactivationTime;
 		if (frac < r)
 			return;
 
@@ -1374,10 +1372,10 @@ JigLib_RigidBody.prototype.dampForDeactivation = function()
 		
 }
 
-JigLib_RigidBody.prototype.doMovementActivations = function(physicsSystem)
+JigLib.RigidBody.prototype.doMovementActivations = function(physicsSystem)
 {
 
-		if (this._bodiesToBeActivatedOnMovement.length == 0 || this._currState.position.subtract(this._storedPositionForActivation).get_length() < JigLib_JConfig.posThreshold)
+		if (this._bodiesToBeActivatedOnMovement.length == 0 || this._currState.position.subtract(this._storedPositionForActivation).get_length() < JigLib.JConfig.posThreshold)
 			return;
 
 		for (var _bodiesToBeActivatedOnMovement_i = 0, _bodiesToBeActivatedOnMovement_l = this._bodiesToBeActivatedOnMovement.length, body; (_bodiesToBeActivatedOnMovement_i < _bodiesToBeActivatedOnMovement_l) && (body = this._bodiesToBeActivatedOnMovement[_bodiesToBeActivatedOnMovement_i]); _bodiesToBeActivatedOnMovement_i++)
@@ -1389,7 +1387,7 @@ JigLib_RigidBody.prototype.doMovementActivations = function(physicsSystem)
 		
 }
 
-JigLib_RigidBody.prototype.addMovementActivation = function(pos, otherBody)
+JigLib.RigidBody.prototype.addMovementActivation = function(pos, otherBody)
 {
 
 		if (this._bodiesToBeActivatedOnMovement.indexOf(otherBody) > -1)
@@ -1402,7 +1400,7 @@ JigLib_RigidBody.prototype.addMovementActivation = function(pos, otherBody)
 		
 }
 
-JigLib_RigidBody.prototype.setConstraintsAndCollisionsUnsatisfied = function()
+JigLib.RigidBody.prototype.setConstraintsAndCollisionsUnsatisfied = function()
 {
 
 		for (var _constraints_i = 0, _constraints_l = this._constraints.length, _constraint; (_constraints_i < _constraints_l) && (_constraint = this._constraints[_constraints_i]); _constraints_i++)
@@ -1413,27 +1411,27 @@ JigLib_RigidBody.prototype.setConstraintsAndCollisionsUnsatisfied = function()
 		
 }
 
-JigLib_RigidBody.prototype.segmentIntersect = function(out, seg, state)
+JigLib.RigidBody.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		return false;
 		
 }
 
-JigLib_RigidBody.prototype.getInertiaProperties = function(m)
+JigLib.RigidBody.prototype.getInertiaProperties = function(m)
 {
 
-		return new JigLib_Matrix3D();
+		return new JigLib.Matrix3D();
 		
 }
 
-JigLib_RigidBody.prototype.updateBoundingBox = function()
+JigLib.RigidBody.prototype.updateBoundingBox = function()
 {
 
 		
 }
 
-JigLib_RigidBody.prototype.hitTestObject3D = function(obj3D)
+JigLib.RigidBody.prototype.hitTestObject3D = function(obj3D)
 {
 
 		var num1, num2;
@@ -1447,7 +1445,7 @@ JigLib_RigidBody.prototype.hitTestObject3D = function(obj3D)
 		
 }
 
-JigLib_RigidBody.prototype.disableCollisions = function(body)
+JigLib.RigidBody.prototype.disableCollisions = function(body)
 {
 
 		if (this._nonCollidables.indexOf(body) < 0)
@@ -1455,7 +1453,7 @@ JigLib_RigidBody.prototype.disableCollisions = function(body)
 		
 }
 
-JigLib_RigidBody.prototype.enableCollisions = function(body)
+JigLib.RigidBody.prototype.enableCollisions = function(body)
 {
 
 		if (this._nonCollidables.indexOf(body) >= 0)
@@ -1463,7 +1461,7 @@ JigLib_RigidBody.prototype.enableCollisions = function(body)
 		
 }
 
-JigLib_RigidBody.prototype.addCollideBody = function(body)
+JigLib.RigidBody.prototype.addCollideBody = function(body)
 {
 
 		if (this._collideBodies.indexOf(body) < 0) {
@@ -1477,7 +1475,7 @@ JigLib_RigidBody.prototype.addCollideBody = function(body)
 		
 }
 
-JigLib_RigidBody.prototype.removeCollideBodies = function(body)
+JigLib.RigidBody.prototype.removeCollideBodies = function(body)
 {
 
 		var i = this._collideBodies.indexOf(body);
@@ -1492,7 +1490,7 @@ JigLib_RigidBody.prototype.removeCollideBodies = function(body)
 		
 }
 
-JigLib_RigidBody.prototype.addConstraint = function(constraint)
+JigLib.RigidBody.prototype.addConstraint = function(constraint)
 {
 
 		if (this._constraints.indexOf(constraint) < 0)
@@ -1502,7 +1500,7 @@ JigLib_RigidBody.prototype.addConstraint = function(constraint)
 		
 }
 
-JigLib_RigidBody.prototype.removeConstraint = function(constraint)
+JigLib.RigidBody.prototype.removeConstraint = function(constraint)
 {
 
 		if (this._constraints.indexOf(constraint) >= 0)
@@ -1512,7 +1510,7 @@ JigLib_RigidBody.prototype.removeConstraint = function(constraint)
 		
 }
 
-JigLib_RigidBody.prototype.copyCurrentStateToOld = function()
+JigLib.RigidBody.prototype.copyCurrentStateToOld = function()
 {
 
 		this._oldState.position = this._currState.position.clone();
@@ -1522,7 +1520,7 @@ JigLib_RigidBody.prototype.copyCurrentStateToOld = function()
 		
 }
 
-JigLib_RigidBody.prototype.storeState = function()
+JigLib.RigidBody.prototype.storeState = function()
 {
 
 		this._storeState.position = this._currState.position.clone();
@@ -1532,7 +1530,7 @@ JigLib_RigidBody.prototype.storeState = function()
 		
 }
 
-JigLib_RigidBody.prototype.restoreState = function()
+JigLib.RigidBody.prototype.restoreState = function()
 {
 
 		this._currState.position = this._storeState.position.clone();
@@ -1544,174 +1542,174 @@ JigLib_RigidBody.prototype.restoreState = function()
 		
 }
 
-JigLib_RigidBody.prototype.get_currentState = function()
+JigLib.RigidBody.prototype.get_currentState = function()
 {
 
 		return this._currState;
 		
 }
 
-JigLib_RigidBody.prototype.get_oldState = function()
+JigLib.RigidBody.prototype.get_oldState = function()
 {
 
 		return this._oldState;
 		
 }
 
-JigLib_RigidBody.prototype.get_id = function()
+JigLib.RigidBody.prototype.get_id = function()
 {
 
 		return this._id;
 		
 }
 
-JigLib_RigidBody.prototype.get_type = function()
+JigLib.RigidBody.prototype.get_type = function()
 {
 
 		return this._type;
 		
 }
 
-JigLib_RigidBody.prototype.get_skin = function()
+JigLib.RigidBody.prototype.get_skin = function()
 {
 
 		return this._skin;
 		
 }
 
-JigLib_RigidBody.prototype.get_boundingSphere = function()
+JigLib.RigidBody.prototype.get_boundingSphere = function()
 {
 
 		return this._boundingSphere;
 		
 }
 
-JigLib_RigidBody.prototype.get_boundingBox = function()
+JigLib.RigidBody.prototype.get_boundingBox = function()
 {
 
 		return this._boundingBox;
 		
 }
 
-JigLib_RigidBody.prototype.get_force = function()
+JigLib.RigidBody.prototype.get_force = function()
 {
 
 		return this._force;
 		
 }
 
-JigLib_RigidBody.prototype.get_mass = function()
+JigLib.RigidBody.prototype.get_mass = function()
 {
 
 		return this._mass;
 		
 }
 
-JigLib_RigidBody.prototype.get_invMass = function()
+JigLib.RigidBody.prototype.get_invMass = function()
 {
 
 		return this._invMass;
 		
 }
 
-JigLib_RigidBody.prototype.get_worldInertia = function()
+JigLib.RigidBody.prototype.get_worldInertia = function()
 {
 
 		return this._worldInertia;
 		
 }
 
-JigLib_RigidBody.prototype.get_worldInvInertia = function()
+JigLib.RigidBody.prototype.get_worldInvInertia = function()
 {
 
 		return this._worldInvInertia;
 		
 }
 
-JigLib_RigidBody.prototype.get_nonCollidables = function()
+JigLib.RigidBody.prototype.get_nonCollidables = function()
 {
 
 		return this._nonCollidables;
 		
 }
 
-JigLib_RigidBody.prototype.get_constraints = function()
+JigLib.RigidBody.prototype.get_constraints = function()
 {
 
 		return this._constraints;
 		
 }
 
-JigLib_RigidBody.prototype.set_linVelocityDamping = function(vel)
+JigLib.RigidBody.prototype.set_linVelocityDamping = function(vel)
 {
 
-		this._linVelDamping.x = JigLib_JMath3D.getLimiteNumber(vel.x, 0, 1);
-		this._linVelDamping.y = JigLib_JMath3D.getLimiteNumber(vel.y, 0, 1);
-		this._linVelDamping.z = JigLib_JMath3D.getLimiteNumber(vel.z, 0, 1);
+		this._linVelDamping.x = JigLib.JMath3D.getLimiteNumber(vel.x, 0, 1);
+		this._linVelDamping.y = JigLib.JMath3D.getLimiteNumber(vel.y, 0, 1);
+		this._linVelDamping.z = JigLib.JMath3D.getLimiteNumber(vel.z, 0, 1);
 		
 }
 
-JigLib_RigidBody.prototype.get_linVelocityDamping = function()
+JigLib.RigidBody.prototype.get_linVelocityDamping = function()
 {
 
 		return this._linVelDamping;
 		
 }
 
-JigLib_RigidBody.prototype.set_rotVelocityDamping = function(vel)
+JigLib.RigidBody.prototype.set_rotVelocityDamping = function(vel)
 {
 
-		this._rotVelDamping.x = JigLib_JMath3D.getLimiteNumber(vel.x, 0, 1);
-		this._rotVelDamping.y = JigLib_JMath3D.getLimiteNumber(vel.y, 0, 1);
-		this._rotVelDamping.z = JigLib_JMath3D.getLimiteNumber(vel.z, 0, 1);
+		this._rotVelDamping.x = JigLib.JMath3D.getLimiteNumber(vel.x, 0, 1);
+		this._rotVelDamping.y = JigLib.JMath3D.getLimiteNumber(vel.y, 0, 1);
+		this._rotVelDamping.z = JigLib.JMath3D.getLimiteNumber(vel.z, 0, 1);
 		
 }
 
-JigLib_RigidBody.prototype.get_rotVelocityDamping = function()
+JigLib.RigidBody.prototype.get_rotVelocityDamping = function()
 {
 
 		return this._rotVelDamping;
 		
 }
 
-JigLib_RigidBody.prototype.set_maxLinVelocities = function(vel)
+JigLib.RigidBody.prototype.set_maxLinVelocities = function(vel)
 {
 
-		this._maxLinVelocities = new JigLib_Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
+		this._maxLinVelocities = new JigLib.Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
 		
 }
 
-JigLib_RigidBody.prototype.get_maxLinVelocities = function()
+JigLib.RigidBody.prototype.get_maxLinVelocities = function()
 {
 
 		return this._maxLinVelocities;
 		
 }
 
-JigLib_RigidBody.prototype.set_maxRotVelocities = function(vel)
+JigLib.RigidBody.prototype.set_maxRotVelocities = function(vel)
 {
 
-		this._maxRotVelocities = new JigLib_Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
+		this._maxRotVelocities = new JigLib.Vector3D(Math.abs(vel.x),Math.abs(vel.y),Math.abs(vel.z));
 		
 }
 
-JigLib_RigidBody.prototype.get_maxRotVelocities = function()
+JigLib.RigidBody.prototype.get_maxRotVelocities = function()
 {
 
 		return this._maxRotVelocities;
 		
 }
 
-JigLib_RigidBody.prototype.limitVel = function()
+JigLib.RigidBody.prototype.limitVel = function()
 {
 
-		this._currState.linVelocity.x = JigLib_JMath3D.getLimiteNumber(this._currState.linVelocity.x, -this._maxLinVelocities.x, this._maxLinVelocities.x);
-		this._currState.linVelocity.y = JigLib_JMath3D.getLimiteNumber(this._currState.linVelocity.y, -this._maxLinVelocities.y, this._maxLinVelocities.y);
-		this._currState.linVelocity.z = JigLib_JMath3D.getLimiteNumber(this._currState.linVelocity.z, -this._maxLinVelocities.z, this._maxLinVelocities.z);
+		this._currState.linVelocity.x = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.x, -this._maxLinVelocities.x, this._maxLinVelocities.x);
+		this._currState.linVelocity.y = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.y, -this._maxLinVelocities.y, this._maxLinVelocities.y);
+		this._currState.linVelocity.z = JigLib.JMath3D.getLimiteNumber(this._currState.linVelocity.z, -this._maxLinVelocities.z, this._maxLinVelocities.z);
 		
 }
 
-JigLib_RigidBody.prototype.limitAngVel = function()
+JigLib.RigidBody.prototype.limitAngVel = function()
 {
 
 		var fx = Math.abs(this._currState.rotVelocity.x) / this._maxRotVelocities.x;
@@ -1720,65 +1718,65 @@ JigLib_RigidBody.prototype.limitAngVel = function()
 		var f = Math.max(fx, fy, fz);
 
 		if (f > 1)
-			this._currState.rotVelocity = JigLib_JNumber3D.getDivideVector(this._currState.rotVelocity, f);
+			this._currState.rotVelocity = JigLib.JNumber3D.getDivideVector(this._currState.rotVelocity, f);
 		
 }
 
-JigLib_RigidBody.prototype.getTransform = function()
+JigLib.RigidBody.prototype.getTransform = function()
 {
 
 		return this._skin ? this._skin.transform : null;
 		
 }
 
-JigLib_RigidBody.prototype.updateObject3D = function()
+JigLib.RigidBody.prototype.updateObject3D = function()
 {
 
 		if (this._skin)
 		{
-			this._skin.transform = JigLib_JMatrix3D.getAppendMatrix3D(this._currState.orientation, JigLib_JMatrix3D.getTranslationMatrix(this._currState.position.x, this._currState.position.y, this._currState.position.z));
+			this._skin.transform = JigLib.JMatrix3D.getAppendMatrix3D(this._currState.orientation, JigLib.JMatrix3D.getTranslationMatrix(this._currState.position.x, this._currState.position.y, this._currState.position.z));
 		}
 		
 }
 
-JigLib_RigidBody.prototype.get_material = function()
+JigLib.RigidBody.prototype.get_material = function()
 {
 
 		return this._material;
 		
 }
 
-JigLib_RigidBody.prototype.get_restitution = function()
+JigLib.RigidBody.prototype.get_restitution = function()
 {
 
 		return this._material.restitution;
 		
 }
 
-JigLib_RigidBody.prototype.set_restitution = function(restitution)
+JigLib.RigidBody.prototype.set_restitution = function(restitution)
 {
 
-		this._material.restitution = JigLib_JMath3D.getLimiteNumber(restitution, 0, 1);
+		this._material.restitution = JigLib.JMath3D.getLimiteNumber(restitution, 0, 1);
 		
 }
 
-JigLib_RigidBody.prototype.get_friction = function()
+JigLib.RigidBody.prototype.get_friction = function()
 {
 
 		return this._material.friction;
 		
 }
 
-JigLib_RigidBody.prototype.set_friction = function(friction)
+JigLib.RigidBody.prototype.set_friction = function(friction)
 {
 
-		this._material.friction = JigLib_JMath3D.getLimiteNumber(friction, 0, 1);
+		this._material.friction = JigLib.JMath3D.getLimiteNumber(friction, 0, 1);
 		
 }
 
-JigLib_RigidBody.idCounter =  0; // int
+JigLib.RigidBody.idCounter =  0; // int
 
-JigLib_RigidBody.formatRotation = function(angle)
+JigLib.RigidBody.formatRotation = function(angle)
 {
 
 			if (angle >= -180 && angle <= 180)
@@ -1796,26 +1794,25 @@ JigLib_RigidBody.formatRotation = function(angle)
 }
 
 
-JigLib.RigidBody = JigLib_RigidBody; 
 
-var JigLib_JBox = function(skin, width, depth, height)
+JigLib.JBox = function(skin, width, depth, height)
 {
 	this._sideLengths = null; // Vector3D
 	this._points = null; // Vector3D
 	this._edges =  [
-			new JigLib_EdgeData( 0, 1 ), new JigLib_EdgeData( 0, 2 ), new JigLib_EdgeData( 0, 6 ),
-			new JigLib_EdgeData( 2, 3 ), new JigLib_EdgeData( 2, 4 ), new JigLib_EdgeData( 6, 7 ),
-			new JigLib_EdgeData( 6, 4 ), new JigLib_EdgeData( 1, 3 ), new JigLib_EdgeData( 1, 7 ),
-			new JigLib_EdgeData( 3, 5 ), new JigLib_EdgeData( 7, 5 ), new JigLib_EdgeData( 4, 5 )]; // EdgeData
+			new JigLib.EdgeData( 0, 1 ), new JigLib.EdgeData( 0, 2 ), new JigLib.EdgeData( 0, 6 ),
+			new JigLib.EdgeData( 2, 3 ), new JigLib.EdgeData( 2, 4 ), new JigLib.EdgeData( 6, 7 ),
+			new JigLib.EdgeData( 6, 4 ), new JigLib.EdgeData( 1, 3 ), new JigLib.EdgeData( 1, 7 ),
+			new JigLib.EdgeData( 3, 5 ), new JigLib.EdgeData( 7, 5 ), new JigLib.EdgeData( 4, 5 )]; // EdgeData
 	this._face =  [
 			[[6, 7, 1, 0]], [[5, 4, 2, 3]],
 			[[3, 1, 7, 5]], [[4, 6, 0, 2]],
 			[[1, 3, 2, 0]], [[7, 6, 4, 5]]]; // Vector.<Vector.<Number>>
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		this._type = "BOX";
 
-		this._sideLengths = new JigLib_Vector3D(width, height, depth);
+		this._sideLengths = new JigLib.Vector3D(width, height, depth);
 		this._boundingSphere = 0.5 * this._sideLengths.get_length();
 		this.initPoint();
 		this.set_mass(1);
@@ -1823,25 +1820,25 @@ var JigLib_JBox = function(skin, width, depth, height)
 		
 }
 
-JigLib.extend(JigLib_JBox, JigLib_RigidBody);
+JigLib.extend(JigLib.JBox, JigLib.RigidBody);
 
-JigLib_JBox.prototype.initPoint = function()
+JigLib.JBox.prototype.initPoint = function()
 {
 
 		var halfSide = this.getHalfSideLengths();
 		this._points = [];
-		this._points[0] = new JigLib_Vector3D(halfSide.x, -halfSide.y, halfSide.z);
-		this._points[1] = new JigLib_Vector3D(halfSide.x, halfSide.y, halfSide.z);
-		this._points[2] = new JigLib_Vector3D(-halfSide.x, -halfSide.y, halfSide.z);
-		this._points[3] = new JigLib_Vector3D(-halfSide.x, halfSide.y, halfSide.z);
-		this._points[4] = new JigLib_Vector3D(-halfSide.x, -halfSide.y, -halfSide.z);
-		this._points[5] = new JigLib_Vector3D(-halfSide.x, halfSide.y, -halfSide.z);
-		this._points[6] = new JigLib_Vector3D(halfSide.x, -halfSide.y, -halfSide.z);
-		this._points[7] = new JigLib_Vector3D(halfSide.x, halfSide.y, -halfSide.z);
+		this._points[0] = new JigLib.Vector3D(halfSide.x, -halfSide.y, halfSide.z);
+		this._points[1] = new JigLib.Vector3D(halfSide.x, halfSide.y, halfSide.z);
+		this._points[2] = new JigLib.Vector3D(-halfSide.x, -halfSide.y, halfSide.z);
+		this._points[3] = new JigLib.Vector3D(-halfSide.x, halfSide.y, halfSide.z);
+		this._points[4] = new JigLib.Vector3D(-halfSide.x, -halfSide.y, -halfSide.z);
+		this._points[5] = new JigLib.Vector3D(-halfSide.x, halfSide.y, -halfSide.z);
+		this._points[6] = new JigLib.Vector3D(halfSide.x, -halfSide.y, -halfSide.z);
+		this._points[7] = new JigLib.Vector3D(halfSide.x, halfSide.y, -halfSide.z);
 		
 }
 
-JigLib_JBox.prototype.set_sideLengths = function(size)
+JigLib.JBox.prototype.set_sideLengths = function(size)
 {
 
 		this._sideLengths = size.clone();
@@ -1853,47 +1850,47 @@ JigLib_JBox.prototype.set_sideLengths = function(size)
 		
 }
 
-JigLib_JBox.prototype.get_sideLengths = function()
+JigLib.JBox.prototype.get_sideLengths = function()
 {
 
 		return this._sideLengths;
 		
 }
 
-JigLib_JBox.prototype.get_edges = function()
+JigLib.JBox.prototype.get_edges = function()
 {
 
 		return this._edges;
 		
 }
 
-JigLib_JBox.prototype.getVolume = function()
+JigLib.JBox.prototype.getVolume = function()
 {
 
 		return (this._sideLengths.x * this._sideLengths.y * this._sideLengths.z);
 		
 }
 
-JigLib_JBox.prototype.getSurfaceArea = function()
+JigLib.JBox.prototype.getSurfaceArea = function()
 {
 
 		return 2 * (this._sideLengths.x * this._sideLengths.y + this._sideLengths.x * this._sideLengths.z + this._sideLengths.y * this._sideLengths.z);
 		
 }
 
-JigLib_JBox.prototype.getHalfSideLengths = function()
+JigLib.JBox.prototype.getHalfSideLengths = function()
 {
 
-		return JigLib_JNumber3D.getScaleVector(this._sideLengths, 0.5);
+		return JigLib.JNumber3D.getScaleVector(this._sideLengths, 0.5);
 		
 }
 
-JigLib_JBox.prototype.getSpan = function(axis)
+JigLib.JBox.prototype.getSpan = function(axis)
 {
 
 		var s, u, d, r, p;
 		var cols = this.get_currentState().getOrientationCols();
-		var obj = new JigLib_SpanData();
+		var obj = new JigLib.SpanData();
 		s = Math.abs(axis.dotProduct(cols[0])) * (0.5 * this._sideLengths.x);
 		u = Math.abs(axis.dotProduct(cols[1])) * (0.5 * this._sideLengths.y);
 		d = Math.abs(axis.dotProduct(cols[2])) * (0.5 * this._sideLengths.z);
@@ -1906,14 +1903,14 @@ JigLib_JBox.prototype.getSpan = function(axis)
 		
 }
 
-JigLib_JBox.prototype.getCornerPoints = function(state)
+JigLib.JBox.prototype.getCornerPoints = function(state)
 {
 
 		var _points_length = this._points.length;
 		var arr = [];
 
-		var transform = JigLib_JMatrix3D.getTranslationMatrix(state.position.x, state.position.y, state.position.z);
-		transform = JigLib_JMatrix3D.getAppendMatrix3D(state.orientation, transform);
+		var transform = JigLib.JMatrix3D.getTranslationMatrix(state.position.x, state.position.y, state.position.z);
+		transform = JigLib.JMatrix3D.getAppendMatrix3D(state.orientation, transform);
 		
 		var i=0;
 		for (var _points_i = 0, _points_l = this._points.length, _point; (_points_i < _points_l) && (_point = this._points[_points_i]); _points_i++){
@@ -1924,22 +1921,22 @@ JigLib_JBox.prototype.getCornerPoints = function(state)
 		
 }
 
-JigLib_JBox.prototype.getCornerPointsInBoxSpace = function(thisState, boxState)
+JigLib.JBox.prototype.getCornerPointsInBoxSpace = function(thisState, boxState)
 {
 
 		
 		var max, orient, transform;
 		
-		max = JigLib_JMatrix3D.getTransposeMatrix(boxState.orientation);
+		max = JigLib.JMatrix3D.getTransposeMatrix(boxState.orientation);
 		var pos = thisState.position.subtract(boxState.position);
 		pos = max.transformVector(pos);
 		
-		orient = JigLib_JMatrix3D.getAppendMatrix3D(thisState.orientation, max);
+		orient = JigLib.JMatrix3D.getAppendMatrix3D(thisState.orientation, max);
 		
 		var arr = [];
 		
-		transform = JigLib_JMatrix3D.getTranslationMatrix(pos.x, pos.y, pos.z);
-		transform = JigLib_JMatrix3D.getAppendMatrix3D(orient, transform);
+		transform = JigLib.JMatrix3D.getTranslationMatrix(pos.x, pos.y, pos.z);
+		transform = JigLib.JMatrix3D.getAppendMatrix3D(orient, transform);
 		
 		var i = 0;
 		for (var _points_i = 0, _points_l = this._points.length, _point; (_points_i < _points_l) && (_point = this._points[_points_i]); _points_i++)
@@ -1949,14 +1946,14 @@ JigLib_JBox.prototype.getCornerPointsInBoxSpace = function(thisState, boxState)
 		
 }
 
-JigLib_JBox.prototype.getSqDistanceToPoint = function(state, closestBoxPoint, point)
+JigLib.JBox.prototype.getSqDistanceToPoint = function(state, closestBoxPoint, point)
 {
 
 		var _closestBoxPoint, halfSideLengths;
 		var delta=0, sqDistance=0;
 		
 		_closestBoxPoint = point.subtract(state.position);
-		_closestBoxPoint = JigLib_JMatrix3D.getTransposeMatrix(state.orientation).transformVector(_closestBoxPoint);
+		_closestBoxPoint = JigLib.JMatrix3D.getTransposeMatrix(state.orientation).transformVector(_closestBoxPoint);
 
 		halfSideLengths = this.getHalfSideLengths();
 
@@ -2004,27 +2001,27 @@ JigLib_JBox.prototype.getSqDistanceToPoint = function(state, closestBoxPoint, po
 		
 }
 
-JigLib_JBox.prototype.getDistanceToPoint = function(state, closestBoxPoint, point)
+JigLib.JBox.prototype.getDistanceToPoint = function(state, closestBoxPoint, point)
 {
 
 		return Math.sqrt(this.getSqDistanceToPoint(state, closestBoxPoint, point));
 		
 }
 
-JigLib_JBox.prototype.pointIntersect = function(pos)
+JigLib.JBox.prototype.pointIntersect = function(pos)
 {
 
 		var p, h, dirVec;
 		
 		p = pos.subtract(this.get_currentState().position);
-		h = JigLib_JNumber3D.getScaleVector(this._sideLengths, 0.5);
+		h = JigLib.JNumber3D.getScaleVector(this._sideLengths, 0.5);
 		
 		var cols = this.get_currentState().getOrientationCols();
 		for (var dir; dir < 3; dir++)
 		{
 			dirVec = cols[dir].clone();
 			dirVec.normalize();
-			if (Math.abs(dirVec.dotProduct(p)) > JigLib_JNumber3D.toArray(h)[dir] + JigLib_JMath3D.NUM_TINY)
+			if (Math.abs(dirVec.dotProduct(p)) > JigLib.JNumber3D.toArray(h)[dir] + JigLib.JMath3D.NUM_TINY)
 			{
 				return false;
 			}
@@ -2033,24 +2030,24 @@ JigLib_JBox.prototype.pointIntersect = function(pos)
 		
 }
 
-JigLib_JBox.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JBox.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		out.frac = 0;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 		
-		var tiny=JigLib_JMath3D.NUM_TINY, huge=JigLib_JMath3D.NUM_HUGE, frac, min, max, dirMin=0, dirMax=0, dir=0, e, f, t, t1, t2, directionVectorNumber;
+		var tiny=JigLib.JMath3D.NUM_TINY, huge=JigLib.JMath3D.NUM_HUGE, frac, min, max, dirMin=0, dirMax=0, dir=0, e, f, t, t1, t2, directionVectorNumber;
 		var p, h;
 
 		frac = huge;
 		min = -huge;
 		max = huge;
 		p = state.position.subtract(seg.origin);
-		h = JigLib_JNumber3D.getScaleVector(this._sideLengths, 0.5);
+		h = JigLib.JNumber3D.getScaleVector(this._sideLengths, 0.5);
 		
 		var orientationCol = state.getOrientationCols();
-		var directionVectorArray = JigLib_JNumber3D.toArray(h);
+		var directionVectorArray = JigLib.JNumber3D.toArray(h);
 		for (dir = 0; dir < 3; dir++)
 		{
 			directionVectorNumber = directionVectorArray[dir];
@@ -2109,7 +2106,7 @@ JigLib_JBox.prototype.segmentIntersect = function(out, seg, state)
 		out.position = seg.getPoint(frac);
 		if (orientationCol[dir].dotProduct(seg.delta) < 0)
 		{
-			out.normal = JigLib_JNumber3D.getScaleVector(orientationCol[dir], -1);
+			out.normal = JigLib.JNumber3D.getScaleVector(orientationCol[dir], -1);
 		}
 		else
 		{
@@ -2119,17 +2116,17 @@ JigLib_JBox.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JBox.prototype.getInertiaProperties = function(m)
+JigLib.JBox.prototype.getInertiaProperties = function(m)
 {
 
-		return JigLib_JMatrix3D.getScaleMatrix(
+		return JigLib.JMatrix3D.getScaleMatrix(
 		(m / 12) * (this._sideLengths.y * this._sideLengths.y + this._sideLengths.z * this._sideLengths.z),
 		(m / 12) * (this._sideLengths.x * this._sideLengths.x + this._sideLengths.z * this._sideLengths.z),
 		(m / 12) * (this._sideLengths.x * this._sideLengths.x + this._sideLengths.y * this._sideLengths.y))
 		
 }
 
-JigLib_JBox.prototype.updateBoundingBox = function()
+JigLib.JBox.prototype.updateBoundingBox = function()
 {
 
 		this._boundingBox.clear();
@@ -2139,31 +2136,30 @@ JigLib_JBox.prototype.updateBoundingBox = function()
 
 
 
-JigLib.JBox = JigLib_JBox; 
 
-var JigLib_JChassis = function(car, skin, width, depth, height)
+JigLib.JChassis = function(car, skin, width, depth, height)
 {
 	this._car = null; // JCar
 
-		JigLib_JBox.apply(this, [ skin, width, depth, height ]);
+		JigLib.JBox.apply(this, [ skin, width, depth, height ]);
 
 		this._car = car;
 		
 }
 
-JigLib.extend(JigLib_JChassis, JigLib_JBox);
+JigLib.extend(JigLib.JChassis, JigLib.JBox);
 
-JigLib_JChassis.prototype.get_car = function()
+JigLib.JChassis.prototype.get_car = function()
 {
 
 		return this._car;
 		
 }
 
-JigLib_JChassis.prototype.postPhysics = function(dt)
+JigLib.JChassis.prototype.postPhysics = function(dt)
 {
 
-		JigLib_JBox.prototype.postPhysics.apply(this, [ dt ]);
+		JigLib.JBox.prototype.postPhysics.apply(this, [ dt ]);
 		this._car.addExternalForces(dt);
 		this._car.postPhysics(dt);
 		
@@ -2171,16 +2167,15 @@ JigLib_JChassis.prototype.postPhysics = function(dt)
 
 
 
-JigLib.JChassis = JigLib_JChassis; 
 
-var JigLib_CollDetectFunctor = function()
+JigLib.CollDetectFunctor = function()
 {
 	this.name = null; // String
 	this.type0 = null; // String
 	this.type1 = null; // String
 }
 
-JigLib_CollDetectFunctor.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectFunctor.prototype.collDetect = function(info, collArr)
 {
 
 		
@@ -2188,9 +2183,8 @@ JigLib_CollDetectFunctor.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectFunctor = JigLib_CollDetectFunctor; 
 
-var JigLib_CollDetectBoxPlane = function()
+JigLib.CollDetectBoxPlane = function()
 {
 
 		this.name = "BoxPlane";
@@ -2199,9 +2193,9 @@ var JigLib_CollDetectBoxPlane = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxPlane, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxPlane, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -2216,7 +2210,7 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 		var plane = info.body1;
 
 		var centreDist = plane.pointPlaneDistance(box.get_currentState().position);
-		if (centreDist > box.get_boundingSphere() + JigLib_JConfig.collToll)
+		if (centreDist > box.get_boundingSphere() + JigLib.JConfig.collToll)
 			return;
 
 		var newPts = box.getCornerPoints(box.get_currentState());
@@ -2234,9 +2228,9 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 			newDepth = -1 * plane.pointPlaneDistance(newPt);
 			oldDepth = -1 * plane.pointPlaneDistance(oldPt);
 			
-			if (Math.max(newDepth, oldDepth) > -JigLib_JConfig.collToll)
+			if (Math.max(newDepth, oldDepth) > -JigLib.JConfig.collToll)
 			{
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0 = oldPt.subtract(box.get_oldState().position);
 				cpInfo.r1 = oldPt.subtract(plane.get_oldState().position);
 				cpInfo.initialPenetration = oldDepth;
@@ -2246,12 +2240,12 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 		
 		if (collPts.length > 0)
 		{
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = plane.get_normal().clone();
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + plane.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + plane.get_material().friction);
 			collInfo.mat = mat;
@@ -2269,9 +2263,8 @@ JigLib_CollDetectBoxPlane.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxPlane = JigLib_CollDetectBoxPlane; 
 
-var JigLib_CollDetectBoxMesh = function()
+JigLib.CollDetectBoxMesh = function()
 {
 
 		this.name = "BoxMesh";
@@ -2280,16 +2273,16 @@ var JigLib_CollDetectBoxMesh = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxMesh, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxMesh, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
+JigLib.CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
 {
 
 		var obj0 = box.getSpan(axis);
 		var obj1 = triangle.getSpan(axis);
-		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib_JMath3D.NUM_TINY;
+		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib.JMath3D.NUM_TINY;
 		
-		if (obj0Min > (obj1Max + JigLib_JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib_JConfig.collToll + tiny))
+		if (obj0Min > (obj1Max + JigLib.JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib.JConfig.collToll + tiny))
 		{
 			out.flag = true;
 			return true;
@@ -2312,14 +2305,14 @@ JigLib_CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
+JigLib.CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
 {
 
 		for (var contactPoints_i = 0, contactPoints_l = contactPoints.length, contactPoint; (contactPoints_i < contactPoints_l) && (contactPoint = contactPoints[contactPoints_i]); contactPoints_i++)
 		{
 			if (contactPoint.subtract(pt).get_lengthSquared() < combinationDistanceSq)
 			{
-				contactPoint = JigLib_JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
+				contactPoint = JigLib.JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
 				return false;
 			}
 		}
@@ -2328,7 +2321,7 @@ JigLib_CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combin
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(pts, box, triangle, combinationDistanceSq)
+JigLib.CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(pts, box, triangle, combinationDistanceSq)
 {
 
 		var edges=box.get_edges();
@@ -2339,8 +2332,8 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		var seg;
 		for(var i=0;i<12;i++){
 			edge=edges[i];
-			data=new JigLib_CollOutData();
-			seg=new JigLib_JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
+			data=new JigLib.CollOutData();
+			seg=new JigLib.JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
 			if(triangle.segmentTriangleIntersection(data,seg)){
 				this.addPoint(pts,seg.getPoint(data.frac),combinationDistanceSq);
 				if(pts.length>8) return pts.length;
@@ -2351,12 +2344,12 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		for(i=0;i<3;i++){
 			pt0=triangle.getVertex(i);
 			pt1=triangle.getVertex((i+1)%3);
-			data=new JigLib_CollOutData();
-			if(box.segmentIntersect(data,new JigLib_JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
+			data=new JigLib.CollOutData();
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
-			if(box.segmentIntersect(data,new JigLib_JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
@@ -2365,13 +2358,13 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, triangle, mesh, info, collArr)
+JigLib.CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, triangle, mesh, info, collArr)
 {
 
 		
 		var triEdge0, triEdge1, triEdge2, triNormal, D, N, boxOldPos, boxNewPos, meshPos, delta;
 		var dirs0=box.get_currentState().getOrientationCols();
-		var tri=new JigLib_JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
+		var tri=new JigLib.JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
 		triEdge0=tri.getVertex(1).subtract(tri.getVertex(0));
 		triEdge0.normalize();
 		triEdge1=tri.getVertex(2).subtract(tri.getVertex(1));
@@ -2394,14 +2387,14 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		
 		var overlapDepths=[];
 		for(var i=0;i<numAxes;i++){
-			overlapDepths[i]=new JigLib_SpanData();
+			overlapDepths[i]=new JigLib.SpanData();
 			if(this.disjoint(overlapDepths[i],axes[i],box,tri)){
 				return false;
 			}
 		}
 		
 		var minAxis=-1;
-		var tiny=JigLib_JMath3D.NUM_TINY, minDepth=JigLib_JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
+		var tiny=JigLib.JMath3D.NUM_TINY, minDepth=JigLib.JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
 
 		for(i = 0; i < numAxes; i++){
 			l2=axes[i].get_lengthSquared();
@@ -2445,19 +2438,19 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		if(numPts>0){
 			var cpInfo;
 			for (i=0; i<numPts; i++){
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0=pts[i].subtract(boxNewPos);
 				cpInfo.r1=pts[i].subtract(meshPos);
 				cpInfo.initialPenetration=oldDepth;
 				collPts[i]=cpInfo;
 			}
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = N;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + mesh.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + mesh.get_material().friction);
 			collInfo.mat = mat;
@@ -2475,7 +2468,7 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box, mesh, info, collArr)
+JigLib.CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box, mesh, info, collArr)
 {
 
 		var boxRadius=box.get_boundingSphere();
@@ -2504,7 +2497,7 @@ JigLib_CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -2523,9 +2516,8 @@ JigLib_CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxMesh = JigLib_CollDetectBoxMesh; 
 
-var JigLib_CollDetectBoxBox = function()
+JigLib.CollDetectBoxBox = function()
 {
 	this.MAX_SUPPORT_VERTS =  10; // Number
 	this.combinationDist = null; // Number
@@ -2536,16 +2528,16 @@ var JigLib_CollDetectBoxBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
+JigLib.CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
 {
 
 		var obj0 = box0.getSpan(axis);
 		var obj1 = box1.getSpan(axis);
-		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib_JMath3D.NUM_TINY;
+		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib.JMath3D.NUM_TINY;
 
-		if (obj0Min > (obj1Max + JigLib_JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib_JConfig.collToll + tiny))
+		if (obj0Min > (obj1Max + JigLib.JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib.JConfig.collToll + tiny))
 		{
 			out.flag = true;
 			return true;
@@ -2568,14 +2560,14 @@ JigLib_CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
+JigLib.CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
 {
 
 		for (var contactPoints_i = 0, contactPoints_l = contactPoints.length, contactPoint; (contactPoints_i < contactPoints_l) && (contactPoint = contactPoints[contactPoints_i]); contactPoints_i++)
 		{
 			if (contactPoint.subtract(pt).get_lengthSquared() < combinationDistanceSq)
 			{
-				contactPoint = JigLib_JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
+				contactPoint = JigLib.JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
 				return false;
 			}
 		}
@@ -2584,49 +2576,49 @@ JigLib_CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combina
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getSupportPoint = function(box, axis)
+JigLib.CollDetectBoxBox.prototype.getSupportPoint = function(box, axis)
 {
 
 		var orientationCol = box.get_currentState().getOrientationCols();
-		var _as=axis.dotProduct(orientationCol[0]), _au=axis.dotProduct(orientationCol[1]), _ad=axis.dotProduct(orientationCol[2]), tiny=JigLib_JMath3D.NUM_TINY;
+		var _as=axis.dotProduct(orientationCol[0]), _au=axis.dotProduct(orientationCol[1]), _ad=axis.dotProduct(orientationCol[2]), tiny=JigLib.JMath3D.NUM_TINY;
 		
 		var p = box.get_currentState().position.clone();
   
 		if (_as < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
 		}else if (_as >= tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
 		}
   
 		if (_au < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
 		}else if (_au > tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
 		}
   
 		if (_ad < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
 		}else if (_ad > tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
 		}
 		return p;
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(contactPoint, origBoxSides, origBoxState, edgePt0, edgePt1)
+JigLib.CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(contactPoint, origBoxSides, origBoxState, edgePt0, edgePt1)
 {
 
 		var jDir, kDir, num=0, iDir, iFace;
-		var dist0, dist1, frac, tiny=JigLib_JMath3D.NUM_TINY;
+		var dist0, dist1, frac, tiny=JigLib.JMath3D.NUM_TINY;
 		var pt, edgeDir;
 		
 		edgeDir = edgePt1.subtract(edgePt0);
 		edgeDir.normalize();
 		var ptArr, faceOffsets, edgePt0Arr, edgePt1Arr, edgeDirArr, sidesArr;
-		edgePt0Arr = JigLib_JNumber3D.toArray(edgePt0);
-		edgePt1Arr = JigLib_JNumber3D.toArray(edgePt1);
-		edgeDirArr = JigLib_JNumber3D.toArray(edgeDir);
-		sidesArr = JigLib_JNumber3D.toArray(JigLib_JNumber3D.getScaleVector(origBoxSides, 0.5));
+		edgePt0Arr = JigLib.JNumber3D.toArray(edgePt0);
+		edgePt1Arr = JigLib.JNumber3D.toArray(edgePt1);
+		edgeDirArr = JigLib.JNumber3D.toArray(edgeDir);
+		sidesArr = JigLib.JNumber3D.toArray(JigLib.JNumber3D.getScaleVector(origBoxSides, 0.5));
 		for (iDir = 2; iDir >= 0; iDir--) {
 			if (Math.abs(edgeDirArr[iDir]) < 0.1) {
 				continue;
@@ -2646,8 +2638,8 @@ JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(con
 				frac = 1;
 				}
 				if (frac >= 0) {
-				pt = JigLib_JNumber3D.getScaleVector(edgePt0, 1 - frac).add(JigLib_JNumber3D.getScaleVector(edgePt1, frac));
-				ptArr = JigLib_JNumber3D.toArray(pt);
+				pt = JigLib.JNumber3D.getScaleVector(edgePt0, 1 - frac).add(JigLib.JNumber3D.getScaleVector(edgePt1, frac));
+				ptArr = JigLib.JNumber3D.toArray(pt);
 				if ((ptArr[jDir] > -sidesArr[jDir] - tiny) && (ptArr[jDir] < sidesArr[jDir] + tiny) && (ptArr[kDir] > -sidesArr[kDir] - tiny) && (ptArr[kDir] < sidesArr[kDir] + tiny) ) {
 					pt = origBoxState.orientation.transformVector(pt);
 					pt = pt.add(origBoxState.position);
@@ -2663,7 +2655,7 @@ JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(con
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(contactPoint, box0, box1, newState)
+JigLib.CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(contactPoint, box0, box1, newState)
 {
 
 		var num = 0;
@@ -2687,7 +2679,7 @@ JigLib_CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(c
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contactPoint, box0, box1, newState)
+JigLib.CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contactPoint, box0, box1, newState)
 {
 
 		this.getBox2BoxEdgesIntersectionPoints(contactPoint, box0, box1, newState);
@@ -2696,7 +2688,7 @@ JigLib_CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contact
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 {
 
 		var box0 = info.body0;
@@ -2708,7 +2700,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		if (!box0.get_boundingBox().overlapTest(box1.get_boundingBox()))
 			return;
 
-		var numTiny = JigLib_JMath3D.NUM_TINY, numHuge = JigLib_JMath3D.NUM_HUGE;
+		var numTiny = JigLib.JMath3D.NUM_TINY, numHuge = JigLib.JMath3D.NUM_HUGE;
 
 		var dirs0Arr = box0.get_currentState().getOrientationCols();
 		var dirs1Arr = box1.get_currentState().getOrientationCols();
@@ -2737,7 +2729,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var ax;
 		for (i = 0; i < axesLength; i++)
 		{
-			overlapDepths[i] = new JigLib_SpanData();
+			overlapDepths[i] = new JigLib.SpanData();
 
 			l2 = axes[i].get_lengthSquared();
 			if (l2 < numTiny)
@@ -2784,7 +2776,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var contactPointsFromOld = true;
 		var contactPoints = [];
 		this.combinationDist = 0.05 * Math.min(Math.min(box0.get_sideLengths().x, box0.get_sideLengths().y, box0.get_sideLengths().z), Math.min(box1.get_sideLengths().x, box1.get_sideLengths().y, box1.get_sideLengths().z));
-		this.combinationDist += (JigLib_JConfig.collToll * 3.464);
+		this.combinationDist += (JigLib.JConfig.collToll * 3.464);
 		this.combinationDist *= this.combinationDist;
 
 		if (minDepth > -numTiny)
@@ -2800,7 +2792,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var bodyDeltaLen = bodyDelta.dotProduct(N);
 		var oldDepth = minDepth + bodyDeltaLen;
 		
-		var SATPoint = new JigLib_Vector3D();
+		var SATPoint = new JigLib.Vector3D();
 		switch(minAxis){
 			//-----------------------------------------------------------------
 			// Box0 face, Box1 Corner collision
@@ -2812,7 +2804,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			//-----------------------------------------------------------------
 			// Get the lowest point on the box1 along box1 normal
 			//-----------------------------------------------------------------
-			SATPoint = this.getSupportPoint(box1, JigLib_JNumber3D.getScaleVector(N, -1));
+			SATPoint = this.getSupportPoint(box1, JigLib.JNumber3D.getScaleVector(N, -1));
 			break;
 		}
 		//-----------------------------------------------------------------
@@ -2851,7 +2843,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			// find two P0, P1 point on both edges. 
 			//-----------------------------------------------------------------
 			var P0 = this.getSupportPoint(box0, N);
-			var P1 = this.getSupportPoint(box1, JigLib_JNumber3D.getScaleVector(N, -1));
+			var P1 = this.getSupportPoint(box1, JigLib.JNumber3D.getScaleVector(N, -1));
       
 			//-----------------------------------------------------------------
 			// Find the edge intersection. 
@@ -2879,8 +2871,8 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			//-----------------------------------------------------------------
 			// point on edge of box0
 			//-----------------------------------------------------------------
-			P0 = P0.add(JigLib_JNumber3D.getScaleVector(dirs0Arr[ia], t));
-			SATPoint = P0.add(JigLib_JNumber3D.getScaleVector(N, 0.5 * minDepth));
+			P0 = P0.add(JigLib.JNumber3D.getScaleVector(dirs0Arr[ia], t));
+			SATPoint = P0.add(JigLib.JNumber3D.getScaleVector(N, 0.5 * minDepth));
 			break;
 		}
 		}
@@ -2915,7 +2907,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 				dist = contactPoint.subtract(SATPoint).length;
 				depthScale = (dist - minDist) / (maxDist - minDist);
 				depth = (1 - depthScale) * oldDepth;
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				
 				if (contactPointsFromOld)
 				{
@@ -2934,7 +2926,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		}
 		else
 		{
-			cpInfo = new JigLib_CollPointInfo();
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = SATPoint.subtract(box0.get_currentState().position);
 			cpInfo.r1 = SATPoint.subtract(box1.get_currentState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -2943,12 +2935,12 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			collPts[0] = cpInfo;
 		}
 
-		var collInfo = new JigLib_CollisionInfo();
+		var collInfo = new JigLib.CollisionInfo();
 		collInfo.objInfo = info;
 		collInfo.dirToBody = N;
 		collInfo.pointInfo = collPts;
 		
-		var mat = new JigLib_MaterialProperties();
+		var mat = new JigLib.MaterialProperties();
 		mat.restitution = 0.5*(box0.get_material().restitution + box1.get_material().restitution);
 		mat.friction = 0.5*(box0.get_material().friction + box1.get_material().friction);
 		collInfo.mat = mat;
@@ -2962,9 +2954,8 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxBox = JigLib_CollDetectBoxBox; 
 
-var JigLib_CollDetectSphereTerrain = function()
+JigLib.CollDetectSphereTerrain = function()
 {
 
 		this.name = "SphereTerrain";
@@ -2973,9 +2964,9 @@ var JigLib_CollDetectSphereTerrain = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereTerrain, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereTerrain, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereTerrain.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereTerrain.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -2990,25 +2981,25 @@ JigLib_CollDetectSphereTerrain.prototype.collDetect = function(info, collArr)
 		var terrain = info.body1;
 				
 		var obj = terrain.getHeightAndNormalByPoint(sphere.get_currentState().position);
-		if (obj.height < JigLib_JConfig.collToll + sphere.get_radius()) {
+		if (obj.height < JigLib.JConfig.collToll + sphere.get_radius()) {
 			var dist = terrain.getHeightByPoint(sphere.get_oldState().position);
 			var depth = sphere.get_radius() - dist;
 			
-			var Pt = sphere.get_oldState().position.subtract(JigLib_JNumber3D.getScaleVector(obj.normal, sphere.get_radius()));
+			var Pt = sphere.get_oldState().position.subtract(JigLib.JNumber3D.getScaleVector(obj.normal, sphere.get_radius()));
 			
 			var collPts = [];
-			var cpInfo = new JigLib_CollPointInfo();
+			var cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = Pt.subtract(sphere.get_oldState().position);
 			cpInfo.r1 = Pt.subtract(terrain.get_oldState().position);
 			cpInfo.initialPenetration = depth;
 			collPts[0]=cpInfo;
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = obj.normal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(sphere.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -3026,9 +3017,8 @@ JigLib_CollDetectSphereTerrain.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSphereTerrain = JigLib_CollDetectSphereTerrain; 
 
-var JigLib_CollDetectSphereBox = function()
+JigLib.CollDetectSphereBox = function()
 {
 
 		this.name = "SphereBox";
@@ -3037,9 +3027,9 @@ var JigLib_CollDetectSphereBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -3065,10 +3055,10 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 		//var spherePos = sphere.get_oldState().position;
 		//var boxPos = box.get_oldState().position;
 		
-		var oldBoxPoint = [new JigLib_Vector3D()];
-		var newBoxPoint = [new JigLib_Vector3D()];
+		var oldBoxPoint = [new JigLib.Vector3D()];
+		var newBoxPoint = [new JigLib.Vector3D()];
 		
-		var oldDist, newDist, oldDepth, newDepth, tiny=JigLib_JMath3D.NUM_TINY;
+		var oldDist, newDist, oldDepth, newDepth, tiny=JigLib.JMath3D.NUM_TINY;
 		oldDist = box.getDistanceToPoint(box.get_oldState(), oldBoxPoint, sphere.get_oldState().position);
 		newDist = box.getDistanceToPoint(box.get_currentState(), newBoxPoint, sphere.get_currentState().position);
 		
@@ -3076,7 +3066,7 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 		
 		oldDepth = sphere.get_radius() - oldDist;
 		newDepth = sphere.get_radius() - newDist;
-		if (Math.max(oldDepth, newDepth) > -JigLib_JConfig.collToll)
+		if (Math.max(oldDepth, newDepth) > -JigLib.JConfig.collToll)
 		{
 			var dir;
 			var collPts = [];
@@ -3096,18 +3086,18 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 				dir.normalize();
 			}
 			
-			var cpInfo = new JigLib_CollPointInfo();
+			var cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = _oldBoxPosition.subtract(sphere.get_oldState().position);
 			cpInfo.r1 = _oldBoxPosition.subtract(box.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
 			collPts[0]=cpInfo;
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = dir;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere.get_material().restitution + box.get_material().restitution);
 			mat.friction = 0.5*(sphere.get_material().friction + box.get_material().friction);
 			collInfo.mat = mat;
@@ -3125,9 +3115,8 @@ JigLib_CollDetectSphereBox.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSphereBox = JigLib_CollDetectSphereBox; 
 
-var JigLib_CollDetectCapsuleTerrain = function()
+JigLib.CollDetectCapsuleTerrain = function()
 {
 
 		this.name = "BoxTerrain";
@@ -3136,9 +3125,9 @@ var JigLib_CollDetectCapsuleTerrain = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectCapsuleTerrain, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectCapsuleTerrain, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -3155,15 +3144,15 @@ JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
 		var collPts = [];
 		var cpInfo;
 		
-		var averageNormal = new JigLib_Vector3D();
+		var averageNormal = new JigLib.Vector3D();
 		var pos1 = capsule.getBottomPos(capsule.get_oldState());
 		var pos2 = capsule.getBottomPos(capsule.get_currentState());
 		var obj1 = terrain.getHeightAndNormalByPoint(pos1);
 		var obj2 = terrain.getHeightAndNormalByPoint(pos2);
-		if (Math.min(obj1.height, obj2.height) < JigLib_JConfig.collToll + capsule.get_radius()) {
+		if (Math.min(obj1.height, obj2.height) < JigLib.JConfig.collToll + capsule.get_radius()) {
 			var oldDepth = capsule.get_radius() - obj1.height;
-			var worldPos = pos1.subtract(JigLib_JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
-			cpInfo = new JigLib_CollPointInfo();
+			var worldPos = pos1.subtract(JigLib.JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(terrain.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -3175,10 +3164,10 @@ JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
 		pos2 = capsule.getEndPos(capsule.get_currentState());
 		obj1 = terrain.getHeightAndNormalByPoint(pos1);
 		obj2 = terrain.getHeightAndNormalByPoint(pos2);
-		if (Math.min(obj1.height, obj2.height) < JigLib_JConfig.collToll + capsule.get_radius()) {
+		if (Math.min(obj1.height, obj2.height) < JigLib.JConfig.collToll + capsule.get_radius()) {
 			oldDepth = capsule.get_radius() - obj1.height;
-			worldPos = pos1.subtract(JigLib_JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
-			cpInfo = new JigLib_CollPointInfo();
+			worldPos = pos1.subtract(JigLib.JNumber3D.getScaleVector(obj2.normal, capsule.get_radius()));
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(terrain.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -3190,12 +3179,12 @@ JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
 		{
 			averageNormal.normalize();
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = averageNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(capsule.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(capsule.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -3213,9 +3202,8 @@ JigLib_CollDetectCapsuleTerrain.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectCapsuleTerrain = JigLib_CollDetectCapsuleTerrain; 
 
-var JigLib_CollDetectSphereCapsule = function()
+JigLib.CollDetectSphereCapsule = function()
 {
 
 		this.name = "SphereCapsule";
@@ -3224,9 +3212,9 @@ var JigLib_CollDetectSphereCapsule = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereCapsule, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereCapsule, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -3249,8 +3237,8 @@ JigLib_CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
 			return;
 		}
 
-		var oldSeg = new JigLib_JSegment(capsule.getBottomPos(capsule.get_oldState()), JigLib_JNumber3D.getScaleVector(capsule.get_oldState().getOrientationCols()[1], capsule.get_length()));
-		var newSeg = new JigLib_JSegment(capsule.getBottomPos(capsule.get_currentState()), JigLib_JNumber3D.getScaleVector(capsule.get_currentState().getOrientationCols()[1], capsule.get_length()));
+		var oldSeg = new JigLib.JSegment(capsule.getBottomPos(capsule.get_oldState()), JigLib.JNumber3D.getScaleVector(capsule.get_oldState().getOrientationCols()[1], capsule.get_length()));
+		var newSeg = new JigLib.JSegment(capsule.getBottomPos(capsule.get_currentState()), JigLib.JNumber3D.getScaleVector(capsule.get_currentState().getOrientationCols()[1], capsule.get_length()));
 		var radSum = sphere.get_radius() + capsule.get_radius();
 
 		var oldObj = [];
@@ -3258,7 +3246,7 @@ JigLib_CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
 		var newObj = [];
 		var newDistSq = newSeg.pointSegmentDistanceSq(newObj, sphere.get_currentState().position);
 
-		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib_JConfig.collToll, 2))
+		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib.JConfig.collToll, 2))
 		{
 			var segPos = oldSeg.getPoint(oldObj[0]);
 			var delta = sphere.get_oldState().position.subtract(segPos);
@@ -3266,30 +3254,30 @@ JigLib_CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
 			var dist = Math.sqrt(oldDistSq);
 			var depth = radSum - dist;
 
-			if (dist > JigLib_JMath3D.NUM_TINY)
+			if (dist > JigLib.JMath3D.NUM_TINY)
 			{
-				delta = JigLib_JNumber3D.getDivideVector(delta, dist);
+				delta = JigLib.JNumber3D.getDivideVector(delta, dist);
 			}
 			else
 			{
-				delta = JigLib_JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib_Vector3D.Y_AXIS);
+				delta = JigLib.JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib.Vector3D.Y_AXIS);
 			}
 
-			var worldPos = segPos.add(JigLib_JNumber3D.getScaleVector(delta, capsule.get_radius() - 0.5 * depth));
+			var worldPos = segPos.add(JigLib.JNumber3D.getScaleVector(delta, capsule.get_radius() - 0.5 * depth));
 
 			var collPts = [];
-			var cpInfo = new JigLib_CollPointInfo();
+			var cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(sphere.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.initialPenetration = depth;
 			collPts[0]=cpInfo;
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = delta;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere.get_material().restitution + capsule.get_material().restitution);
 			mat.friction = 0.5*(sphere.get_material().friction + capsule.get_material().friction);
 			collInfo.mat = mat;
@@ -3307,9 +3295,8 @@ JigLib_CollDetectSphereCapsule.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSphereCapsule = JigLib_CollDetectSphereCapsule; 
 
-var JigLib_CollisionSystemAbstract = function()
+JigLib.CollisionSystemAbstract = function()
 {
 	this.detectionFunctors = null; // Dictionary
 	this.collBody = null; // RigidBody
@@ -3318,35 +3305,35 @@ var JigLib_CollisionSystemAbstract = function()
 
 		this.collBody = [];
 		this.detectionFunctors = [];
-		this.detectionFunctors["BOX_BOX"] = new JigLib_CollDetectBoxBox();
-		this.detectionFunctors["BOX_SPHERE"] = new JigLib_CollDetectSphereBox();
-		this.detectionFunctors["BOX_CAPSULE"] = new JigLib_CollDetectCapsuleBox();
-		this.detectionFunctors["BOX_PLANE"] = new JigLib_CollDetectBoxPlane();
-		this.detectionFunctors["BOX_TERRAIN"] = new JigLib_CollDetectBoxTerrain();
-		this.detectionFunctors["BOX_TRIANGLEMESH"] = new JigLib_CollDetectBoxMesh();
-		this.detectionFunctors["SPHERE_BOX"] = new JigLib_CollDetectSphereBox();
-		this.detectionFunctors["SPHERE_SPHERE"] = new JigLib_CollDetectSphereSphere();
-		this.detectionFunctors["SPHERE_CAPSULE"] = new JigLib_CollDetectSphereCapsule();
-		this.detectionFunctors["SPHERE_PLANE"] = new JigLib_CollDetectSpherePlane();
-		this.detectionFunctors["SPHERE_TERRAIN"] = new JigLib_CollDetectSphereTerrain();
-		this.detectionFunctors["SPHERE_TRIANGLEMESH"] = new JigLib_CollDetectSphereMesh();
-		this.detectionFunctors["CAPSULE_CAPSULE"] = new JigLib_CollDetectCapsuleCapsule();
-		this.detectionFunctors["CAPSULE_BOX"] = new JigLib_CollDetectCapsuleBox();
-		this.detectionFunctors["CAPSULE_SPHERE"] = new JigLib_CollDetectSphereCapsule();
-		this.detectionFunctors["CAPSULE_PLANE"] = new JigLib_CollDetectCapsulePlane();
-		this.detectionFunctors["CAPSULE_TERRAIN"] = new JigLib_CollDetectCapsuleTerrain();
-		this.detectionFunctors["PLANE_BOX"] = new JigLib_CollDetectBoxPlane();
-		this.detectionFunctors["PLANE_SPHERE"] = new JigLib_CollDetectSpherePlane();
-		this.detectionFunctors["PLANE_CAPSULE"] = new JigLib_CollDetectCapsulePlane();
-		this.detectionFunctors["TERRAIN_SPHERE"] = new JigLib_CollDetectSphereTerrain();
-		this.detectionFunctors["TERRAIN_BOX"] = new JigLib_CollDetectBoxTerrain();
-		this.detectionFunctors["TERRAIN_CAPSULE"] = new JigLib_CollDetectCapsuleTerrain();
-		this.detectionFunctors["TRIANGLEMESH_SPHERE"] = new JigLib_CollDetectSphereMesh();
-		this.detectionFunctors["TRIANGLEMESH_BOX"] = new JigLib_CollDetectBoxMesh();
+		this.detectionFunctors["BOX_BOX"] = new JigLib.CollDetectBoxBox();
+		this.detectionFunctors["BOX_SPHERE"] = new JigLib.CollDetectSphereBox();
+		this.detectionFunctors["BOX_CAPSULE"] = new JigLib.CollDetectCapsuleBox();
+		this.detectionFunctors["BOX_PLANE"] = new JigLib.CollDetectBoxPlane();
+		this.detectionFunctors["BOX_TERRAIN"] = new JigLib.CollDetectBoxTerrain();
+		this.detectionFunctors["BOX_TRIANGLEMESH"] = new JigLib.CollDetectBoxMesh();
+		this.detectionFunctors["SPHERE_BOX"] = new JigLib.CollDetectSphereBox();
+		this.detectionFunctors["SPHERE_SPHERE"] = new JigLib.CollDetectSphereSphere();
+		this.detectionFunctors["SPHERE_CAPSULE"] = new JigLib.CollDetectSphereCapsule();
+		this.detectionFunctors["SPHERE_PLANE"] = new JigLib.CollDetectSpherePlane();
+		this.detectionFunctors["SPHERE_TERRAIN"] = new JigLib.CollDetectSphereTerrain();
+		this.detectionFunctors["SPHERE_TRIANGLEMESH"] = new JigLib.CollDetectSphereMesh();
+		this.detectionFunctors["CAPSULE_CAPSULE"] = new JigLib.CollDetectCapsuleCapsule();
+		this.detectionFunctors["CAPSULE_BOX"] = new JigLib.CollDetectCapsuleBox();
+		this.detectionFunctors["CAPSULE_SPHERE"] = new JigLib.CollDetectSphereCapsule();
+		this.detectionFunctors["CAPSULE_PLANE"] = new JigLib.CollDetectCapsulePlane();
+		this.detectionFunctors["CAPSULE_TERRAIN"] = new JigLib.CollDetectCapsuleTerrain();
+		this.detectionFunctors["PLANE_BOX"] = new JigLib.CollDetectBoxPlane();
+		this.detectionFunctors["PLANE_SPHERE"] = new JigLib.CollDetectSpherePlane();
+		this.detectionFunctors["PLANE_CAPSULE"] = new JigLib.CollDetectCapsulePlane();
+		this.detectionFunctors["TERRAIN_SPHERE"] = new JigLib.CollDetectSphereTerrain();
+		this.detectionFunctors["TERRAIN_BOX"] = new JigLib.CollDetectBoxTerrain();
+		this.detectionFunctors["TERRAIN_CAPSULE"] = new JigLib.CollDetectCapsuleTerrain();
+		this.detectionFunctors["TRIANGLEMESH_SPHERE"] = new JigLib.CollDetectSphereMesh();
+		this.detectionFunctors["TRIANGLEMESH_BOX"] = new JigLib.CollDetectBoxMesh();
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.addCollisionBody = function(body)
+JigLib.CollisionSystemAbstract.prototype.addCollisionBody = function(body)
 {
 
 		if (this.collBody.indexOf(body) < 0)
@@ -3354,7 +3341,7 @@ JigLib_CollisionSystemAbstract.prototype.addCollisionBody = function(body)
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.removeCollisionBody = function(body)
+JigLib.CollisionSystemAbstract.prototype.removeCollisionBody = function(body)
 {
 
 		if (this.collBody.indexOf(body) >= 0)
@@ -3362,14 +3349,14 @@ JigLib_CollisionSystemAbstract.prototype.removeCollisionBody = function(body)
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.removeAllCollisionBodies = function()
+JigLib.CollisionSystemAbstract.prototype.removeAllCollisionBodies = function()
 {
 
 		this.collBody.length=0;
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.detectCollisions = function(body, collArr)
+JigLib.CollisionSystemAbstract.prototype.detectCollisions = function(body, collArr)
 {
 
 		if (!body.isActive)
@@ -3386,7 +3373,7 @@ JigLib_CollisionSystemAbstract.prototype.detectCollisions = function(body, collA
 			}
 			if (this.checkCollidables(body, _collBody) && this.detectionFunctors[body.get_type() + "_" + _collBody.get_type()] != undefined)
 			{
-				info = new JigLib_CollDetectInfo();
+				info = new JigLib.CollDetectInfo();
 				info.body0 = body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -3396,27 +3383,27 @@ JigLib_CollisionSystemAbstract.prototype.detectCollisions = function(body, collA
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.detectAllCollisions = function(bodies, collArr)
+JigLib.CollisionSystemAbstract.prototype.detectAllCollisions = function(bodies, collArr)
 {
 
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.collisionSkinMoved = function(colBody)
+JigLib.CollisionSystemAbstract.prototype.collisionSkinMoved = function(colBody)
 {
 
 		// used for grid
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.segmentIntersect = function(out, seg, ownerBody)
+JigLib.CollisionSystemAbstract.prototype.segmentIntersect = function(out, seg, ownerBody)
 {
 
-		out.frac = JigLib_JMath3D.NUM_HUGE;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.frac = JigLib.JMath3D.NUM_HUGE;
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 		
-		var obj = new JigLib_CollOutBodyData();
+		var obj = new JigLib.CollOutBodyData();
 		for (var collBody_i = 0, collBody_l = this.collBody.length, _collBody; (collBody_i < collBody_l) && (_collBody = this.collBody[collBody_i]); collBody_i++)
 		{
 			if (_collBody != ownerBody && this.segmentBounding(seg, _collBody))
@@ -3450,7 +3437,7 @@ JigLib_CollisionSystemAbstract.prototype.segmentIntersect = function(out, seg, o
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.segmentBounding = function(seg, obj)
+JigLib.CollisionSystemAbstract.prototype.segmentBounding = function(seg, obj)
 {
 
 		var pos = seg.getPoint(0.5);
@@ -3466,14 +3453,14 @@ JigLib_CollisionSystemAbstract.prototype.segmentBounding = function(seg, obj)
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.get_numCollisionsChecks = function()
+JigLib.CollisionSystemAbstract.prototype.get_numCollisionsChecks = function()
 {
 
 		return this._numCollisionsChecks;	
 		
 }
 
-JigLib_CollisionSystemAbstract.prototype.checkCollidables = function(body0, body1)
+JigLib.CollisionSystemAbstract.prototype.checkCollidables = function(body0, body1)
 {
 
 		if (body0.get_nonCollidables().length == 0 && body1.get_nonCollidables().length == 0)
@@ -3491,18 +3478,17 @@ JigLib_CollisionSystemAbstract.prototype.checkCollidables = function(body0, body
 
 
 
-JigLib.CollisionSystemAbstract = JigLib_CollisionSystemAbstract; 
 
-var JigLib_CollisionSystemBrute = function()
+JigLib.CollisionSystemBrute = function()
 {
 
-		JigLib_CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 }
 
-JigLib.extend(JigLib_CollisionSystemBrute, JigLib_CollisionSystemAbstract);
+JigLib.extend(JigLib.CollisionSystemBrute, JigLib.CollisionSystemAbstract);
 
-JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
+JigLib.CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
 {
 
 		var info;
@@ -3530,7 +3516,7 @@ JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, col
 				
 				if (this.checkCollidables(_body, _collBody) && this.detectionFunctors[bodyType + "_" + _collBody.get_type()] != undefined)
 				{
-				info = new JigLib_CollDetectInfo();
+				info = new JigLib.CollDetectInfo();
 				info.body0 = _body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -3544,9 +3530,8 @@ JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, col
 
 
 
-JigLib.CollisionSystemBrute = JigLib_CollisionSystemBrute; 
 
-var JigLib_CollDetectCapsuleBox = function()
+JigLib.CollDetectCapsuleBox = function()
 {
 
 		this.name = "CapsuleBox";
@@ -3555,18 +3540,17 @@ var JigLib_CollDetectCapsuleBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectCapsuleBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectCapsuleBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
 {
 
 }
 
 
 
-JigLib.CollDetectCapsuleBox = JigLib_CollDetectCapsuleBox; 
 
-var JigLib_CollDetectSphereMesh = function()
+JigLib.CollDetectSphereMesh = function()
 {
 
 		this.name = "SphereMesh";
@@ -3575,9 +3559,9 @@ var JigLib_CollDetectSphereMesh = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereMesh, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereMesh, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = function(sphere, mesh, info, collTolerance, collArr)
+JigLib.CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = function(sphere, mesh, info, collTolerance, collArr)
 {
 
 		var body0Pos = info.body0.get_oldState().position;
@@ -3586,13 +3570,13 @@ JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = functi
 		var sphereTolR = collTolerance + sphere.get_radius();
 		var sphereTolR2 = sphereTolR * sphereTolR;
 		
-		var collNormal = new JigLib_Vector3D();
+		var collNormal = new JigLib.Vector3D();
 		var collPts = [];
 		
 		var potentialTriangles = [];
 		var numTriangles = mesh.get_octree().getTrianglesIntersectingtAABox(potentialTriangles, sphere.get_boundingBox());
 		
-		var newD2, distToCentre, oldD2, dist, depth, tiny=JigLib_JMath3D.NUM_TINY;
+		var newD2, distToCentre, oldD2, dist, depth, tiny=JigLib.JMath3D.NUM_TINY;
 		var meshTriangle;
 		var vertexIndices;
 		var arr;
@@ -3604,7 +3588,7 @@ JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = functi
 		    if (distToCentre >= sphereTolR) continue;
 			
 			vertexIndices = meshTriangle.get_vertexIndices();
-			triangle = new JigLib_JTriangle(mesh.get_octree().getVertex(vertexIndices[0]), mesh.get_octree().getVertex(vertexIndices[1]), mesh.get_octree().getVertex(vertexIndices[2]));
+			triangle = new JigLib.JTriangle(mesh.get_octree().getVertex(vertexIndices[0]), mesh.get_octree().getVertex(vertexIndices[1]), mesh.get_octree().getVertex(vertexIndices[2]));
 			arr = [];
 			newD2 = triangle.pointTriangleDistanceSq(arr, sphere.get_currentState().position);
 			
@@ -3616,9 +3600,9 @@ JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = functi
 			    var collisionN = (dist > tiny) ? (sphere.get_oldState().position.subtract(triangle.getPoint(arr[0], arr[1]))) : triangle.get_normal().clone();
 				collisionN.normalize();
 			    // since impulse get applied at the old position
-			    var pt = sphere.get_oldState().position.subtract(JigLib_JNumber3D.getScaleVector(collisionN, sphere.get_radius()));
+			    var pt = sphere.get_oldState().position.subtract(JigLib.JNumber3D.getScaleVector(collisionN, sphere.get_radius()));
 				
-				var cpInfo = new JigLib_CollPointInfo();
+				var cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0 = pt.subtract(body0Pos);
 				cpInfo.r1 = pt.subtract(body1Pos);
 				cpInfo.initialPenetration = depth;
@@ -3628,12 +3612,12 @@ JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = functi
 			}
 		}
 		if(collPts.length>0){
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = collNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere.get_material().restitution + mesh.get_material().restitution);
 			mat.friction = 0.5*(sphere.get_material().friction + mesh.get_material().friction);
 			collInfo.mat = mat;
@@ -3649,7 +3633,7 @@ JigLib_CollDetectSphereMesh.prototype.collDetectSphereStaticMeshOverlap = functi
 		
 }
 
-JigLib_CollDetectSphereMesh.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereMesh.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -3663,15 +3647,14 @@ JigLib_CollDetectSphereMesh.prototype.collDetect = function(info, collArr)
 		var sphere = info.body0;
 		var mesh = info.body1;
 		
-		this.collDetectSphereStaticMeshOverlap(sphere, mesh, info, JigLib_JConfig.collToll, collArr);
+		this.collDetectSphereStaticMeshOverlap(sphere, mesh, info, JigLib.JConfig.collToll, collArr);
 		
 }
 
 
 
-JigLib.CollDetectSphereMesh = JigLib_CollDetectSphereMesh; 
 
-var JigLib_CollDetectBoxTerrain = function()
+JigLib.CollDetectBoxTerrain = function()
 {
 
 		this.name = "BoxTerrain";
@@ -3680,9 +3663,9 @@ var JigLib_CollDetectBoxTerrain = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxTerrain, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxTerrain, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -3698,7 +3681,7 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 				
 		var oldPts = box.getCornerPoints(box.get_oldState());
 		var newPts = box.getCornerPoints(box.get_currentState());
-		var collNormal = new JigLib_Vector3D();
+		var collNormal = new JigLib.Vector3D();
 		
 		var obj;
 		var dist;
@@ -3712,11 +3695,11 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 			newPt = newPts[i];
 			obj = terrain.getHeightAndNormalByPoint(newPt);
 			
-			if (obj.height < JigLib_JConfig.collToll) {
+			if (obj.height < JigLib.JConfig.collToll) {
 				oldPt = oldPts[i];
 				dist = terrain.getHeightByPoint(oldPt);
 				collNormal = collNormal.add(obj.normal);
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0 = oldPt.subtract(box.get_oldState().position);
 				cpInfo.r1 = oldPt.subtract(terrain.get_oldState().position);
 				cpInfo.initialPenetration = -dist;
@@ -3727,12 +3710,12 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 		if (collPts.length > 0) {
 			collNormal.normalize();
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = collNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -3750,9 +3733,8 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxTerrain = JigLib_CollDetectBoxTerrain; 
 
-var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
+JigLib.CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 {
 	this.gridEntries = null; // CollisionSystemGridEntry
 	this.overflowEntries = null; // CollisionSystemGridEntry
@@ -3767,7 +3749,7 @@ var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 	this.sizeZ = null; // Number
 	this.minDelta = null; // Number
 
-		JigLib_CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 		this.nx = nx; this.ny = ny; this.nz = nz;
 		this.dx = dx; this.dy = dy; this.dz = dz;
@@ -3776,26 +3758,26 @@ var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 		this.sizeZ = nz * dz;
 		this.minDelta = Math.min(dx, dy, dz);
 		
-		this.startPoint = new JigLib_Vector3D(sx, sy, sz);
+		this.startPoint = new JigLib.Vector3D(sx, sy, sz);
 		
 		this.gridEntries = [];
 		
 		var len=this.gridEntries.length;
 		for (var j = 0; j < len; ++j)
 		{
-			var gridEntry = new JigLib_CollisionSystemGridEntry(null);
+			var gridEntry = new JigLib.CollisionSystemGridEntry(null);
 			gridEntry.gridIndex = j;
 			this.gridEntries[j]=gridEntry;
 		}
 		
-		this.overflowEntries = new JigLib_CollisionSystemGridEntry(null);
+		this.overflowEntries = new JigLib.CollisionSystemGridEntry(null);
 		this.overflowEntries.gridIndex = -1;
 		
 }
 
-JigLib.extend(JigLib_CollisionSystemGrid, JigLib_CollisionSystemAbstract);
+JigLib.extend(JigLib.CollisionSystemGrid, JigLib.CollisionSystemAbstract);
 
-JigLib_CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
+JigLib.CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
 {
 
 		var _i = i % this.nx;
@@ -3806,7 +3788,7 @@ JigLib_CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
 {
 
 		var i;var j;var k;
@@ -3815,23 +3797,23 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
 		if ((sides.x > this.dx) || (sides.y > this.dy) || (sides.z > this.dz))
 		{
 			i = j = k = -1;
-			return new JigLib_Vector3D(i,j,k);
+			return new JigLib.Vector3D(i,j,k);
 		}
 		
 		var min = colBody.get_boundingBox().minPos.clone();
-		min.x = JigLib_JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JigLib_JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JigLib_JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		i =  ((min.x - this.startPoint.x) / this.dx) % this.nx;
 		j =  ((min.y - this.startPoint.y) / this.dy) % this.ny;
 		k =  ((min.z - this.startPoint.z) / this.dz) % this.nz;
 		
-		return new JigLib_Vector3D(i,j,k);
+		return new JigLib.Vector3D(i,j,k);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 {
 
 		var tempStoreObject = new Object;
@@ -3851,9 +3833,9 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 		
 		var min = colBody.get_boundingBox().minPos.clone();
 
-		min.x = JigLib_JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JigLib_JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JigLib_JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		fi = (min.x - this.startPoint.x) / this.dx;
 		fj = (min.y - this.startPoint.y) / this.dy;
@@ -3882,7 +3864,7 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
 {
 
 		var tempStoreVector = this.calcGridForSkin3(colBody);
@@ -3892,7 +3874,7 @@ JigLib_CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.addCollisionBody = function(body)
+JigLib.CollisionSystemGrid.prototype.addCollisionBody = function(body)
 {
 
 		if (this.collBody.indexOf(body) < 0)
@@ -3901,22 +3883,22 @@ JigLib_CollisionSystemGrid.prototype.addCollisionBody = function(body)
 		body.collisionSystem = this;
 
 		// also do the grid stuff - for now put it on the overflow list
-		var entry = new JigLib_CollisionSystemGridEntry(body);
+		var entry = new JigLib.CollisionSystemGridEntry(body);
 		body.externalData = entry;
 		
 		// add entry to the start of the list
-		JigLib_CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
 		this.collisionSkinMoved(body);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.removeCollisionBody = function(body)
+JigLib.CollisionSystemGrid.prototype.removeCollisionBody = function(body)
 {
 
 		if (body.externalData != null)
 		{
 			body.externalData.collisionBody = null;
-			JigLib_CollisionSystemGridEntry.removeGridEntry(body.externalData);
+			JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			body.externalData = null;
 		}
 
@@ -3925,21 +3907,21 @@ JigLib_CollisionSystemGrid.prototype.removeCollisionBody = function(body)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.removeAllCollisionBodies = function()
+JigLib.CollisionSystemGrid.prototype.removeAllCollisionBodies = function()
 {
 
 		for (var collBody_i = 0, collBody_l = this.collBody.length, body; (collBody_i < collBody_l) && (body = this.collBody[collBody_i]); collBody_i++){
 			if (body.externalData != null)
 			{
 				body.externalData.collisionBody = null;
-				JigLib_CollisionSystemGridEntry.removeGridEntry(body.externalData);
+				JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			}
 		}
 		this.collBody.length=0;
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
+JigLib.CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
 {
 
 		var entry = colBody.externalData;
@@ -3963,12 +3945,12 @@ JigLib_CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
 		else
 			start = this.overflowEntries;
 		
-		JigLib_CollisionSystemGridEntry.removeGridEntry(entry);
-		JigLib_CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
+		JigLib.CollisionSystemGridEntry.removeGridEntry(entry);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
+JigLib.CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
 {
 
 		var entries = []; 
@@ -4031,7 +4013,7 @@ JigLib_CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, collArr)
+JigLib.CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, collArr)
 {
 
 		var info;
@@ -4063,7 +4045,7 @@ JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, coll
 				
 				if (this.checkCollidables(body, entry.collisionBody) && this.detectionFunctors[bodyType + "_" + entry.collisionBody.get_type()] != undefined)
 				{
-					info = new JigLib_CollDetectInfo();
+					info = new JigLib.CollDetectInfo();
 					info.body0 = body;
 					info.body1 = entry.collisionBody;
 					fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -4078,9 +4060,8 @@ JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, coll
 
 
 
-JigLib.CollisionSystemGrid = JigLib_CollisionSystemGrid; 
 
-var JigLib_CollDetectCapsuleCapsule = function()
+JigLib.CollDetectCapsuleCapsule = function()
 {
 
 		this.name = "CapsuleCapsule";
@@ -4089,9 +4070,9 @@ var JigLib_CollDetectCapsuleCapsule = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectCapsuleCapsule, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectCapsuleCapsule, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 {
 
 		var capsule0 = info.body0;
@@ -4109,12 +4090,12 @@ JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 		var collPts = [];
 		var cpInfo;
 
-		var averageNormal = new JigLib_Vector3D();
+		var averageNormal = new JigLib.Vector3D();
 		var oldSeg0, newSeg0, oldSeg1, newSeg1;
-		oldSeg0 = new JigLib_JSegment(capsule0.getEndPos(capsule0.get_oldState()), JigLib_JNumber3D.getScaleVector(capsule0.get_oldState().getOrientationCols()[1], -capsule0.get_length()));
-		newSeg0 = new JigLib_JSegment(capsule0.getEndPos(capsule0.get_currentState()), JigLib_JNumber3D.getScaleVector(capsule0.get_currentState().getOrientationCols()[1], -capsule0.get_length()));
-		oldSeg1 = new JigLib_JSegment(capsule1.getEndPos(capsule1.get_oldState()), JigLib_JNumber3D.getScaleVector(capsule1.get_oldState().getOrientationCols()[1], -capsule1.get_length()));
-		newSeg1 = new JigLib_JSegment(capsule1.getEndPos(capsule1.get_currentState()), JigLib_JNumber3D.getScaleVector(capsule1.get_currentState().getOrientationCols()[1], -capsule1.get_length()));
+		oldSeg0 = new JigLib.JSegment(capsule0.getEndPos(capsule0.get_oldState()), JigLib.JNumber3D.getScaleVector(capsule0.get_oldState().getOrientationCols()[1], -capsule0.get_length()));
+		newSeg0 = new JigLib.JSegment(capsule0.getEndPos(capsule0.get_currentState()), JigLib.JNumber3D.getScaleVector(capsule0.get_currentState().getOrientationCols()[1], -capsule0.get_length()));
+		oldSeg1 = new JigLib.JSegment(capsule1.getEndPos(capsule1.get_oldState()), JigLib.JNumber3D.getScaleVector(capsule1.get_oldState().getOrientationCols()[1], -capsule1.get_length()));
+		newSeg1 = new JigLib.JSegment(capsule1.getEndPos(capsule1.get_currentState()), JigLib.JNumber3D.getScaleVector(capsule1.get_currentState().getOrientationCols()[1], -capsule1.get_length()));
 
 		var radSum = capsule0.get_radius() + capsule1.get_radius();
 
@@ -4123,7 +4104,7 @@ JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 		var newObj = [];
 		var newDistSq = newSeg0.segmentSegmentDistanceSq(oldObj, newSeg1);
 
-		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib_JConfig.collToll, 2))
+		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib.JConfig.collToll, 2))
 		{
 			var pos0 = oldSeg0.getPoint(oldObj[0]);
 			var pos1 = oldSeg1.getPoint(oldObj[1]);
@@ -4132,19 +4113,19 @@ JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 			var dist = Math.sqrt(oldDistSq);
 			var depth = radSum - dist;
 
-			if (dist > JigLib_JMath3D.NUM_TINY)
+			if (dist > JigLib.JMath3D.NUM_TINY)
 			{
-				delta = JigLib_JNumber3D.getDivideVector(delta, dist);
+				delta = JigLib.JNumber3D.getDivideVector(delta, dist);
 			}
 			else
 			{
-				delta = JigLib_JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib_Vector3D.Y_AXIS);
+				delta = JigLib.JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib.Vector3D.Y_AXIS);
 			}
 
-			var worldPos = pos1.add(JigLib_JNumber3D.getScaleVector(delta, capsule1.get_radius() - 0.5 * depth));
+			var worldPos = pos1.add(JigLib.JNumber3D.getScaleVector(delta, capsule1.get_radius() - 0.5 * depth));
 			averageNormal = averageNormal.add(delta);
 
-			cpInfo = new JigLib_CollPointInfo();
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule0.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(capsule1.get_oldState().position);
 			cpInfo.initialPenetration = depth;
@@ -4153,12 +4134,12 @@ JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 
 		if (collPts.length > 0)
 		{
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = averageNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(capsule0.get_material().restitution + capsule1.get_material().restitution);
 			mat.friction = 0.5*(capsule0.get_material().friction + capsule1.get_material().friction);
 			collInfo.mat = mat;
@@ -4176,9 +4157,8 @@ JigLib_CollDetectCapsuleCapsule.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectCapsuleCapsule = JigLib_CollDetectCapsuleCapsule; 
 
-var JigLib_CollPointInfo = function()
+JigLib.CollPointInfo = function()
 {
 	this.initialPenetration = null; // Number
 	this.r0 = null; // Vector3D
@@ -4188,16 +4168,15 @@ var JigLib_CollPointInfo = function()
 	this.denominator =  0; // Number
 	this.accumulatedNormalImpulse =  0; // Number
 	this.accumulatedNormalImpulseAux =  0; // Number
-	this.accumulatedFrictionImpulse =  new JigLib_Vector3D(); // Vector3D
+	this.accumulatedFrictionImpulse =  new JigLib.Vector3D(); // Vector3D
 }
 
 
 
-JigLib.CollPointInfo = JigLib_CollPointInfo; 
 
-var JigLib_CollisionInfo = function()
+JigLib.CollisionInfo = function()
 {
-	this.mat =  new JigLib_MaterialProperties(); // MaterialProperties
+	this.mat =  new JigLib.MaterialProperties(); // MaterialProperties
 	this.objInfo = null; // CollDetectInfo
 	this.dirToBody = null; // Vector3D
 	this.pointInfo = null; // CollPointInfo
@@ -4206,9 +4185,8 @@ var JigLib_CollisionInfo = function()
 
 
 
-JigLib.CollisionInfo = JigLib_CollisionInfo; 
 
-var JigLib_CollDetectCapsulePlane = function()
+JigLib.CollDetectCapsulePlane = function()
 {
 
 		this.name = "CapsulePlane";
@@ -4217,9 +4195,9 @@ var JigLib_CollDetectCapsulePlane = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectCapsulePlane, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectCapsulePlane, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -4241,12 +4219,12 @@ JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
 		var newPos = capsule.getBottomPos(capsule.get_currentState());
 		var newDist = plane.pointPlaneDistance(newPos);
 
-		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib_JConfig.collToll)
+		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib.JConfig.collToll)
 		{
 			var oldDepth = capsule.get_radius() - oldDist;
-			var worldPos = oldPos.subtract(JigLib_JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
+			var worldPos = oldPos.subtract(JigLib.JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
 
-			cpInfo = new JigLib_CollPointInfo();
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(plane.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -4257,12 +4235,12 @@ JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
 		newPos = capsule.getEndPos(capsule.get_currentState());
 		oldDist = plane.pointPlaneDistance(oldPos);
 		newDist = plane.pointPlaneDistance(newPos);
-		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib_JConfig.collToll)
+		if (Math.min(oldDist, newDist) < capsule.get_radius() + JigLib.JConfig.collToll)
 		{
 			oldDepth = capsule.get_radius() - oldDist;
-			worldPos = oldPos.subtract(JigLib_JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
+			worldPos = oldPos.subtract(JigLib.JNumber3D.getScaleVector(plane.get_normal(), capsule.get_radius()));
 
-			cpInfo = new JigLib_CollPointInfo();
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(capsule.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(plane.get_oldState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -4271,12 +4249,12 @@ JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
 
 		if (collPts.length > 0)
 		{
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = plane.get_normal().clone();
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(capsule.get_material().restitution + plane.get_material().restitution);
 			mat.friction = 0.5*(capsule.get_material().friction + plane.get_material().friction);
 			collInfo.mat = mat;
@@ -4294,9 +4272,8 @@ JigLib_CollDetectCapsulePlane.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectCapsulePlane = JigLib_CollDetectCapsulePlane; 
 
-var JigLib_CollDetectInfo = function()
+JigLib.CollDetectInfo = function()
 {
 	this.body0 = null; // RigidBody
 	this.body1 = null; // RigidBody
@@ -4304,9 +4281,8 @@ var JigLib_CollDetectInfo = function()
 
 
 
-JigLib.CollDetectInfo = JigLib_CollDetectInfo; 
 
-var JigLib_CollDetectSphereSphere = function()
+JigLib.CollDetectSphereSphere = function()
 {
 
 		this.name = "SphereSphere";
@@ -4315,9 +4291,9 @@ var JigLib_CollDetectSphereSphere = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSphereSphere, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSphereSphere, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSphereSphere.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSphereSphere.prototype.collDetect = function(info, collArr)
 {
 
 		var sphere0 = info.body0;
@@ -4331,34 +4307,34 @@ JigLib_CollDetectSphereSphere.prototype.collDetect = function(info, collArr)
 		newDistSq = newDelta.get_lengthSquared();
 		radSum = sphere0.get_radius() + sphere1.get_radius();
 
-		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib_JConfig.collToll, 2))
+		if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JigLib.JConfig.collToll, 2))
 		{
 			oldDist = Math.sqrt(oldDistSq);
 			depth = radSum - oldDist;
-			if (oldDist > JigLib_JMath3D.NUM_TINY)
+			if (oldDist > JigLib.JMath3D.NUM_TINY)
 			{
-				oldDelta = JigLib_JNumber3D.getDivideVector(oldDelta, oldDist);
+				oldDelta = JigLib.JNumber3D.getDivideVector(oldDelta, oldDist);
 			}
 			else
 			{
-				oldDelta = JigLib_JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib_Vector3D.Y_AXIS);
+				oldDelta = JigLib.JMatrix3D.getRotationMatrix(0, 0, 1, 360 * Math.random()).transformVector(JigLib.Vector3D.Y_AXIS);
 			}
 			
-			var worldPos = sphere1.get_oldState().position.add(JigLib_JNumber3D.getScaleVector(oldDelta, sphere1.get_radius() - 0.5 * depth));
+			var worldPos = sphere1.get_oldState().position.add(JigLib.JNumber3D.getScaleVector(oldDelta, sphere1.get_radius() - 0.5 * depth));
 
 			var collPts = [];
-			var cpInfo = new JigLib_CollPointInfo();
+			var cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = worldPos.subtract(sphere0.get_oldState().position);
 			cpInfo.r1 = worldPos.subtract(sphere1.get_oldState().position);
 			cpInfo.initialPenetration = depth;
 			collPts[0]=cpInfo;
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = oldDelta;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(sphere0.get_material().restitution + sphere1.get_material().restitution);
 			mat.friction = 0.5*(sphere0.get_material().friction + sphere1.get_material().friction);
 			collInfo.mat = mat;
@@ -4376,9 +4352,8 @@ JigLib_CollDetectSphereSphere.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSphereSphere = JigLib_CollDetectSphereSphere; 
 
-var JigLib_CollisionSystemGridEntry = function(collisionBody)
+JigLib.CollisionSystemGridEntry = function(collisionBody)
 {
 	this.collisionBody = null; // RigidBody
 	this.previous = null; // CollisionSystemGridEntry
@@ -4391,12 +4366,12 @@ var JigLib_CollisionSystemGridEntry = function(collisionBody)
 }
 
 
-JigLib_CollisionSystemGridEntry.removeGridEntry = function(entry)
+JigLib.CollisionSystemGridEntry.removeGridEntry = function(entry)
 {
 
-			// link the JigLib_CollisionSystemGridEntry.previous to the JigLib_CollisionSystemGridEntry.next (may be 0)
+			// link the JigLib.CollisionSystemGridEntry.previous to the JigLib.CollisionSystemGridEntry.next (may be 0)
 			entry.previous.next = entry.next;
-			// link the JigLib_CollisionSystemGridEntry.next (if it exists) to the JigLib_CollisionSystemGridEntry.previous.
+			// link the JigLib.CollisionSystemGridEntry.next (if it exists) to the JigLib.CollisionSystemGridEntry.previous.
 			if (entry.next != null)
 				entry.next.previous = entry.previous;
 			// tidy up this entry
@@ -4405,7 +4380,7 @@ JigLib_CollisionSystemGridEntry.removeGridEntry = function(entry)
 		
 }
 
-JigLib_CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
+JigLib.CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
 {
 
 			var next = prev.next;
@@ -4419,9 +4394,8 @@ JigLib_CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
 }
 
 
-JigLib.CollisionSystemGridEntry = JigLib_CollisionSystemGridEntry; 
 
-var JigLib_CollDetectSpherePlane = function()
+JigLib.CollDetectSpherePlane = function()
 {
 
 		this.name = "SpherePlane";
@@ -4430,9 +4404,9 @@ var JigLib_CollDetectSpherePlane = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectSpherePlane, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectSpherePlane, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectSpherePlane.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectSpherePlane.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -4450,7 +4424,7 @@ JigLib_CollDetectSpherePlane.prototype.collDetect = function(info, collArr)
 		oldDist = plane.pointPlaneDistance(sphere.get_oldState().position);
 		newDist = plane.pointPlaneDistance(sphere.get_currentState().position);
 
-		if (Math.min(newDist, oldDist) > sphere.get_boundingSphere() + JigLib_JConfig.collToll)
+		if (Math.min(newDist, oldDist) > sphere.get_boundingSphere() + JigLib.JConfig.collToll)
 		{
 			info.body0.removeCollideBodies(info.body1);
 			info.body1.removeCollideBodies(info.body0);
@@ -4461,19 +4435,19 @@ JigLib_CollDetectSpherePlane.prototype.collDetect = function(info, collArr)
 		var cpInfo;
 		depth = sphere.get_radius() - oldDist;
 
-		var worldPos = sphere.get_oldState().position.subtract(JigLib_JNumber3D.getScaleVector(plane.get_normal(), sphere.get_radius()));
-		cpInfo = new JigLib_CollPointInfo();
+		var worldPos = sphere.get_oldState().position.subtract(JigLib.JNumber3D.getScaleVector(plane.get_normal(), sphere.get_radius()));
+		cpInfo = new JigLib.CollPointInfo();
 		cpInfo.r0 = worldPos.subtract(sphere.get_oldState().position);
 		cpInfo.r1 = worldPos.subtract(plane.get_oldState().position);
 		cpInfo.initialPenetration = depth;
 		collPts[0]=cpInfo;
 		
-		var collInfo = new JigLib_CollisionInfo();
+		var collInfo = new JigLib.CollisionInfo();
 		collInfo.objInfo = info;
 		collInfo.dirToBody = plane.get_normal().clone();
 		collInfo.pointInfo = collPts;
 		
-		var mat = new JigLib_MaterialProperties();
+		var mat = new JigLib.MaterialProperties();
 		mat.restitution = 0.5*(sphere.get_material().restitution + plane.get_material().restitution);
 		mat.friction = 0.5*(sphere.get_material().friction + plane.get_material().friction);
 		collInfo.mat = mat;
@@ -4487,41 +4461,40 @@ JigLib_CollDetectSpherePlane.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectSpherePlane = JigLib_CollDetectSpherePlane; 
 
-var JigLib_JMatrix3D = function()
+JigLib.JMatrix3D = function()
 {
 }
 
 
-JigLib_JMatrix3D.getTranslationMatrix = function(x, y, z)
+JigLib.JMatrix3D.getTranslationMatrix = function(x, y, z)
 {
 
-			var matrix3D = new JigLib_Matrix3D();
+			var matrix3D = new JigLib.Matrix3D();
 			matrix3D.appendTranslation(x, y, z);
 			return matrix3D;
 		
 }
 
-JigLib_JMatrix3D.getScaleMatrix = function(x, y, z)
+JigLib.JMatrix3D.getScaleMatrix = function(x, y, z)
 {
 
-			var matrix3D = new JigLib_Matrix3D();
+			var matrix3D = new JigLib.Matrix3D();
 			matrix3D.prependScale(x, y, z);
 			return matrix3D;
 		
 }
 
-JigLib_JMatrix3D.getRotationMatrix = function(x, y, z, degree, pivotPoint)
+JigLib.JMatrix3D.getRotationMatrix = function(x, y, z, degree, pivotPoint)
 {
 
-			var matrix3D = new JigLib_Matrix3D();
-			matrix3D.appendRotation(degree, new JigLib_Vector3D(x,y,z),pivotPoint);
+			var matrix3D = new JigLib.Matrix3D();
+			matrix3D.appendRotation(degree, new JigLib.Vector3D(x,y,z),pivotPoint);
 			return matrix3D;
 		
 }
 
-JigLib_JMatrix3D.getInverseMatrix = function(m)
+JigLib.JMatrix3D.getInverseMatrix = function(m)
 {
 
 			var matrix3D = m.clone();
@@ -4530,7 +4503,7 @@ JigLib_JMatrix3D.getInverseMatrix = function(m)
 		
 }
 
-JigLib_JMatrix3D.getTransposeMatrix = function(m)
+JigLib.JMatrix3D.getTransposeMatrix = function(m)
 {
 
 			var matrix3D = m.clone();
@@ -4539,7 +4512,7 @@ JigLib_JMatrix3D.getTransposeMatrix = function(m)
 		
 }
 
-JigLib_JMatrix3D.getAppendMatrix3D = function(a, b)
+JigLib.JMatrix3D.getAppendMatrix3D = function(a, b)
 {
 
 			var matrix3D = a.clone();
@@ -4548,7 +4521,7 @@ JigLib_JMatrix3D.getAppendMatrix3D = function(a, b)
 		
 }
 
-JigLib_JMatrix3D.getPrependMatrix = function(a, b)
+JigLib.JMatrix3D.getPrependMatrix = function(a, b)
 {
 
 			var matrix3D = a.clone();
@@ -4557,12 +4530,12 @@ JigLib_JMatrix3D.getPrependMatrix = function(a, b)
 		
 }
 
-JigLib_JMatrix3D.getSubMatrix = function(a, b)
+JigLib.JMatrix3D.getSubMatrix = function(a, b)
 {
 
 			var ar = a.get_rawData();
 			var br = b.get_rawData();
-			return new JigLib_Matrix3D([[
+			return new JigLib.Matrix3D([[
 				ar[0] - br[0],
 				ar[1] - br[1],
 				ar[2] - br[2],
@@ -4583,30 +4556,30 @@ JigLib_JMatrix3D.getSubMatrix = function(a, b)
 		
 }
 
-JigLib_JMatrix3D.getRotationMatrixAxis = function(degree, rotateAxis)
+JigLib.JMatrix3D.getRotationMatrixAxis = function(degree, rotateAxis)
 {
 
-    		var matrix3D = new JigLib_Matrix3D();
-    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:JigLib_Vector3D.X_AXIS);
+    		var matrix3D = new JigLib.Matrix3D();
+    		matrix3D.appendRotation(degree, rotateAxis?rotateAxis:JigLib.Vector3D.X_AXIS);
     		return matrix3D;
 		
 }
 
-JigLib_JMatrix3D.getCols = function(matrix3D)
+JigLib.JMatrix3D.getCols = function(matrix3D)
 {
 
 			var rawData =  matrix3D.get_rawData();
 			var cols = [];
 			
-			cols[0] = new JigLib_Vector3D(rawData[0], rawData[4], rawData[8]);
-			cols[1] = new JigLib_Vector3D(rawData[1], rawData[5], rawData[9]);
-			cols[2] = new JigLib_Vector3D(rawData[2], rawData[6], rawData[10]);
+			cols[0] = new JigLib.Vector3D(rawData[0], rawData[4], rawData[8]);
+			cols[1] = new JigLib.Vector3D(rawData[1], rawData[5], rawData[9]);
+			cols[2] = new JigLib.Vector3D(rawData[2], rawData[6], rawData[10]);
 			
 			return cols;
 		
 }
 
-JigLib_JMatrix3D.multiplyVector = function(matrix3D, v)
+JigLib.JMatrix3D.multiplyVector = function(matrix3D, v)
 {
 
 			v = matrix3D.transformVector(v);
@@ -4628,125 +4601,122 @@ JigLib_JMatrix3D.multiplyVector = function(matrix3D, v)
 }
 
 
-JigLib.JMatrix3D = JigLib_JMatrix3D; 
 
-var JigLib_Vector3D = function()
+JigLib.Vector3D = function()
 {
 }
 
-JigLib_Vector3D.prototype.get_length = function()
-{
- 
-}
-
-JigLib_Vector3D.prototype.get_lengthSquared = function()
+JigLib.Vector3D.prototype.get_length = function()
 {
  
 }
 
-JigLib_Vector3D.prototype.add = function()
+JigLib.Vector3D.prototype.get_lengthSquared = function()
 {
  
 }
 
-JigLib_Vector3D.prototype.clone = function()
+JigLib.Vector3D.prototype.add = function()
 {
  
 }
 
-JigLib_Vector3D.prototype.crossProduct = function()
+JigLib.Vector3D.prototype.clone = function()
 {
  
 }
 
-JigLib_Vector3D.prototype.subtract = function()
+JigLib.Vector3D.prototype.crossProduct = function()
 {
  
 }
 
-
-
-JigLib.Vector3D = JigLib_Vector3D; 
-
-var JigLib_Matrix3D = function()
-{
-}
-
-JigLib_Matrix3D.prototype.get_determinant = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.get_position = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.get_rawData = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.set_rawData = function(rawData)
-{
- 
-}
-
-JigLib_Matrix3D.prototype.clone = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.deltaTransformVector = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.interpolate = function()
-{
- 
-}
-
-JigLib_Matrix3D.prototype.transformVector = function()
+JigLib.Vector3D.prototype.subtract = function()
 {
  
 }
 
 
 
-JigLib.Matrix3D = JigLib_Matrix3D; 
 
-var JigLib_JMath3D = function()
+JigLib.Matrix3D = function()
 {
 }
 
-JigLib_JMath3D.NUM_TINY =  0.000001; // Number
-JigLib_JMath3D.NUM_HUGE =  1000000; // Number
+JigLib.Matrix3D.prototype.get_determinant = function()
+{
+ 
+}
 
-JigLib_JMath3D.fromNormalAndPoint = function(normal, point)
+JigLib.Matrix3D.prototype.get_position = function()
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.get_rawData = function()
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.set_rawData = function(rawData)
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.clone = function()
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.deltaTransformVector = function()
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.interpolate = function()
+{
+ 
+}
+
+JigLib.Matrix3D.prototype.transformVector = function()
+{
+ 
+}
+
+
+
+
+JigLib.JMath3D = function()
+{
+}
+
+JigLib.JMath3D.NUM_TINY =  0.000001; // Number
+JigLib.JMath3D.NUM_HUGE =  1000000; // Number
+
+JigLib.JMath3D.fromNormalAndPoint = function(normal, point)
 {
 
-        	var v = new JigLib_Vector3D(normal.x, normal.y, normal.z);
+        	var v = new JigLib.Vector3D(normal.x, normal.y, normal.z);
         	v.w = -(v.x*point.x + v.y*point.y + v.z*point.z);
         	
         	return v;
         
 }
 
-JigLib_JMath3D.getIntersectionLine = function(v, v0, v1)
+JigLib.JMath3D.getIntersectionLine = function(v, v0, v1)
 {
 
 			var d0 = v.x * v0.x + v.y * v0.y + v.z * v0.z - v.w;
 			var d1 = v.x * v1.x + v.y * v1.y + v.z * v1.z - v.w;
 			var m = d1 / (d1 - d0);
-			return new JigLib_Vector3D(
+			return new JigLib.Vector3D(
 				v1.x + (v0.x - v1.x) * m,
 				v1.y + (v0.y - v1.y) * m,
 				v1.z + (v0.z - v1.z) * m);
 		
 }
 
-JigLib_JMath3D.wrap = function(val, min, max)
+JigLib.JMath3D.wrap = function(val, min, max)
 {
 
 			var delta = max - min;
@@ -4760,7 +4730,7 @@ JigLib_JMath3D.wrap = function(val, min, max)
 		
 }
 
-JigLib_JMath3D.getLimiteNumber = function(num, min, max)
+JigLib.JMath3D.getLimiteNumber = function(num, min, max)
 {
 
 			var n = num;
@@ -4777,14 +4747,13 @@ JigLib_JMath3D.getLimiteNumber = function(num, min, max)
 }
 
 
-JigLib.JMath3D = JigLib_JMath3D; 
 
-var JigLib_JNumber3D = function()
+JigLib.JNumber3D = function()
 {
 }
 
 
-JigLib_JNumber3D.toArray = function(v)
+JigLib.JNumber3D.toArray = function(v)
 {
 
 			var arr=[];
@@ -4795,7 +4764,7 @@ JigLib_JNumber3D.toArray = function(v)
 		
 }
 
-JigLib_JNumber3D.copyFromArray = function(v, arr)
+JigLib.JNumber3D.copyFromArray = function(v, arr)
 {
 
 			if (arr.length >= 3)
@@ -4807,28 +4776,28 @@ JigLib_JNumber3D.copyFromArray = function(v, arr)
 		
 }
 
-JigLib_JNumber3D.getScaleVector = function(v, s)
+JigLib.JNumber3D.getScaleVector = function(v, s)
 {
 
-			return new JigLib_Vector3D(v.x*s,v.y*s,v.z*s,v.w);
+			return new JigLib.Vector3D(v.x*s,v.y*s,v.z*s,v.w);
 		
 }
 
-JigLib_JNumber3D.getDivideVector = function(v, w)
+JigLib.JNumber3D.getDivideVector = function(v, w)
 {
 
 			if (w != 0)
 			{
-				return new JigLib_Vector3D(v.x / w, v.y / w, v.z / w);
+				return new JigLib.Vector3D(v.x / w, v.y / w, v.z / w);
 			}
 			else
 			{
-				return new JigLib_Vector3D(0, 0, 0);
+				return new JigLib.Vector3D(0, 0, 0);
 			}
 		
 }
 
-JigLib_JNumber3D.getNormal = function(v0, v1, v2)
+JigLib.JNumber3D.getNormal = function(v0, v1, v2)
 {
 
 			var E = v1.clone();
@@ -4841,9 +4810,8 @@ JigLib_JNumber3D.getNormal = function(v0, v1, v2)
 }
 
 
-JigLib.JNumber3D = JigLib_JNumber3D; 
 
-var JigLib_JIndexedTriangle = function()
+JigLib.JIndexedTriangle = function()
 {
 	this.counter = null; // int
 	this._vertexIndices = null; // uint
@@ -4855,12 +4823,12 @@ var JigLib_JIndexedTriangle = function()
 		this._vertexIndices[0] = -1;
 		this._vertexIndices[1] = -1;
 		this._vertexIndices[2] = -1;
-		this._plane = new JigLib_PlaneData();
-		this._boundingBox = new JigLib_JAABox();
+		this._plane = new JigLib.PlaneData();
+		this._boundingBox = new JigLib.JAABox();
 		
 }
 
-JigLib_JIndexedTriangle.prototype.setVertexIndices = function(i0, i1, i2, vertexArray)
+JigLib.JIndexedTriangle.prototype.setVertexIndices = function(i0, i1, i2, vertexArray)
 {
 
 		this._vertexIndices[0] = i0;
@@ -4876,7 +4844,7 @@ JigLib_JIndexedTriangle.prototype.setVertexIndices = function(i0, i1, i2, vertex
 		
 }
 
-JigLib_JIndexedTriangle.prototype.updateVertexIndices = function(vertexArray)
+JigLib.JIndexedTriangle.prototype.updateVertexIndices = function(vertexArray)
 {
 
 		var i0, i1, i2;
@@ -4893,28 +4861,28 @@ JigLib_JIndexedTriangle.prototype.updateVertexIndices = function(vertexArray)
 		
 }
 
-JigLib_JIndexedTriangle.prototype.get_vertexIndices = function()
+JigLib.JIndexedTriangle.prototype.get_vertexIndices = function()
 {
 
 		return this._vertexIndices;
 		
 }
 
-JigLib_JIndexedTriangle.prototype.getVertexIndex = function(iCorner)
+JigLib.JIndexedTriangle.prototype.getVertexIndex = function(iCorner)
 {
 
 		return this._vertexIndices[iCorner];
 		
 }
 
-JigLib_JIndexedTriangle.prototype.get_plane = function()
+JigLib.JIndexedTriangle.prototype.get_plane = function()
 {
 
 		return this._plane;
 		
 }
 
-JigLib_JIndexedTriangle.prototype.get_boundingBox = function()
+JigLib.JIndexedTriangle.prototype.get_boundingBox = function()
 {
 
 		return this._boundingBox;
@@ -4923,9 +4891,8 @@ JigLib_JIndexedTriangle.prototype.get_boundingBox = function()
 
 
 
-JigLib.JIndexedTriangle = JigLib_JIndexedTriangle; 
 
-var JigLib_JOctree = function()
+JigLib.JOctree = function()
 {
 	this._cells = null; // OctreeCell
 	this._vertices = null; // Vector3D
@@ -4939,46 +4906,46 @@ var JigLib_JOctree = function()
 		this._vertices = [];
 		this._triangles = [];
 		this._cellsToTest = [];
-		this._boundingBox = new JigLib_JAABox();
+		this._boundingBox = new JigLib.JAABox();
 		
 }
 
-JigLib_JOctree.prototype.get_trianglesData = function()
+JigLib.JOctree.prototype.get_trianglesData = function()
 {
 
 		return this._triangles;
 		
 }
 
-JigLib_JOctree.prototype.getTriangle = function(iTriangle)
+JigLib.JOctree.prototype.getTriangle = function(iTriangle)
 {
 
 		return this._triangles[iTriangle];
 		
 }
 
-JigLib_JOctree.prototype.get_verticesData = function()
+JigLib.JOctree.prototype.get_verticesData = function()
 {
 
 		return this._vertices;
 		
 }
 
-JigLib_JOctree.prototype.getVertex = function(iVertex)
+JigLib.JOctree.prototype.getVertex = function(iVertex)
 {
 
 		return this._vertices[iVertex];
 		
 }
 
-JigLib_JOctree.prototype.boundingBox = function()
+JigLib.JOctree.prototype.boundingBox = function()
 {
 
 		return this._boundingBox;
 		
 }
 
-JigLib_JOctree.prototype.clear = function()
+JigLib.JOctree.prototype.clear = function()
 {
 
 		this._cells.length=0;
@@ -4987,14 +4954,14 @@ JigLib_JOctree.prototype.clear = function()
 		
 }
 
-JigLib_JOctree.prototype.addTriangles = function(vertices, numVertices, triangleVertexIndices, numTriangles)
+JigLib.JOctree.prototype.addTriangles = function(vertices, numVertices, triangleVertexIndices, numTriangles)
 {
 
 		this.clear();
 		
 		this._vertices = vertices.concat();
 		
-		var NLen, tiny=JigLib_JMath3D.NUM_TINY;
+		var NLen, tiny=JigLib.JMath3D.NUM_TINY;
 		var i0, i1, i2;
 		var dr1, dr2, N;
 		var indexedTriangle;
@@ -5010,7 +4977,7 @@ JigLib_JOctree.prototype.addTriangles = function(vertices, numVertices, triangle
 			
 			if (NLen > tiny)
 			{
-				indexedTriangle = new JigLib_JIndexedTriangle();
+				indexedTriangle = new JigLib.JIndexedTriangle();
 				indexedTriangle.setVertexIndices(i0, i1, i2, this._vertices);
 				this._triangles.push(indexedTriangle);
 			}
@@ -5018,7 +4985,7 @@ JigLib_JOctree.prototype.addTriangles = function(vertices, numVertices, triangle
 		
 }
 
-JigLib_JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize)
+JigLib.JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize)
 {
 
 		this._boundingBox.clear();
@@ -5028,7 +4995,7 @@ JigLib_JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize
 		}
 		
 		this._cells.length=0;
-		this._cells.push(new JigLib_OctreeCell(this._boundingBox));
+		this._cells.push(new JigLib.OctreeCell(this._boundingBox));
 		
 		var numTriangles = this._triangles.length;
 		for (var i = 0; i < numTriangles; i++ ) {
@@ -5047,10 +5014,10 @@ JigLib_JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize
 			if (this._cells[cellIndex].triangleIndices.length <= maxTrianglesPerCell || this._cells[cellIndex].AABox.getRadiusAboutCentre() < minCellSize) {
 				continue;
 			}
-			for (i = 0; i < JigLib_OctreeCell.NUM_CHILDREN; i++ ) {
+			for (i = 0; i < JigLib.OctreeCell.NUM_CHILDREN; i++ ) {
 				this._cells[cellIndex].childCellIndices[i] = this._cells.length;
 				cellsToProcess.push(this._cells.length);
-				this._cells.push(new JigLib_OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
+				this._cells.push(new JigLib.OctreeCell(this.createAABox(this._cells[cellIndex].AABox, i)));
 				
 				childCell = this._cells[this._cells.length - 1];
 				numTriangles = this._cells[cellIndex].triangleIndices.length;
@@ -5067,7 +5034,7 @@ JigLib_JOctree.prototype.buildOctree = function(maxTrianglesPerCell, minCellSize
 		
 }
 
-JigLib_JOctree.prototype.updateTriangles = function(vertices)
+JigLib.JOctree.prototype.updateTriangles = function(vertices)
 {
 
 		this._vertices = vertices.concat();
@@ -5078,7 +5045,7 @@ JigLib_JOctree.prototype.updateTriangles = function(vertices)
 		
 }
 
-JigLib_JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aabb)
+JigLib.JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aabb)
 {
 
 		if (this._cells.length == 0) return 0;
@@ -5111,7 +5078,7 @@ JigLib_JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aa
 				}
 				}
 			}else {
-				for (i = 0 ; i < JigLib_OctreeCell.NUM_CHILDREN ; i++) {
+				for (i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
 				this._cellsToTest.push(cell.childCellIndices[i]);
 				}
 			}
@@ -5120,7 +5087,7 @@ JigLib_JOctree.prototype.getTrianglesIntersectingtAABox = function(triangles, aa
 		
 }
 
-JigLib_JOctree.prototype.dumpStats = function()
+JigLib.JOctree.prototype.dumpStats = function()
 {
 
 		var maxTris = 0, numTris, cellIndex, cell;
@@ -5139,7 +5106,7 @@ JigLib_JOctree.prototype.dumpStats = function()
 				maxTris = numTris;
 				}
 			}else {
-				for (var i = 0 ; i < JigLib_OctreeCell.NUM_CHILDREN ; i++) {
+				for (var i = 0 ; i < JigLib.OctreeCell.NUM_CHILDREN ; i++) {
 				if ((cell.childCellIndices[i] >= 0) && (cell.childCellIndices[i] < this._cells.length)) {
 					cellsToProcess.push(cell.childCellIndices[i]);
 				}
@@ -5149,43 +5116,43 @@ JigLib_JOctree.prototype.dumpStats = function()
 		
 }
 
-JigLib_JOctree.prototype.createAABox = function(aabb, _id)
+JigLib.JOctree.prototype.createAABox = function(aabb, _id)
 {
 
-		var dims = JigLib_JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
+		var dims = JigLib.JNumber3D.getScaleVector(aabb.maxPos.subtract(aabb.minPos), 0.5);
 		var offset;
 		switch(_id) {
 			case 0:
-				offset = new JigLib_Vector3D(1, 1, 1);
+				offset = new JigLib.Vector3D(1, 1, 1);
 				break;
 			case 1:
-				offset = new JigLib_Vector3D(1, 1, 0);
+				offset = new JigLib.Vector3D(1, 1, 0);
 				break;
 			case 2:
-				offset = new JigLib_Vector3D(1, 0, 1);
+				offset = new JigLib.Vector3D(1, 0, 1);
 				break;
 			case 3:
-				offset = new JigLib_Vector3D(1, 0, 0);
+				offset = new JigLib.Vector3D(1, 0, 0);
 				break;
 			case 4:
-				offset = new JigLib_Vector3D(0, 1, 1);
+				offset = new JigLib.Vector3D(0, 1, 1);
 				break;
 			case 5:
-				offset = new JigLib_Vector3D(0, 1, 0);
+				offset = new JigLib.Vector3D(0, 1, 0);
 				break;
 			case 6:
-				offset = new JigLib_Vector3D(0, 0, 1);
+				offset = new JigLib.Vector3D(0, 0, 1);
 				break;
 			case 7:
-				offset = new JigLib_Vector3D(0, 0, 0);
+				offset = new JigLib.Vector3D(0, 0, 0);
 				break;
 			default:
-				offset = new JigLib_Vector3D(0, 0, 0);
+				offset = new JigLib.Vector3D(0, 0, 0);
 				break;
 		}
 		
-		var result = new JigLib_JAABox();
-		result.minPos = aabb.minPos.add(new JigLib_Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
+		var result = new JigLib.JAABox();
+		result.minPos = aabb.minPos.add(new JigLib.Vector3D(offset.x * dims.x, offset.y * dims.y, offset.z * dims.z));
 		result.maxPos = result.minPos.add(dims);
 		
 		dims.scaleBy(0.00001);
@@ -5196,7 +5163,7 @@ JigLib_JOctree.prototype.createAABox = function(aabb, _id)
 		
 }
 
-JigLib_JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
+JigLib.JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
 {
 
 		if (!triangle.get_boundingBox().overlapTest(cell.AABox)) {
@@ -5208,14 +5175,14 @@ JigLib_JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
 				return true;
 			}
 			
-		var tri = new JigLib_JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
+		var tri = new JigLib.JTriangle(this.getVertex(triangle.getVertexIndex(0)), this.getVertex(triangle.getVertexIndex(1)), this.getVertex(triangle.getVertexIndex(2)));
 		var edge;
 		var seg;
 		var edges = cell.get_egdes();
 		var pts = cell.get_points();
 		for (var i = 0; i < 12; i++ ) {
 			edge = edges[i];
-			seg = new JigLib_JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
+			seg = new JigLib.JSegment(pts[edge.ind0], pts[edge.ind1].subtract(pts[edge.ind0]));
 			if (tri.segmentTriangleIntersection(null, seg)) {
 				return true;
 			}
@@ -5226,7 +5193,7 @@ JigLib_JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
 		for (i = 0; i < 3; i++ ) {
 			pt0 = tri.getVertex(i);
 			pt1 = tri.getVertex((i + 1) % 3);
-			if (cell.AABox.segmentAABoxOverlap(new JigLib_JSegment(pt0, pt1.subtract(pt0)))) {
+			if (cell.AABox.segmentAABoxOverlap(new JigLib.JSegment(pt0, pt1.subtract(pt0)))) {
 				return true;
 			}
 		}
@@ -5234,7 +5201,7 @@ JigLib_JOctree.prototype.doesTriangleIntersectCell = function(triangle, cell)
 		
 }
 
-JigLib_JOctree.prototype.incrementTestCounter = function()
+JigLib.JOctree.prototype.incrementTestCounter = function()
 {
 
 		++this._testCounter;
@@ -5250,14 +5217,13 @@ JigLib_JOctree.prototype.incrementTestCounter = function()
 
 
 
-JigLib.JOctree = JigLib_JOctree; 
 
-var JigLib_JCapsule = function(skin, r, l)
+JigLib.JCapsule = function(skin, r, l)
 {
 	this._length = null; // Number
 	this._radius = null; // Number
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		this._type = "CAPSULE";
 		this._radius = r;
 		this._length = l;
@@ -5267,9 +5233,9 @@ var JigLib_JCapsule = function(skin, r, l)
 		
 }
 
-JigLib.extend(JigLib_JCapsule, JigLib_RigidBody);
+JigLib.extend(JigLib.JCapsule, JigLib.RigidBody);
 
-JigLib_JCapsule.prototype.set_radius = function(r)
+JigLib.JCapsule.prototype.set_radius = function(r)
 {
 
 		this._radius = r;
@@ -5280,14 +5246,14 @@ JigLib_JCapsule.prototype.set_radius = function(r)
 		
 }
 
-JigLib_JCapsule.prototype.get_radius = function()
+JigLib.JCapsule.prototype.get_radius = function()
 {
 
 		return this._radius;
 		
 }
 
-JigLib_JCapsule.prototype.set_length = function(l)
+JigLib.JCapsule.prototype.set_length = function(l)
 {
 
 		this._length = l;
@@ -5298,33 +5264,33 @@ JigLib_JCapsule.prototype.set_length = function(l)
 		
 }
 
-JigLib_JCapsule.prototype.get_length = function()
+JigLib.JCapsule.prototype.get_length = function()
 {
 
 		return this._length;
 		
 }
 
-JigLib_JCapsule.prototype.getBottomPos = function(state)
+JigLib.JCapsule.prototype.getBottomPos = function(state)
 {
 
-		return state.position.add(JigLib_JNumber3D.getScaleVector(state.getOrientationCols()[1], -this._length / 2));
+		return state.position.add(JigLib.JNumber3D.getScaleVector(state.getOrientationCols()[1], -this._length / 2));
 		
 }
 
-JigLib_JCapsule.prototype.getEndPos = function(state)
+JigLib.JCapsule.prototype.getEndPos = function(state)
 {
 
-		return state.position.add(JigLib_JNumber3D.getScaleVector(state.getOrientationCols()[1], this._length / 2));
+		return state.position.add(JigLib.JNumber3D.getScaleVector(state.getOrientationCols()[1], this._length / 2));
 		
 }
 
-JigLib_JCapsule.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JCapsule.prototype.segmentIntersect = function(out, seg, state)
 {
 
 }
 
-JigLib_JCapsule.prototype.getInertiaProperties = function(m)
+JigLib.JCapsule.prototype.getInertiaProperties = function(m)
 {
 
 		var cylinderMass, Ixx, Iyy, Izz, endMass;
@@ -5338,11 +5304,11 @@ JigLib_JCapsule.prototype.getInertiaProperties = function(m)
 		Iyy += (0.2 * endMass * this._radius * this._radius);
 		Izz += (0.4 * endMass * this._radius * this._radius + endMass * Math.pow(0.5 * this._length, 2));
 		
-		return JigLib_JMatrix3D.getScaleMatrix(Ixx, Iyy, Izz);
+		return JigLib.JMatrix3D.getScaleMatrix(Ixx, Iyy, Izz);
 		
 }
 
-JigLib_JCapsule.prototype.updateBoundingBox = function()
+JigLib.JCapsule.prototype.updateBoundingBox = function()
 {
 
 		this._boundingBox.clear();
@@ -5350,14 +5316,14 @@ JigLib_JCapsule.prototype.updateBoundingBox = function()
 		
 }
 
-JigLib_JCapsule.prototype.getBoundingSphere = function(r, l)
+JigLib.JCapsule.prototype.getBoundingSphere = function(r, l)
 {
 
 		return Math.sqrt(Math.pow(l / 2, 2) + r * r) + r;
 		
 }
 
-JigLib_JCapsule.prototype.getVolume = function()
+JigLib.JCapsule.prototype.getVolume = function()
 {
 
 		return (4 / 3) * Math.PI * this._radius * this._radius * this._radius + this._length * Math.PI * this._radius * this._radius;
@@ -5366,9 +5332,8 @@ JigLib_JCapsule.prototype.getVolume = function()
 
 
 
-JigLib.JCapsule = JigLib_JCapsule; 
 
-var JigLib_JRay = function(_origin, _dir)
+JigLib.JRay = function(_origin, _dir)
 {
 	this.origin = null; // Vector3D
 	this.dir = null; // Vector3D
@@ -5378,18 +5343,17 @@ var JigLib_JRay = function(_origin, _dir)
 		
 }
 
-JigLib_JRay.prototype.getOrigin = function(t)
+JigLib.JRay.prototype.getOrigin = function(t)
 {
 
-		return this.origin.add(JigLib_JNumber3D.getScaleVector(this.dir, t));
+		return this.origin.add(JigLib.JNumber3D.getScaleVector(this.dir, t));
 		
 }
 
 
 
-JigLib.JRay = JigLib_JRay; 
 
-var JigLib_JAABox = function()
+JigLib.JAABox = function()
 {
 	this.minPos = null; // Vector3D
 	this.maxPos = null; // Vector3D
@@ -5398,7 +5362,7 @@ var JigLib_JAABox = function()
 		
 }
 
-JigLib_JAABox.prototype.get_sideLengths = function()
+JigLib.JAABox.prototype.get_sideLengths = function()
 {
 
 		var pos = this.maxPos.clone();
@@ -5407,54 +5371,54 @@ JigLib_JAABox.prototype.get_sideLengths = function()
 		
 }
 
-JigLib_JAABox.prototype.get_centrePos = function()
+JigLib.JAABox.prototype.get_centrePos = function()
 {
 
 		var pos = this.minPos.clone();
-		return JigLib_JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
+		return JigLib.JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
 		
 }
 
-JigLib_JAABox.prototype.getAllPoints = function()
+JigLib.JAABox.prototype.getAllPoints = function()
 {
 
 		var center, halfSide;
 		var points;
 		center = this.get_centrePos();
-		halfSide = JigLib_JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
+		halfSide = JigLib.JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
 		points = [];
-		points[0] = center.add(new JigLib_Vector3D(halfSide.x, -halfSide.y, halfSide.z));
-		points[1] = center.add(new JigLib_Vector3D(halfSide.x, halfSide.y, halfSide.z));
-		points[2] = center.add(new JigLib_Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
-		points[3] = center.add(new JigLib_Vector3D(-halfSide.x, halfSide.y, halfSide.z));
-		points[4] = center.add(new JigLib_Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
-		points[5] = center.add(new JigLib_Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
-		points[6] = center.add(new JigLib_Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
-		points[7] = center.add(new JigLib_Vector3D(halfSide.x, halfSide.y, -halfSide.z));
+		points[0] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, halfSide.z));
+		points[1] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, halfSide.z));
+		points[2] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
+		points[3] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, halfSide.z));
+		points[4] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
+		points[5] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
+		points[6] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
+		points[7] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, -halfSide.z));
 		
 		return points;
 		
 }
 
-JigLib_JAABox.prototype.get_edges = function()
+JigLib.JAABox.prototype.get_edges = function()
 {
 
 		return [
-		new JigLib_EdgeData( 0, 1 ), new JigLib_EdgeData( 0, 2 ), new JigLib_EdgeData( 0, 6 ),
-		new JigLib_EdgeData( 2, 3 ), new JigLib_EdgeData( 2, 4 ), new JigLib_EdgeData( 6, 7 ),
-		new JigLib_EdgeData( 6, 4 ), new JigLib_EdgeData( 1, 3 ), new JigLib_EdgeData( 1, 7 ),
-		new JigLib_EdgeData( 3, 5 ), new JigLib_EdgeData( 7, 5 ), new JigLib_EdgeData( 4, 5 )];
+		new JigLib.EdgeData( 0, 1 ), new JigLib.EdgeData( 0, 2 ), new JigLib.EdgeData( 0, 6 ),
+		new JigLib.EdgeData( 2, 3 ), new JigLib.EdgeData( 2, 4 ), new JigLib.EdgeData( 6, 7 ),
+		new JigLib.EdgeData( 6, 4 ), new JigLib.EdgeData( 1, 3 ), new JigLib.EdgeData( 1, 7 ),
+		new JigLib.EdgeData( 3, 5 ), new JigLib.EdgeData( 7, 5 ), new JigLib.EdgeData( 4, 5 )];
 		
 }
 
-JigLib_JAABox.prototype.getRadiusAboutCentre = function()
+JigLib.JAABox.prototype.getRadiusAboutCentre = function()
 {
 
 		return 0.5 * (this.maxPos.subtract(this.minPos).get_length());
 		
 }
 
-JigLib_JAABox.prototype.move = function(delta)
+JigLib.JAABox.prototype.move = function(delta)
 {
 
 		this.minPos.add(delta);
@@ -5462,29 +5426,29 @@ JigLib_JAABox.prototype.move = function(delta)
 		
 }
 
-JigLib_JAABox.prototype.clear = function()
+JigLib.JAABox.prototype.clear = function()
 {
 
-		var huge=JigLib_JMath3D.NUM_HUGE;
-		this.minPos = new JigLib_Vector3D(huge, huge, huge);
-		this.maxPos = new JigLib_Vector3D( -huge, -huge, -huge);
+		var huge=JigLib.JMath3D.NUM_HUGE;
+		this.minPos = new JigLib.Vector3D(huge, huge, huge);
+		this.maxPos = new JigLib.Vector3D( -huge, -huge, -huge);
 		
 }
 
-JigLib_JAABox.prototype.clone = function()
+JigLib.JAABox.prototype.clone = function()
 {
 
-		var aabb = new JigLib_JAABox();
+		var aabb = new JigLib.JAABox();
 		aabb.minPos = this.minPos.clone();
 		aabb.maxPos = this.maxPos.clone();
 		return aabb;
 		
 }
 
-JigLib_JAABox.prototype.addPoint = function(pos)
+JigLib.JAABox.prototype.addPoint = function(pos)
 {
 
-		var tiny=JigLib_JMath3D.NUM_TINY;
+		var tiny=JigLib.JMath3D.NUM_TINY;
 		if (pos.x < this.minPos.x) this.minPos.x = pos.x - tiny;
 		if (pos.x > this.maxPos.x) this.maxPos.x = pos.x + tiny;
 		if (pos.y < this.minPos.y) this.minPos.y = pos.y - tiny;
@@ -5494,7 +5458,7 @@ JigLib_JAABox.prototype.addPoint = function(pos)
 		
 }
 
-JigLib_JAABox.prototype.addBox = function(box)
+JigLib.JAABox.prototype.addBox = function(box)
 {
 
 		var pts = box.getCornerPoints(box.get_currentState());
@@ -5509,7 +5473,7 @@ JigLib_JAABox.prototype.addBox = function(box)
 		
 }
 
-JigLib_JAABox.prototype.addSphere = function(sphere)
+JigLib.JAABox.prototype.addSphere = function(sphere)
 {
 
 		//if (sphere.get_currentState().position.x - sphere.get_radius() < _minPos.x) {
@@ -5550,7 +5514,7 @@ JigLib_JAABox.prototype.addSphere = function(sphere)
 		
 }
 
-JigLib_JAABox.prototype.addCapsule = function(capsule)
+JigLib.JAABox.prototype.addCapsule = function(capsule)
 {
 
 		var pos = capsule.getBottomPos(capsule.get_currentState());
@@ -5599,7 +5563,7 @@ JigLib_JAABox.prototype.addCapsule = function(capsule)
 		
 }
 
-JigLib_JAABox.prototype.addSegment = function(seg)
+JigLib.JAABox.prototype.addSegment = function(seg)
 {
 
 		this.addPoint(seg.origin);
@@ -5607,7 +5571,7 @@ JigLib_JAABox.prototype.addSegment = function(seg)
 		
 }
 
-JigLib_JAABox.prototype.overlapTest = function(box)
+JigLib.JAABox.prototype.overlapTest = function(box)
 {
 
 		return (
@@ -5620,7 +5584,7 @@ JigLib_JAABox.prototype.overlapTest = function(box)
 		
 }
 
-JigLib_JAABox.prototype.isPointInside = function(pos)
+JigLib.JAABox.prototype.isPointInside = function(pos)
 {
 
 		return ((pos.x >= this.minPos.x) && 
@@ -5632,17 +5596,17 @@ JigLib_JAABox.prototype.isPointInside = function(pos)
 		
 }
 
-JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
+JigLib.JAABox.prototype.segmentAABoxOverlap = function(seg)
 {
 
 		var jDir, kDir, i, iFace;
-		var frac, dist0, dist1, tiny=JigLib_JMath3D.NUM_TINY;
+		var frac, dist0, dist1, tiny=JigLib.JMath3D.NUM_TINY;
 		
 		var pt, minPosArr, maxPosArr, p0, p1, faceOffsets;
-		minPosArr = JigLib_JNumber3D.toArray(this.minPos);
-		maxPosArr = JigLib_JNumber3D.toArray(this.maxPos);
-		p0 = JigLib_JNumber3D.toArray(seg.origin);
-		p1 = JigLib_JNumber3D.toArray(seg.getEnd());
+		minPosArr = JigLib.JNumber3D.toArray(this.minPos);
+		maxPosArr = JigLib.JNumber3D.toArray(this.maxPos);
+		p0 = JigLib.JNumber3D.toArray(seg.origin);
+		p1 = JigLib.JNumber3D.toArray(seg.getEnd());
 		for (i = 0; i < 3; i++ ) {
 			jDir = (i + 1) % 3;
 			kDir = (i + 2) % 3;
@@ -5660,7 +5624,7 @@ JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
 				frac = 1;
 				
 				if (frac >= 0) {
-				pt = JigLib_JNumber3D.toArray(seg.getPoint(frac));
+				pt = JigLib.JNumber3D.toArray(seg.getPoint(frac));
 				if((pt[jDir] > minPosArr[jDir] - tiny) && 
 				(pt[jDir] < maxPosArr[jDir] + tiny) && 
 				(pt[kDir] > minPosArr[kDir] - tiny) && 
@@ -5676,14 +5640,13 @@ JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
 
 
 
-JigLib.JAABox = JigLib_JAABox; 
 
-var JigLib_JTerrain = function(tr, yUp)
+JigLib.JTerrain = function(tr, yUp)
 {
 	this._terrain = null; // ITerrain
 	this._yUp = null; // Boolean
 
-		JigLib_RigidBody.apply(this, [ null ]);
+		JigLib.RigidBody.apply(this, [ null ]);
 
 		// yUp for lite
 		this._yUp = yUp;
@@ -5691,24 +5654,24 @@ var JigLib_JTerrain = function(tr, yUp)
 		this._terrain = tr;
 		this.set_movable(false);
 		
-		this._boundingBox.minPos=new JigLib_Vector3D(tr.minW,-tr.maxHeight,tr.minH);
-		this._boundingBox.maxPos=new JigLib_Vector3D(tr.maxW,tr.maxHeight,tr.maxH);
+		this._boundingBox.minPos=new JigLib.Vector3D(tr.minW,-tr.maxHeight,tr.minH);
+		this._boundingBox.maxPos=new JigLib.Vector3D(tr.maxW,tr.maxHeight,tr.maxH);
 		this._boundingSphere=this._boundingBox.getRadiusAboutCentre();
 		
 		this._type = "TERRAIN";
 		
 }
 
-JigLib.extend(JigLib_JTerrain, JigLib_RigidBody);
+JigLib.extend(JigLib.JTerrain, JigLib.RigidBody);
 
-JigLib_JTerrain.prototype.get_terrainMesh = function()
+JigLib.JTerrain.prototype.get_terrainMesh = function()
 {
 
 		return this._terrain;
 		
 }
 
-JigLib_JTerrain.prototype.getHeightByIndex = function(i, j)
+JigLib.JTerrain.prototype.getHeightByIndex = function(i, j)
 {
 
 		i = this.limiteInt(i, 0, this._terrain.sw);
@@ -5718,7 +5681,7 @@ JigLib_JTerrain.prototype.getHeightByIndex = function(i, j)
 		
 }
 
-JigLib_JTerrain.prototype.getNormalByIndex = function(i, j)
+JigLib.JTerrain.prototype.getNormalByIndex = function(i, j)
 {
 
 		   var i0 = i - 1;
@@ -5734,28 +5697,28 @@ JigLib_JTerrain.prototype.getNormalByIndex = function(i, j)
 		   var dy = (j1 - j0) * this._terrain.dh;
 		   if (i0 == i1) dx = 1;
 		   if (j0 == j1) dy = 1;
-		   if (i0 == i1 && j0 == j1) return JigLib_Vector3D.Y_AXIS;
+		   if (i0 == i1 && j0 == j1) return JigLib.Vector3D.Y_AXIS;
 
 		   var hFwd = this._terrain.heights[i1][j];
 		   var hBack = this._terrain.heights[i0][j];
 		   var hLeft = this._terrain.heights[i][j1];
 		   var hRight = this._terrain.heights[i][j0];
 
-		   var normal = new JigLib_Vector3D(dx, hFwd - hBack, 0);
-		   normal = new JigLib_Vector3D(0, hLeft - hRight, dy).crossProduct(normal);
+		   var normal = new JigLib.Vector3D(dx, hFwd - hBack, 0);
+		   normal = new JigLib.Vector3D(0, hLeft - hRight, dy).crossProduct(normal);
 		   normal.normalize();
 		   return normal;
 		   
 }
 
-JigLib_JTerrain.prototype.getSurfacePosByIndex = function(i, j)
+JigLib.JTerrain.prototype.getSurfacePosByIndex = function(i, j)
 {
 
-		   return new JigLib_Vector3D(this._terrain.minW + i * this._terrain.dw, this.getHeightByIndex(i, j), this._terrain.minH + j * this._terrain.dh);
+		   return new JigLib.Vector3D(this._terrain.minW + i * this._terrain.dw, this.getHeightByIndex(i, j), this._terrain.minH + j * this._terrain.dh);
 		   
 }
 
-JigLib_JTerrain.prototype.getHeightAndNormalByPoint = function(point)
+JigLib.JTerrain.prototype.getHeightAndNormalByPoint = function(point)
 {
 
 		var i0, j0, i1, j1;
@@ -5776,8 +5739,8 @@ JigLib_JTerrain.prototype.getHeightAndNormalByPoint = function(point)
 
 		iFrac = 1 - (w - (i0 * this._terrain.dw + this._terrain.minW)) / this._terrain.dw;
 		jFrac = (h - (j0 * this._terrain.dh + this._terrain.minH)) / this._terrain.dh;
-		iFrac = JigLib_JMath3D.getLimiteNumber(iFrac, 0, 1);
-		jFrac = JigLib_JMath3D.getLimiteNumber(jFrac, 0, 1);
+		iFrac = JigLib.JMath3D.getLimiteNumber(iFrac, 0, 1);
+		jFrac = JigLib.JMath3D.getLimiteNumber(jFrac, 0, 1);
 
 		// yUp for lite
 		h00 = this._yUp ? this._terrain.heights[i0][j0] : -this._terrain.heights[i0][j0];
@@ -5785,30 +5748,30 @@ JigLib_JTerrain.prototype.getHeightAndNormalByPoint = function(point)
 		h10 = this._yUp ? this._terrain.heights[i1][j0] : -this._terrain.heights[i1][j0];
 		h11 = this._yUp ? this._terrain.heights[i1][j1] : -this._terrain.heights[i1][j1];
 
-		var obj = new JigLib_TerrainData();
+		var obj = new JigLib.TerrainData();
 		var plane;
 		if (iFrac < jFrac || i0 == i1 || j0 == j1)
 		{
-			obj.normal = new JigLib_Vector3D(0, h11 - h10, this._terrain.dh).crossProduct(new JigLib_Vector3D(this._terrain.dw, h11 - h01, 0));
+			obj.normal = new JigLib.Vector3D(0, h11 - h10, this._terrain.dh).crossProduct(new JigLib.Vector3D(this._terrain.dw, h11 - h01, 0));
 			// yUp for lite
 			if (!this._yUp)
 				obj.normal.negate();
 			obj.normal.normalize();
 
-			plane = new JigLib_PlaneData();
-			plane.setWithNormal(new JigLib_Vector3D((i1 * this._terrain.dw + this._terrain.minW), h11, (j1 * this._terrain.dh + this._terrain.minH)), obj.normal);
+			plane = new JigLib.PlaneData();
+			plane.setWithNormal(new JigLib.Vector3D((i1 * this._terrain.dw + this._terrain.minW), h11, (j1 * this._terrain.dh + this._terrain.minH)), obj.normal);
 			obj.height = plane.pointPlaneDistance(point);
 		}
 		else
 		{
-			obj.normal = new JigLib_Vector3D(0, h01 - h00, this._terrain.dh).crossProduct(new JigLib_Vector3D(this._terrain.dw, h10 - h00, 0));
+			obj.normal = new JigLib.Vector3D(0, h01 - h00, this._terrain.dh).crossProduct(new JigLib.Vector3D(this._terrain.dw, h10 - h00, 0));
 			// yUp for lite
 			if (!this._yUp)
 				obj.normal.negate();
 			obj.normal.normalize();
 
-			plane = new JigLib_PlaneData();
-			plane.setWithNormal(new JigLib_Vector3D((i0 * this._terrain.dw + this._terrain.minW), h00, (j0 * this._terrain.dh + this._terrain.minH)), obj.normal);
+			plane = new JigLib.PlaneData();
+			plane.setWithNormal(new JigLib.Vector3D((i0 * this._terrain.dw + this._terrain.minW), h00, (j0 * this._terrain.dh + this._terrain.minH)), obj.normal);
 			obj.height = plane.pointPlaneDistance(point);
 		}
 
@@ -5816,35 +5779,35 @@ JigLib_JTerrain.prototype.getHeightAndNormalByPoint = function(point)
 		
 }
 
-JigLib_JTerrain.prototype.getHeightByPoint = function(point)
+JigLib.JTerrain.prototype.getHeightByPoint = function(point)
 {
 
 		return this.getHeightAndNormalByPoint(point).height;
 		
 }
 
-JigLib_JTerrain.prototype.getNormalByPoint = function(point)
+JigLib.JTerrain.prototype.getNormalByPoint = function(point)
 {
 
 		return this.getHeightAndNormalByPoint(point).normal;
 		
 }
 
-JigLib_JTerrain.prototype.getSurfacePosByPoint = function(point)
+JigLib.JTerrain.prototype.getSurfacePosByPoint = function(point)
 {
 
-		return new JigLib_Vector3D(point.x, this.getHeightAndNormalByPoint(point).height, point.z);
+		return new JigLib.Vector3D(point.x, this.getHeightAndNormalByPoint(point).height, point.z);
 		
 }
 
-JigLib_JTerrain.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JTerrain.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		out.frac = 0;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
-		var segY, depthEnd, weightStart, weightEnd, tiny=JigLib_JMath3D.NUM_TINY;
+		var segY, depthEnd, weightStart, weightEnd, tiny=JigLib.JMath3D.NUM_TINY;
 		// yUp for lite
 		segY = this._yUp ? seg.delta.y : -seg.delta.y;
 
@@ -5875,7 +5838,7 @@ JigLib_JTerrain.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JTerrain.prototype.limiteInt = function(num, min, max)
+JigLib.JTerrain.prototype.limiteInt = function(num, min, max)
 {
 
 		var n = num;
@@ -5888,7 +5851,7 @@ JigLib_JTerrain.prototype.limiteInt = function(num, min, max)
 		
 }
 
-JigLib_JTerrain.prototype.updateState = function()
+JigLib.JTerrain.prototype.updateState = function()
 {
 
 		
@@ -5896,64 +5859,63 @@ JigLib_JTerrain.prototype.updateState = function()
 
 
 
-JigLib.JTerrain = JigLib_JTerrain; 
 
-var JigLib_JPlane = function(skin, initNormal)
+JigLib.JPlane = function(skin, initNormal)
 {
 	this._initNormal = null; // Vector3D
 	this._normal = null; // Vector3D
 	this._distance = null; // Number
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 
-		this._initNormal = initNormal ? initNormal.clone() : new JigLib_Vector3D(0, 0, -1);
+		this._initNormal = initNormal ? initNormal.clone() : new JigLib.Vector3D(0, 0, -1);
 		this._normal = this._initNormal.clone();
 
 		this._distance = 0;
 		this.set_movable(false);
 		
-		var huge=JigLib_JMath3D.NUM_HUGE;
-		this._boundingBox.minPos = new JigLib_Vector3D(-huge, -huge, -huge);
-		this._boundingBox.maxPos = new JigLib_Vector3D(huge, huge, huge);
+		var huge=JigLib.JMath3D.NUM_HUGE;
+		this._boundingBox.minPos = new JigLib.Vector3D(-huge, -huge, -huge);
+		this._boundingBox.maxPos = new JigLib.Vector3D(huge, huge, huge);
 
 		this._type = "PLANE";
 		
 }
 
-JigLib.extend(JigLib_JPlane, JigLib_RigidBody);
+JigLib.extend(JigLib.JPlane, JigLib.RigidBody);
 
-JigLib_JPlane.prototype.get_normal = function()
+JigLib.JPlane.prototype.get_normal = function()
 {
 
 		return this._normal;
 		
 }
 
-JigLib_JPlane.prototype.get_distance = function()
+JigLib.JPlane.prototype.get_distance = function()
 {
 
 		return this._distance;
 		
 }
 
-JigLib_JPlane.prototype.pointPlaneDistance = function(pt)
+JigLib.JPlane.prototype.pointPlaneDistance = function(pt)
 {
 
 		return this._normal.dotProduct(pt) - this._distance;
 		
 }
 
-JigLib_JPlane.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JPlane.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		out.frac = 0;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
 		var frac = 0, t, denom;
 
 		denom = this._normal.dotProduct(seg.delta);
-		if (Math.abs(denom) > JigLib_JMath3D.NUM_TINY)
+		if (Math.abs(denom) > JigLib.JMath3D.NUM_TINY)
 		{
 			t = -1 * (this._normal.dotProduct(seg.origin) - this._distance) / denom;
 
@@ -5978,10 +5940,10 @@ JigLib_JPlane.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JPlane.prototype.updateState = function()
+JigLib.JPlane.prototype.updateState = function()
 {
 
-		JigLib_RigidBody.prototype.updateState.apply(this, [  ]);
+		JigLib.RigidBody.prototype.updateState.apply(this, [  ]);
 
 		this._normal = this._currState.orientation.transformVector(this._initNormal);
 		this._distance = this._currState.position.dotProduct(this._normal);
@@ -5990,16 +5952,15 @@ JigLib_JPlane.prototype.updateState = function()
 
 
 
-JigLib.JPlane = JigLib_JPlane; 
 
-var JigLib_JTriangleMesh = function(skin, initPosition, initOrientation, maxTrianglesPerCell, minCellSize)
+JigLib.JTriangleMesh = function(skin, initPosition, initOrientation, maxTrianglesPerCell, minCellSize)
 {
 	this._octree = null; // JOctree
 	this._maxTrianglesPerCell = null; // int
 	this._minCellSize = null; // Number
 	this._skinVertices = null; // Vector3D
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		
 		this.get_currentState().position=initPosition.clone();
 		this.get_currentState().orientation=initOrientation.clone();
@@ -6013,31 +5974,31 @@ var JigLib_JTriangleMesh = function(skin, initPosition, initOrientation, maxTria
 			this.createMesh(this._skinVertices,skin.indices);
 			
 			this._boundingBox=this._octree.boundingBox().clone();
-			skin.transform = JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib_JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z));
+			skin.transform = JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, JigLib.JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z));
 		}
 		
 		this._type = "TRIANGLEMESH";
 		
 }
 
-JigLib.extend(JigLib_JTriangleMesh, JigLib_RigidBody);
+JigLib.extend(JigLib.JTriangleMesh, JigLib.RigidBody);
 
-JigLib_JTriangleMesh.prototype.createMesh = function(vertices, triangleVertexIndices)
+JigLib.JTriangleMesh.prototype.createMesh = function(vertices, triangleVertexIndices)
 {
 
 		
 		var len=vertices.length;
 		var vts=[];
 		
-		var transform = JigLib_JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z);
-		transform = JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, transform);
+		var transform = JigLib.JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z);
+		transform = JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, transform);
 		
 		var i = 0;
 		for (var vertices_i = 0, vertices_l = vertices.length, _point; (vertices_i < vertices_l) && (_point = vertices[vertices_i]); vertices_i++){
 			vts[i++] = transform.transformVector(_point);
 		}
 		
-		this._octree = new JigLib_JOctree();
+		this._octree = new JigLib.JOctree();
 		
 		this._octree.addTriangles(vts, vts.length, triangleVertexIndices, triangleVertexIndices.length);
 		this._octree.buildOctree(this._maxTrianglesPerCell, this._minCellSize);
@@ -6045,29 +6006,29 @@ JigLib_JTriangleMesh.prototype.createMesh = function(vertices, triangleVertexInd
 		
 }
 
-JigLib_JTriangleMesh.prototype.get_octree = function()
+JigLib.JTriangleMesh.prototype.get_octree = function()
 {
 
 		return this._octree;
 		
 }
 
-JigLib_JTriangleMesh.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JTriangleMesh.prototype.segmentIntersect = function(out, seg, state)
 {
 
-		var segBox = new JigLib_JAABox();
+		var segBox = new JigLib.JAABox();
 		segBox.addSegment(seg);
 		
 		var potentialTriangles = [];
 		var numTriangles = this._octree.getTrianglesIntersectingtAABox(potentialTriangles, segBox);
 		
-		var bestFrac = JigLib_JMath3D.NUM_HUGE;
+		var bestFrac = JigLib.JMath3D.NUM_HUGE;
 		var tri;
 		var meshTriangle;
 		for (var iTriangle = 0 ; iTriangle < numTriangles ; iTriangle++) {
 			meshTriangle = this._octree.getTriangle(potentialTriangles[iTriangle]);
 			
-			tri = new JigLib_JTriangle(this._octree.getVertex(meshTriangle.getVertexIndex(0)), this._octree.getVertex(meshTriangle.getVertexIndex(1)), this._octree.getVertex(meshTriangle.getVertexIndex(2)));
+			tri = new JigLib.JTriangle(this._octree.getVertex(meshTriangle.getVertexIndex(0)), this._octree.getVertex(meshTriangle.getVertexIndex(1)), this._octree.getVertex(meshTriangle.getVertexIndex(2)));
 			
 			if (tri.segmentTriangleIntersection(out, seg)) {
 				if (out.frac < bestFrac) {
@@ -6078,7 +6039,7 @@ JigLib_JTriangleMesh.prototype.segmentIntersect = function(out, seg, state)
 			}
 		}
 		out.frac = bestFrac;
-		if (bestFrac < JigLib_JMath3D.NUM_HUGE) {
+		if (bestFrac < JigLib.JMath3D.NUM_HUGE) {
 			return true;
 		}else {
 			return false;
@@ -6086,16 +6047,16 @@ JigLib_JTriangleMesh.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JTriangleMesh.prototype.updateState = function()
+JigLib.JTriangleMesh.prototype.updateState = function()
 {
 
-		JigLib_RigidBody.prototype.updateState.apply(this, [  ]);
+		JigLib.RigidBody.prototype.updateState.apply(this, [  ]);
 		
 		var len=this._skinVertices.length;
 		var vts=[];
 		
-		var transform = JigLib_JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z);
-		transform = JigLib_JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, transform);
+		var transform = JigLib.JMatrix3D.getTranslationMatrix(this.get_currentState().position.x, this.get_currentState().position.y, this.get_currentState().position.z);
+		transform = JigLib.JMatrix3D.getAppendMatrix3D(this.get_currentState().orientation, transform);
 		
 		var i = 0;
 		for (var _skinVertices_i = 0, _skinVertices_l = this._skinVertices.length, _point; (_skinVertices_i < _skinVertices_l) && (_point = this._skinVertices[_skinVertices_i]); _skinVertices_i++){
@@ -6109,14 +6070,14 @@ JigLib_JTriangleMesh.prototype.updateState = function()
 		
 }
 
-JigLib_JTriangleMesh.prototype.getInertiaProperties = function(m)
+JigLib.JTriangleMesh.prototype.getInertiaProperties = function(m)
 {
 
-		return new JigLib_Matrix3D();
+		return new JigLib.Matrix3D();
 		
 }
 
-JigLib_JTriangleMesh.prototype.updateBoundingBox = function()
+JigLib.JTriangleMesh.prototype.updateBoundingBox = function()
 {
 
 		
@@ -6124,9 +6085,8 @@ JigLib_JTriangleMesh.prototype.updateBoundingBox = function()
 
 
 
-JigLib.JTriangleMesh = JigLib_JTriangleMesh; 
 
-var JigLib_JTriangle = function(pt0, pt1, pt2)
+JigLib.JTriangle = function(pt0, pt1, pt2)
 {
 	this.origin = null; // Vector3D
 	this.edge0 = null; // Vector3D
@@ -6138,14 +6098,14 @@ var JigLib_JTriangle = function(pt0, pt1, pt2)
 		
 }
 
-JigLib_JTriangle.prototype.get_edge2 = function()
+JigLib.JTriangle.prototype.get_edge2 = function()
 {
 
 		return this.edge1.subtract(this.edge0);
 		
 }
 
-JigLib_JTriangle.prototype.get_normal = function()
+JigLib.JTriangle.prototype.get_normal = function()
 {
 
 		var N = this.edge0.crossProduct(this.edge1);
@@ -6155,17 +6115,17 @@ JigLib_JTriangle.prototype.get_normal = function()
 		
 }
 
-JigLib_JTriangle.prototype.get_plane = function()
+JigLib.JTriangle.prototype.get_plane = function()
 {
 
-		var pl = new JigLib_PlaneData();
+		var pl = new JigLib.PlaneData();
 		pl.setWithNormal(this.origin, this.get_normal());
 		
 		return pl;
 		
 }
 
-JigLib_JTriangle.prototype.getPoint = function(t0, t1)
+JigLib.JTriangle.prototype.getPoint = function(t0, t1)
 {
 
 		var d0, d1;
@@ -6179,7 +6139,7 @@ JigLib_JTriangle.prototype.getPoint = function(t0, t1)
 		
 }
 
-JigLib_JTriangle.prototype.getCentre = function()
+JigLib.JTriangle.prototype.getCentre = function()
 {
 
 		var result = this.edge0.add(this.edge1);
@@ -6189,7 +6149,7 @@ JigLib_JTriangle.prototype.getCentre = function()
 		
 }
 
-JigLib_JTriangle.prototype.getVertex = function(_id)
+JigLib.JTriangle.prototype.getVertex = function(_id)
 {
 
 		switch(_id) {
@@ -6203,7 +6163,7 @@ JigLib_JTriangle.prototype.getVertex = function(_id)
 		
 }
 
-JigLib_JTriangle.prototype.getSpan = function(axis)
+JigLib.JTriangle.prototype.getSpan = function(axis)
 {
 
 		var d0, d1, d2;
@@ -6211,7 +6171,7 @@ JigLib_JTriangle.prototype.getSpan = function(axis)
 		d1 = this.getVertex(1).dotProduct(axis);
 		d2 = this.getVertex(2).dotProduct(axis);
 		
-		var result = new JigLib_SpanData();
+		var result = new JigLib.SpanData();
 		result.min = Math.min(d0, d1, d2);
 		result.max = Math.max(d0, d1, d2);
 		
@@ -6219,7 +6179,7 @@ JigLib_JTriangle.prototype.getSpan = function(axis)
 		
 }
 
-JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
+JigLib.JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 {
 
 		
@@ -6229,7 +6189,7 @@ JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 		p = seg.delta.crossProduct(this.edge1);
 		a = this.edge0.dotProduct(p);
 		
-		if (a > -JigLib_JMath3D.NUM_TINY && a < JigLib_JMath3D.NUM_TINY) {
+		if (a > -JigLib.JMath3D.NUM_TINY && a < JigLib.JMath3D.NUM_TINY) {
 			return false;
 		}
 		f = 1 / a;
@@ -6250,7 +6210,7 @@ JigLib_JTriangle.prototype.segmentTriangleIntersection = function(out, seg)
 		
 }
 
-JigLib_JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
+JigLib.JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
 {
 
 		
@@ -6477,15 +6437,14 @@ JigLib_JTriangle.prototype.pointTriangleDistanceSq = function(out, point)
 
 
 
-JigLib.JTriangle = JigLib_JTriangle; 
 
-var JigLib_JSphere = function(skin, r)
+JigLib.JSphere = function(skin, r)
 {
 	this.name = null; // String
 	this._radius = null; // Number
 
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		this._type = "SPHERE";
 		this._radius = r;
 		this._boundingSphere = this._radius;
@@ -6494,9 +6453,9 @@ var JigLib_JSphere = function(skin, r)
 		
 }
 
-JigLib.extend(JigLib_JSphere, JigLib_RigidBody);
+JigLib.extend(JigLib.JSphere, JigLib.RigidBody);
 
-JigLib_JSphere.prototype.set_radius = function(r)
+JigLib.JSphere.prototype.set_radius = function(r)
 {
 
 		this._radius = r;
@@ -6507,19 +6466,19 @@ JigLib_JSphere.prototype.set_radius = function(r)
 		
 }
 
-JigLib_JSphere.prototype.get_radius = function()
+JigLib.JSphere.prototype.get_radius = function()
 {
 
 		return this._radius;
 		
 }
 
-JigLib_JSphere.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JSphere.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		out.frac = 0;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
 		var frac = 0, radiusSq, rSq, sDotr, sSq, sigma, sigmaSqrt, lambda1, lambda2;
 		var r, s;
@@ -6560,15 +6519,15 @@ JigLib_JSphere.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JSphere.prototype.getInertiaProperties = function(m)
+JigLib.JSphere.prototype.getInertiaProperties = function(m)
 {
 
 		var Ixx = 0.4 * m * this._radius * this._radius;
-		return JigLib_JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
+		return JigLib.JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
 		
 }
 
-JigLib_JSphere.prototype.updateBoundingBox = function()
+JigLib.JSphere.prototype.updateBoundingBox = function()
 {
 
 		this._boundingBox.clear();
@@ -6578,9 +6537,8 @@ JigLib_JSphere.prototype.updateBoundingBox = function()
 
 
 
-JigLib.JSphere = JigLib_JSphere; 
 
-var JigLib_JSegment = function(_origin, _delta)
+JigLib.JSegment = function(_origin, _delta)
 {
 	this.origin = null; // Vector3D
 	this.delta = null; // Vector3D
@@ -6590,28 +6548,28 @@ var JigLib_JSegment = function(_origin, _delta)
 		
 }
 
-JigLib_JSegment.prototype.getPoint = function(t)
+JigLib.JSegment.prototype.getPoint = function(t)
 {
 
-		return this.origin.add(JigLib_JNumber3D.getScaleVector(this.delta, t));
+		return this.origin.add(JigLib.JNumber3D.getScaleVector(this.delta, t));
 		
 }
 
-JigLib_JSegment.prototype.getEnd = function()
+JigLib.JSegment.prototype.getEnd = function()
 {
 
 		return this.origin.add(this.delta);
 		
 }
 
-JigLib_JSegment.prototype.clone = function()
+JigLib.JSegment.prototype.clone = function()
 {
 
-		return new JigLib_JSegment(this.origin, this.delta);
+		return new JigLib.JSegment(this.origin, this.delta);
 		
 }
 
-JigLib_JSegment.prototype.segmentSegmentDistanceSq = function(out, seg)
+JigLib.JSegment.prototype.segmentSegmentDistanceSq = function(out, seg)
 {
 
 		var fA00, fA01, fA11, fB0, fC, fDet, fB1, fS, fT, fSqrDist, fTmp, fInvDet;
@@ -6624,7 +6582,7 @@ JigLib_JSegment.prototype.segmentSegmentDistanceSq = function(out, seg)
 		fC = kDiff.get_lengthSquared();
 		fDet = Math.abs(fA00 * fA11 - fA01 * fA01);
 
-		if (fDet >= JigLib_JMath3D.NUM_TINY)
+		if (fDet >= JigLib.JMath3D.NUM_TINY)
 		{
 			fB1 = -kDiff.dotProduct(seg.delta);
 			fS = fA01 * fB1 - fA11 * fB0;
@@ -6956,7 +6914,7 @@ JigLib_JSegment.prototype.segmentSegmentDistanceSq = function(out, seg)
 		
 }
 
-JigLib_JSegment.prototype.pointSegmentDistanceSq = function(out, pt)
+JigLib.JSegment.prototype.pointSegmentDistanceSq = function(out, pt)
 {
 
 		var kDiff = pt.subtract(this.origin);
@@ -6977,7 +6935,7 @@ JigLib_JSegment.prototype.pointSegmentDistanceSq = function(out, pt)
 			else
 			{
 				fT /= fSqrLen;
-				kDiff = kDiff.subtract(JigLib_JNumber3D.getScaleVector(this.delta, fT));
+				kDiff = kDiff.subtract(JigLib.JNumber3D.getScaleVector(this.delta, fT));
 			}
 		}
 
@@ -6986,7 +6944,7 @@ JigLib_JSegment.prototype.pointSegmentDistanceSq = function(out, pt)
 		
 }
 
-JigLib_JSegment.prototype.segmentBoxDistanceSq = function(out, rkBox, boxState)
+JigLib.JSegment.prototype.segmentBoxDistanceSq = function(out, rkBox, boxState)
 {
 
 		out[3] = 0;
@@ -6995,7 +6953,7 @@ JigLib_JSegment.prototype.segmentBoxDistanceSq = function(out, rkBox, boxState)
 		out[2] = 0;
 
 		var obj = [];
-		var kRay = new JigLib_JRay(this.origin, this.delta);
+		var kRay = new JigLib.JRay(this.origin, this.delta);
 		var fSqrDistance = this.sqrDistanceLine(obj, kRay, rkBox, boxState);
 		if (obj[3] >= 0)
 		{
@@ -7023,7 +6981,7 @@ JigLib_JSegment.prototype.segmentBoxDistanceSq = function(out, rkBox, boxState)
 		
 }
 
-JigLib_JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxState)
+JigLib.JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxState)
 {
 
 		var kDiff, kPnt, kDir;
@@ -7034,16 +6992,16 @@ JigLib_JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxStat
 		out[2] = 0;
 
 		kDiff = rkLine.origin.subtract(boxState.position);
-		kPnt = new JigLib_Vector3D(kDiff.dotProduct(orientationCols[0]),
+		kPnt = new JigLib.Vector3D(kDiff.dotProduct(orientationCols[0]),
 			kDiff.dotProduct(orientationCols[1]),
 			kDiff.dotProduct(orientationCols[2]));
 
-		kDir = new JigLib_Vector3D(rkLine.dir.dotProduct(orientationCols[0]),
+		kDir = new JigLib.Vector3D(rkLine.dir.dotProduct(orientationCols[0]),
 			rkLine.dir.dotProduct(orientationCols[1]),
 			rkLine.dir.dotProduct(orientationCols[2]));
 		
-		var kPntArr = JigLib_JNumber3D.toArray(kPnt);
-		var kDirArr = JigLib_JNumber3D.toArray(kDir);
+		var kPntArr = JigLib.JNumber3D.toArray(kPnt);
+		var kDirArr = JigLib.JNumber3D.toArray(kDir);
 
 		var bReflect = [];
 		for (var i = 0; i < 3; i++)
@@ -7060,8 +7018,8 @@ JigLib_JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxStat
 			}
 		}
 
-		JigLib_JNumber3D.copyFromArray(kPnt, kPntArr);
-		JigLib_JNumber3D.copyFromArray(kDir, kDirArr);
+		JigLib.JNumber3D.copyFromArray(kPnt, kPntArr);
+		JigLib.JNumber3D.copyFromArray(kDir, kDirArr);
 
 		var obj = new SegmentInfo(kPnt.clone(), 0, 0);
 
@@ -7124,13 +7082,13 @@ JigLib_JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxStat
 			}
 		}
 
-		kPntArr = JigLib_JNumber3D.toArray(obj.rkPnt);
+		kPntArr = JigLib.JNumber3D.toArray(obj.rkPnt);
 		for (i = 0; i < 3; i++)
 		{
 			if (bReflect[i])
 				kPntArr[i] = -kPntArr[i];
 		}
-		JigLib_JNumber3D.copyFromArray(obj.rkPnt, kPntArr);
+		JigLib.JNumber3D.copyFromArray(obj.rkPnt, kPntArr);
 
 		out[0] = obj.rkPnt.x;
 		out[1] = obj.rkPnt.y;
@@ -7140,7 +7098,7 @@ JigLib_JSegment.prototype.sqrDistanceLine = function(out, rkLine, rkBox, boxStat
 		
 }
 
-JigLib_JSegment.prototype.sqrDistancePoint = function(out, rkPoint, rkBox, boxState)
+JigLib.JSegment.prototype.sqrDistancePoint = function(out, rkPoint, rkBox, boxState)
 {
 
 		var kDiff, kClosest, boxHalfSide;
@@ -7148,7 +7106,7 @@ JigLib_JSegment.prototype.sqrDistancePoint = function(out, rkPoint, rkBox, boxSt
 		
 		var orientationVector = boxState.getOrientationCols();
 		kDiff = rkPoint.subtract(boxState.position);
-		kClosest = new JigLib_Vector3D(kDiff.dotProduct(orientationVector[0]),
+		kClosest = new JigLib.Vector3D(kDiff.dotProduct(orientationVector[0]),
 			kDiff.dotProduct(orientationVector[1]),
 			kDiff.dotProduct(orientationVector[2]));
 
@@ -7201,25 +7159,25 @@ JigLib_JSegment.prototype.sqrDistancePoint = function(out, rkPoint, rkBox, boxSt
 		
 }
 
-JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
+JigLib.JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 {
 
 		
 		var fLSqr, fInv, fTmp, fParam, fT, fDelta;
 
-		var kPpE = new JigLib_Vector3D();
+		var kPpE = new JigLib.Vector3D();
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		
 		var boxHalfArr, rkPntArr, rkDirArr, kPpEArr, rkPmEArr;
-		boxHalfArr = JigLib_JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JigLib_JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JigLib_JNumber3D.toArray(rkDir);
-		kPpEArr = JigLib_JNumber3D.toArray(kPpE);
-		rkPmEArr = JigLib_JNumber3D.toArray(rkPmE);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
+		kPpEArr = JigLib.JNumber3D.toArray(kPpE);
+		rkPmEArr = JigLib.JNumber3D.toArray(rkPmE);
 
 		kPpEArr[i1] = rkPntArr[i1] + boxHalfArr[i1];
 		kPpEArr[i2] = rkPntArr[i2] + boxHalfArr[i2];
-		JigLib_JNumber3D.copyFromArray(rkPmE, kPpEArr);
+		JigLib.JNumber3D.copyFromArray(rkPmE, kPpEArr);
 
 		if (rkDirArr[i0] * kPpEArr[i1] >= rkDirArr[i1] * rkPmEArr[i0])
 		{
@@ -7230,7 +7188,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i1] -= (rkDirArr[i1] * rkPmEArr[i0] * fInv);
 				rkPntArr[i2] -= (rkDirArr[i2] * rkPmEArr[i0] * fInv);
 				out.pfLParam = -rkPmEArr[i0] * fInv;
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 			}
 			else
 			{
@@ -7249,7 +7207,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = fT - boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -7262,7 +7220,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 			}
 		}
@@ -7285,7 +7243,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = fT - boxHalfArr[i2];
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -7298,7 +7256,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = boxHalfArr[i2];
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 			}
 			else
@@ -7320,7 +7278,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = fT - boxHalfArr[i1];
 					rkPntArr[i2] = -boxHalfArr[i2];
-					JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -7333,7 +7291,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = boxHalfArr[i1];
 					rkPntArr[i2] = -boxHalfArr[i2];
-					JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				return;
 				}
@@ -7355,7 +7313,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = -boxHalfArr[i1];
 					rkPntArr[i2] = fT - boxHalfArr[i2];
-					JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				else
 				{
@@ -7368,7 +7326,7 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 					rkPntArr[i0] = boxHalfArr[i0];
 					rkPntArr[i1] = -boxHalfArr[i1];
 					rkPntArr[i2] = boxHalfArr[i2];
-					JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+					JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 				}
 				return;
 				}
@@ -7382,17 +7340,17 @@ JigLib_JSegment.prototype.face = function(out, i0, i1, i2, rkDir, rkBox, rkPmE)
 				rkPntArr[i0] = boxHalfArr[i0];
 				rkPntArr[i1] = -boxHalfArr[i1];
 				rkPntArr[i2] = -boxHalfArr[i2];
-				JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+				JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 			}
 		}
 		
 }
 
-JigLib_JSegment.prototype.caseNoZeros = function(out, rkDir, rkBox)
+JigLib.JSegment.prototype.caseNoZeros = function(out, rkDir, rkBox)
 {
 
 		var boxHalfSide = rkBox.getHalfSideLengths();
-		var kPmE = new JigLib_Vector3D(out.rkPnt.x - boxHalfSide.x, out.rkPnt.y - boxHalfSide.y, out.rkPnt.z - boxHalfSide.z);
+		var kPmE = new JigLib.Vector3D(out.rkPnt.x - boxHalfSide.x, out.rkPnt.y - boxHalfSide.y, out.rkPnt.z - boxHalfSide.z);
 
 		var fProdDxPy = rkDir.x * kPmE.y, fProdDyPx = rkDir.y * kPmE.x, fProdDzPx, fProdDxPz, fProdDzPy, fProdDyPz;
 
@@ -7425,14 +7383,14 @@ JigLib_JSegment.prototype.caseNoZeros = function(out, rkDir, rkBox)
 		
 }
 
-JigLib_JSegment.prototype.case0 = function(out, i0, i1, i2, rkDir, rkBox)
+JigLib.JSegment.prototype.case0 = function(out, i0, i1, i2, rkDir, rkBox)
 {
 
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		var boxHalfArr, rkPntArr, rkDirArr;
-		boxHalfArr = JigLib_JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JigLib_JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JigLib_JNumber3D.toArray(rkDir);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
 		
 		var fPmE0 = rkPntArr[i0] - boxHalfArr[i0], fPmE1 = rkPntArr[i1] - boxHalfArr[i1], fProd0 = rkDirArr[i1] * fPmE0, fProd1 = rkDirArr[i0] * fPmE1, fDelta, fInvLSqr, fInv, fPpE1, fPpE0;
 
@@ -7456,7 +7414,7 @@ JigLib_JSegment.prototype.case0 = function(out, i0, i1, i2, rkDir, rkBox)
 				rkPntArr[i1] -= (fProd0 * fInv);
 				out.pfLParam = -fPmE0 * fInv;
 			}
-			JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+			JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		}
 		else
 		{
@@ -7478,7 +7436,7 @@ JigLib_JSegment.prototype.case0 = function(out, i0, i1, i2, rkDir, rkBox)
 				rkPntArr[i0] -= (fProd1 * fInv);
 				out.pfLParam = -fPmE1 * fInv;
 			}
-			JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+			JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		}
 
 		if (rkPntArr[i2] < -boxHalfArr[i2])
@@ -7493,20 +7451,20 @@ JigLib_JSegment.prototype.case0 = function(out, i0, i1, i2, rkDir, rkBox)
 			out.rfSqrDistance += (fDelta * fDelta);
 			rkPntArr[i2] = boxHalfArr[i2];
 		}
-		JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+		JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		
 }
 
-JigLib_JSegment.prototype.case00 = function(out, i0, i1, i2, rkDir, rkBox)
+JigLib.JSegment.prototype.case00 = function(out, i0, i1, i2, rkDir, rkBox)
 {
 
 		var fDelta = 0;
 		var boxHalfSide = rkBox.getHalfSideLengths();
 		
 		var boxHalfArr, rkPntArr, rkDirArr;
-		boxHalfArr = JigLib_JNumber3D.toArray(boxHalfSide);
-		rkPntArr = JigLib_JNumber3D.toArray(out.rkPnt);
-		rkDirArr = JigLib_JNumber3D.toArray(rkDir);
+		boxHalfArr = JigLib.JNumber3D.toArray(boxHalfSide);
+		rkPntArr = JigLib.JNumber3D.toArray(out.rkPnt);
+		rkDirArr = JigLib.JNumber3D.toArray(rkDir);
 		out.pfLParam = (boxHalfArr[i0] - rkPntArr[i0]) / rkDirArr[i0];
 
 		rkPntArr[i0] = boxHalfArr[i0];
@@ -7537,11 +7495,11 @@ JigLib_JSegment.prototype.case00 = function(out, i0, i1, i2, rkDir, rkBox)
 			rkPntArr[i2] = boxHalfArr[i2];
 		}
 
-		JigLib_JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
+		JigLib.JNumber3D.copyFromArray(out.rkPnt, rkPntArr);
 		
 }
 
-JigLib_JSegment.prototype.case000 = function(out, rkBox)
+JigLib.JSegment.prototype.case000 = function(out, rkBox)
 {
 
 		var fDelta = 0;
@@ -7590,47 +7548,44 @@ JigLib_JSegment.prototype.case000 = function(out, rkBox)
 
 
 
-JigLib.JSegment = JigLib_JSegment; 
 
-var JigLib_JConfig = function()
+JigLib.JConfig = function()
 {
 }
 
-JigLib_JConfig.solverType =  "ACCUMULATED"; // String
-JigLib_JConfig.rotationType =  "DEGREES"; // String
-JigLib_JConfig.doShockStep =  false; // Boolean
-JigLib_JConfig.allowedPenetration =  0.01; // Number
-JigLib_JConfig.collToll =  0.05; // Number
-JigLib_JConfig.velThreshold =  0.5; // Number
-JigLib_JConfig.angVelThreshold =  0.5; // Number
-JigLib_JConfig.posThreshold =  0.2; // Number
-JigLib_JConfig.orientThreshold =  0.2; // Number
-JigLib_JConfig.deactivationTime =  0.5; // Number
-JigLib_JConfig.numPenetrationRelaxationTimesteps =  10; // Number
-JigLib_JConfig.numCollisionIterations =  1; // Number
-JigLib_JConfig.numContactIterations =  2; // Number
-JigLib_JConfig.numConstraintIterations =  2; // Number
+JigLib.JConfig.solverType =  "ACCUMULATED"; // String
+JigLib.JConfig.rotationType =  "DEGREES"; // String
+JigLib.JConfig.doShockStep =  false; // Boolean
+JigLib.JConfig.allowedPenetration =  0.01; // Number
+JigLib.JConfig.collToll =  0.05; // Number
+JigLib.JConfig.velThreshold =  0.5; // Number
+JigLib.JConfig.angVelThreshold =  0.5; // Number
+JigLib.JConfig.posThreshold =  0.2; // Number
+JigLib.JConfig.orientThreshold =  0.2; // Number
+JigLib.JConfig.deactivationTime =  0.5; // Number
+JigLib.JConfig.numPenetrationRelaxationTimesteps =  10; // Number
+JigLib.JConfig.numCollisionIterations =  1; // Number
+JigLib.JConfig.numContactIterations =  2; // Number
+JigLib.JConfig.numConstraintIterations =  2; // Number
 
 
-JigLib.JConfig = JigLib_JConfig; 
 
-var JigLib_CollOutData = function(frac, position, normal)
+JigLib.CollOutData = function(frac, position, normal)
 {
 	this.frac = null; // Number
 	this.position = null; // Vector3D
 	this.normal = null; // Vector3D
 
 		this.frac = isNaN(frac) ? 0 : frac;
-		this.position = position ? position : new JigLib_Vector3D;
-		this.normal = normal ? normal : new JigLib_Vector3D;
+		this.position = position ? position : new JigLib.Vector3D;
+		this.normal = normal ? normal : new JigLib.Vector3D;
 		
 }
 
 
 
-JigLib.CollOutData = JigLib_CollOutData; 
 
-var JigLib_ContactData = function()
+JigLib.ContactData = function()
 {
 	this.pair = null; // BodyPair
 	this.impulse = null; // CachedImpulse
@@ -7638,49 +7593,48 @@ var JigLib_ContactData = function()
 
 
 
-JigLib.ContactData = JigLib_ContactData; 
 
-var JigLib_PlaneData = function()
+JigLib.PlaneData = function()
 {
 	this._position = null; // Vector3D
 	this._normal = null; // Vector3D
 	this._distance = null; // Number
 
-		this._position = new JigLib_Vector3D();
-		this._normal = new JigLib_Vector3D(0, 1, 0);
+		this._position = new JigLib.Vector3D();
+		this._normal = new JigLib.Vector3D(0, 1, 0);
 		this._distance = 0;
 		
 }
 
-JigLib_PlaneData.prototype.get_position = function()
+JigLib.PlaneData.prototype.get_position = function()
 {
 
 		return this._position;
 		
 }
 
-JigLib_PlaneData.prototype.get_normal = function()
+JigLib.PlaneData.prototype.get_normal = function()
 {
 
 		return this._normal;
 		
 }
 
-JigLib_PlaneData.prototype.get_distance = function()
+JigLib.PlaneData.prototype.get_distance = function()
 {
 
 		return this._distance;
 		
 }
 
-JigLib_PlaneData.prototype.pointPlaneDistance = function(pt)
+JigLib.PlaneData.prototype.pointPlaneDistance = function(pt)
 {
 
 		return this._normal.dotProduct(pt) - this._distance;
 		
 }
 
-JigLib_PlaneData.prototype.setWithNormal = function(pos, nor)
+JigLib.PlaneData.prototype.setWithNormal = function(pos, nor)
 {
 
 		this._position = pos.clone();
@@ -7689,7 +7643,7 @@ JigLib_PlaneData.prototype.setWithNormal = function(pos, nor)
 		
 }
 
-JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
+JigLib.PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 {
 
 		this._position = pos0.clone();
@@ -7699,8 +7653,8 @@ JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 		this._normal = dr1.crossProduct(dr2);
 		
 		var nLen = this._normal.get_length();
-		if (nLen < JigLib_JMath3D.NUM_TINY) {
-			this._normal = new JigLib_Vector3D(0, 1, 0);
+		if (nLen < JigLib.JMath3D.NUM_TINY) {
+			this._normal = new JigLib.Vector3D(0, 1, 0);
 			this._distance = 0;
 		}else {
 			this._normal.scaleBy(1 / nLen);
@@ -7711,9 +7665,8 @@ JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 
 
 
-JigLib.PlaneData = JigLib_PlaneData; 
 
-var JigLib_EdgeData = function(ind0, ind1)
+JigLib.EdgeData = function(ind0, ind1)
 {
 	this.ind0 = null; // int
 	this.ind1 = null; // int
@@ -7725,23 +7678,21 @@ var JigLib_EdgeData = function(ind0, ind1)
 
 
 
-JigLib.EdgeData = JigLib_EdgeData; 
 
-var JigLib_TerrainData = function(height, normal)
+JigLib.TerrainData = function(height, normal)
 {
 	this.height = null; // Number
 	this.normal = null; // Vector3D
 
 		this.height = isNaN(height) ? 0 : height;
-		this.normal = normal ? normal : new JigLib_Vector3D();
+		this.normal = normal ? normal : new JigLib.Vector3D();
 		
 }
 
 
 
-JigLib.TerrainData = JigLib_TerrainData; 
 
-var JigLib_OctreeCell = function(aabox)
+JigLib.OctreeCell = function(aabox)
 {
 	this.childCellIndices = null; // int
 	this.triangleIndices = null; // int
@@ -7757,65 +7708,63 @@ var JigLib_OctreeCell = function(aabox)
 		if(aabox){
 			this.AABox = aabox.clone();
 		}else {
-			this.AABox = new JigLib_JAABox();
+			this.AABox = new JigLib.JAABox();
 		}
 		this._points = this.AABox.getAllPoints();
 		this._egdes = this.AABox.get_edges();
 		
 }
 
-JigLib_OctreeCell.prototype.isLeaf = function()
+JigLib.OctreeCell.prototype.isLeaf = function()
 {
 
 		return this.childCellIndices[0] == -1;
 		
 }
 
-JigLib_OctreeCell.prototype.clear = function()
+JigLib.OctreeCell.prototype.clear = function()
 {
 
-		for (var i = 0; i < JigLib_OctreeCell.NUM_CHILDREN; i++ ) {
+		for (var i = 0; i < JigLib.OctreeCell.NUM_CHILDREN; i++ ) {
 			this.childCellIndices[i] = -1;
 		}
 		this.triangleIndices.splice(0, this.triangleIndices.length);
 		
 }
 
-JigLib_OctreeCell.prototype.get_points = function()
+JigLib.OctreeCell.prototype.get_points = function()
 {
 
 		return this._points;
 		
 }
 
-JigLib_OctreeCell.prototype.get_egdes = function()
+JigLib.OctreeCell.prototype.get_egdes = function()
 {
 
 		return this._egdes;
 		
 }
 
-JigLib_OctreeCell.NUM_CHILDREN =  8; // uint
+JigLib.OctreeCell.NUM_CHILDREN =  8; // uint
 
 
-JigLib.OctreeCell = JigLib_OctreeCell; 
 
-var JigLib_CollOutBodyData = function(frac, position, normal, rigidBody)
+JigLib.CollOutBodyData = function(frac, position, normal, rigidBody)
 {
 	this.rigidBody = null; // RigidBody
 
-		JigLib_CollOutData.apply(this, [ frac, position, normal ]);
+		JigLib.CollOutData.apply(this, [ frac, position, normal ]);
 		this.rigidBody = rigidBody;
 		
 }
 
-JigLib.extend(JigLib_CollOutBodyData, JigLib_CollOutData);
+JigLib.extend(JigLib.CollOutBodyData, JigLib.CollOutData);
 
 
 
-JigLib.CollOutBodyData = JigLib_CollOutBodyData; 
 
-var JigLib_TriangleVertexIndices = function(_i0, _i1, _i2)
+JigLib.TriangleVertexIndices = function(_i0, _i1, _i2)
 {
 	this.i0 = null; // uint
 	this.i1 = null; // uint
@@ -7829,9 +7778,8 @@ var JigLib_TriangleVertexIndices = function(_i0, _i1, _i2)
 
 
 
-JigLib.TriangleVertexIndices = JigLib_TriangleVertexIndices; 
 
-var JigLib_SpanData = function()
+JigLib.SpanData = function()
 {
 	this.min = null; // Number
 	this.max = null; // Number
@@ -7841,9 +7789,8 @@ var JigLib_SpanData = function()
 
 
 
-JigLib.SpanData = JigLib_SpanData; 
 
-var JigLib_JCollisionEvent = function(type)
+JigLib.JCollisionEvent = function(type)
 {
 	this.body = null; // RigidBody
 
@@ -7851,13 +7798,12 @@ var JigLib_JCollisionEvent = function(type)
 		
 }
 
-JigLib_JCollisionEvent.COLLISION_START =  "collisionStart"; // String
-JigLib_JCollisionEvent.COLLISION_END =  "collisionEnd"; // String
+JigLib.JCollisionEvent.COLLISION_START =  "collisionStart"; // String
+JigLib.JCollisionEvent.COLLISION_END =  "collisionEnd"; // String
 
 
-JigLib.JCollisionEvent = JigLib_JCollisionEvent; 
 
-var JigLib_JConstraint = function()
+JigLib.JConstraint = function()
 {
 	this.satisfied = null; // Boolean
 	this._constraintEnabled = null; // Boolean
@@ -7865,33 +7811,33 @@ var JigLib_JConstraint = function()
 		
 }
 
-JigLib_JConstraint.prototype.preApply = function(dt)
+JigLib.JConstraint.prototype.preApply = function(dt)
 {
 
 		this.satisfied = false;
 		
 }
 
-JigLib_JConstraint.prototype.apply = function(dt)
+JigLib.JConstraint.prototype.apply = function(dt)
 {
 
 		return false;
 		
 }
 
-JigLib_JConstraint.prototype.enableConstraint = function()
+JigLib.JConstraint.prototype.enableConstraint = function()
 {
 
 		
 }
 
-JigLib_JConstraint.prototype.disableConstraint = function()
+JigLib.JConstraint.prototype.disableConstraint = function()
 {
 
 		
 }
 
-JigLib_JConstraint.prototype.get_constraintEnabled = function()
+JigLib.JConstraint.prototype.get_constraintEnabled = function()
 {
 
 		return this._constraintEnabled;
@@ -7900,9 +7846,8 @@ JigLib_JConstraint.prototype.get_constraintEnabled = function()
 
 
 
-JigLib.JConstraint = JigLib_JConstraint; 
 
-var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
+JigLib.JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 {
 	this.minVelForProcessing =  0.001; // Number
 	this.allowedDeviation =  0.01; // Number
@@ -7911,7 +7856,7 @@ var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 	this._pointOnBody = null; // Vector3D
 	this._worldPosition = null; // Vector3D
 
-		JigLib_JConstraint.apply(this, [  ]);
+		JigLib.JConstraint.apply(this, [  ]);
 		this._body = body;
 		this._pointOnBody = pointOnBody;
 		this._worldPosition = worldPosition;
@@ -7921,23 +7866,23 @@ var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 		
 }
 
-JigLib.extend(JigLib_JConstraintWorldPoint, JigLib_JConstraint);
+JigLib.extend(JigLib.JConstraintWorldPoint, JigLib.JConstraint);
 
-JigLib_JConstraintWorldPoint.prototype.set_worldPosition = function(pos)
+JigLib.JConstraintWorldPoint.prototype.set_worldPosition = function(pos)
 {
 
 		this._worldPosition = pos;
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.get_worldPosition = function()
+JigLib.JConstraintWorldPoint.prototype.get_worldPosition = function()
 {
 
 		return this._worldPosition;
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.enableConstraint = function()
+JigLib.JConstraintWorldPoint.prototype.enableConstraint = function()
 {
 
 		if (this._constraintEnabled)
@@ -7946,11 +7891,11 @@ JigLib_JConstraintWorldPoint.prototype.enableConstraint = function()
 		}
 		this._constraintEnabled = true;
 		this._body.addConstraint(this);
-		JigLib_PhysicsSystem.getInstance().addConstraint(this);
+		JigLib.PhysicsSystem.getInstance().addConstraint(this);
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.disableConstraint = function()
+JigLib.JConstraintWorldPoint.prototype.disableConstraint = function()
 {
 
 		if (!this._constraintEnabled)
@@ -7959,11 +7904,11 @@ JigLib_JConstraintWorldPoint.prototype.disableConstraint = function()
 		}
 		this._constraintEnabled = false;
 		this._body.removeConstraint(this);
-		JigLib_PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
+JigLib.JConstraintWorldPoint.prototype.apply = function(dt)
 {
 
 		this.satisfied = true;
@@ -7979,10 +7924,10 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 		deviation = worldPos.subtract(this._worldPosition);
 		deviationDistance = deviation.get_length();
 		if (deviationDistance > this.allowedDeviation) {
-			deviationDir = JigLib_JNumber3D.getDivideVector(deviation, deviationDistance);
-			desiredVel = JigLib_JNumber3D.getScaleVector(deviationDir, (this.allowedDeviation - deviationDistance) / (this.timescale * dt));
+			deviationDir = JigLib.JNumber3D.getDivideVector(deviation, deviationDistance);
+			desiredVel = JigLib.JNumber3D.getScaleVector(deviationDir, (this.allowedDeviation - deviationDistance) / (this.timescale * dt));
 		} else {
-			desiredVel = new JigLib_Vector3D();
+			desiredVel = new JigLib.Vector3D();
 		}
 		
 		N = currentVel.subtract(desiredVel);
@@ -7990,19 +7935,19 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 		if (normalVel < this.minVelForProcessing) {
 			return false;
 		}
-		N = JigLib_JNumber3D.getDivideVector(N, normalVel);
+		N = JigLib.JNumber3D.getDivideVector(N, normalVel);
 		
 		tempV = R.crossProduct(N);
 		tempV = this._body.get_worldInvInertia().transformVector(tempV);
 		denominator = this._body.get_invMass() + N.dotProduct(tempV.crossProduct(R));
 		 
-		if (denominator < JigLib_JMath3D.NUM_TINY) {
+		if (denominator < JigLib.JMath3D.NUM_TINY) {
 			return false;
 		}
 		 
 		normalImpulse = -normalVel / denominator;
 		
-		this._body.applyWorldImpulse(JigLib_JNumber3D.getScaleVector(N, normalImpulse), worldPos, false);
+		this._body.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(N, normalImpulse), worldPos, false);
 		
 		this._body.setConstraintsAndCollisionsUnsatisfied();
 		this.satisfied = true;
@@ -8013,9 +7958,8 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 
 
 
-JigLib.JConstraintWorldPoint = JigLib_JConstraintWorldPoint; 
 
-var JigLib_JConstraintMaxDistance = function(body0, body0Pos, body1, body1Pos, maxDistance)
+JigLib.JConstraintMaxDistance = function(body0, body0Pos, body1, body1Pos, maxDistance)
 {
 	this._maxVelMag =  20; // Number
 	this._minVelForProcessing =  0.01; // Number
@@ -8029,7 +7973,7 @@ var JigLib_JConstraintMaxDistance = function(body0, body0Pos, body1, body1Pos, m
 	this._worldPos = null; // Vector3D
 	this._currentRelPos0 = null; // Vector3D
 
-		JigLib_JConstraint.apply(this, [  ]);
+		JigLib.JConstraint.apply(this, [  ]);
 		this._body0 = body0;
 		this._body0Pos = body0Pos;
 		this._body1 = body1;
@@ -8041,9 +7985,9 @@ var JigLib_JConstraintMaxDistance = function(body0, body0Pos, body1, body1Pos, m
 		
 }
 
-JigLib.extend(JigLib_JConstraintMaxDistance, JigLib_JConstraint);
+JigLib.extend(JigLib.JConstraintMaxDistance, JigLib.JConstraint);
 
-JigLib_JConstraintMaxDistance.prototype.enableConstraint = function()
+JigLib.JConstraintMaxDistance.prototype.enableConstraint = function()
 {
 
 		if (this._constraintEnabled)
@@ -8053,11 +7997,11 @@ JigLib_JConstraintMaxDistance.prototype.enableConstraint = function()
 		this._constraintEnabled = true;
 		this._body0.addConstraint(this);
 		this._body1.addConstraint(this);
-		JigLib_PhysicsSystem.getInstance().addConstraint(this);
+		JigLib.PhysicsSystem.getInstance().addConstraint(this);
 		
 }
 
-JigLib_JConstraintMaxDistance.prototype.disableConstraint = function()
+JigLib.JConstraintMaxDistance.prototype.disableConstraint = function()
 {
 
 		if (!this._constraintEnabled)
@@ -8067,11 +8011,11 @@ JigLib_JConstraintMaxDistance.prototype.disableConstraint = function()
 		this._constraintEnabled = false;
 		this._body0.removeConstraint(this);
 		this._body1.removeConstraint(this);
-		JigLib_PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
 		
 }
 
-JigLib_JConstraintMaxDistance.prototype.preApply = function(dt)
+JigLib.JConstraintMaxDistance.prototype.preApply = function(dt)
 {
 
 		this.satisfied = false;
@@ -8082,13 +8026,13 @@ JigLib_JConstraintMaxDistance.prototype.preApply = function(dt)
 		var worldPos0, worldPos1;
 		worldPos0 = this._body0.get_currentState().position.add(this.r0);
 		worldPos1 = this._body1.get_currentState().position.add(this.r1);
-		this._worldPos = JigLib_JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
+		this._worldPos = JigLib.JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
 
 		this._currentRelPos0 = worldPos0.subtract(worldPos1);
 		
 }
 
-JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
+JigLib.JConstraintMaxDistance.prototype.apply = function(dt)
 {
 
 		this.satisfied = true;
@@ -8098,13 +8042,13 @@ JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
 			return false;
 		}
 
-		var clampedRelPos0Mag, normalVel, denominator, tiny=JigLib_JMath3D.NUM_TINY;
+		var clampedRelPos0Mag, normalVel, denominator, tiny=JigLib.JMath3D.NUM_TINY;
 		var currentVel0, currentVel1, predRelPos0, clampedRelPos0, desiredRelVel0, Vr, N, tempVec1, tempVec2, normalImpulse;
 		
 		currentVel0 = this._body0.getVelocity(this.r0);
 		currentVel1 = this._body1.getVelocity(this.r1);
 
-		predRelPos0 = this._currentRelPos0.add(JigLib_JNumber3D.getScaleVector(currentVel0.subtract(currentVel1), dt));
+		predRelPos0 = this._currentRelPos0.add(JigLib.JNumber3D.getScaleVector(currentVel0.subtract(currentVel1), dt));
 		clampedRelPos0 = predRelPos0.clone();
 		clampedRelPos0Mag = clampedRelPos0.get_length();
 		if (clampedRelPos0Mag <= tiny)
@@ -8113,16 +8057,16 @@ JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
 		}
 		if (clampedRelPos0Mag > this._maxDistance)
 		{
-			clampedRelPos0 = JigLib_JNumber3D.getScaleVector(clampedRelPos0, this._maxDistance / clampedRelPos0Mag);
+			clampedRelPos0 = JigLib.JNumber3D.getScaleVector(clampedRelPos0, this._maxDistance / clampedRelPos0Mag);
 		}
 
-		desiredRelVel0 = JigLib_JNumber3D.getDivideVector(clampedRelPos0.subtract(this._currentRelPos0), dt);
+		desiredRelVel0 = JigLib.JNumber3D.getDivideVector(clampedRelPos0.subtract(this._currentRelPos0), dt);
 		Vr = currentVel0.subtract(currentVel1).subtract(desiredRelVel0);
 
 		normalVel = Vr.get_length();
 		if (normalVel > this._maxVelMag)
 		{
-			Vr = JigLib_JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
+			Vr = JigLib.JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
 			normalVel = this._maxVelMag;
 		}
 		else if (normalVel < this._minVelForProcessing)
@@ -8130,7 +8074,7 @@ JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
 			return false;
 		}
 
-		N = JigLib_JNumber3D.getDivideVector(Vr, normalVel);
+		N = JigLib.JNumber3D.getDivideVector(Vr, normalVel);
 		tempVec1 = this.r0.crossProduct(N);
 		tempVec1 = this._body0.get_worldInvInertia().transformVector(tempVec1);
 		tempVec2 = this.r1.crossProduct(N);
@@ -8141,9 +8085,9 @@ JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
 			return false;
 		}
 
-		normalImpulse = JigLib_JNumber3D.getScaleVector(N, -normalVel / denominator);
+		normalImpulse = JigLib.JNumber3D.getScaleVector(N, -normalVel / denominator);
 		this._body0.applyWorldImpulse(normalImpulse, this._worldPos, false);
-		this._body1.applyWorldImpulse(JigLib_JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
+		this._body1.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
 
 		this._body0.setConstraintsAndCollisionsUnsatisfied();
 		this._body1.setConstraintsAndCollisionsUnsatisfied();
@@ -8154,9 +8098,8 @@ JigLib_JConstraintMaxDistance.prototype.apply = function(dt)
 
 
 
-JigLib.JConstraintMaxDistance = JigLib_JConstraintMaxDistance; 
 
-var JigLib_JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowedDistance, timescale)
+JigLib.JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowedDistance, timescale)
 {
 	this._maxVelMag =  20; // Number
 	this._minVelForProcessing =  0.01; // Number
@@ -8171,16 +8114,16 @@ var JigLib_JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowed
 	this._worldPos = null; // Vector3D
 	this._vrExtra = null; // Vector3D
 
-		JigLib_JConstraint.apply(this, [  ]);
+		JigLib.JConstraint.apply(this, [  ]);
 		this._body0 = body0;
 		this._body0Pos = body0Pos;
 		this._body1 = body1;
 		this._body1Pos = body1Pos;
 		this._allowedDistance = allowedDistance;
 		this._timescale = timescale;
-		if (this._timescale < JigLib_JMath3D.NUM_TINY)
+		if (this._timescale < JigLib.JMath3D.NUM_TINY)
 		{
-			this._timescale = JigLib_JMath3D.NUM_TINY;
+			this._timescale = JigLib.JMath3D.NUM_TINY;
 		}
 		
 		this._constraintEnabled = false;
@@ -8188,9 +8131,9 @@ var JigLib_JConstraintPoint = function(body0, body0Pos, body1, body1Pos, allowed
 		
 }
 
-JigLib.extend(JigLib_JConstraintPoint, JigLib_JConstraint);
+JigLib.extend(JigLib.JConstraintPoint, JigLib.JConstraint);
 
-JigLib_JConstraintPoint.prototype.enableConstraint = function()
+JigLib.JConstraintPoint.prototype.enableConstraint = function()
 {
 
 		if (this._constraintEnabled)
@@ -8200,11 +8143,11 @@ JigLib_JConstraintPoint.prototype.enableConstraint = function()
 		this._constraintEnabled = true;
 		this._body0.addConstraint(this);
 		this._body1.addConstraint(this);
-		JigLib_PhysicsSystem.getInstance().addConstraint(this);
+		JigLib.PhysicsSystem.getInstance().addConstraint(this);
 		
 }
 
-JigLib_JConstraintPoint.prototype.disableConstraint = function()
+JigLib.JConstraintPoint.prototype.disableConstraint = function()
 {
 
 		if (!this._constraintEnabled)
@@ -8214,11 +8157,11 @@ JigLib_JConstraintPoint.prototype.disableConstraint = function()
 		this._constraintEnabled = false;
 		this._body0.removeConstraint(this);
 		this._body1.removeConstraint(this);
-		JigLib_PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
 		
 }
 
-JigLib_JConstraintPoint.prototype.preApply = function(dt)
+JigLib.JConstraintPoint.prototype.preApply = function(dt)
 {
 
 		this.satisfied = false;
@@ -8229,22 +8172,22 @@ JigLib_JConstraintPoint.prototype.preApply = function(dt)
 		var worldPos0, worldPos1, deviation, deviationAmount;
 		worldPos0 = this._body0.get_currentState().position.add(this.r0);
 		worldPos1 = this._body1.get_currentState().position.add(this.r1);
-		this._worldPos = JigLib_JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
+		this._worldPos = JigLib.JNumber3D.getScaleVector(worldPos0.add(worldPos1), 0.5);
 
 		deviation = worldPos0.subtract(worldPos1);
 		deviationAmount = deviation.get_length();
 		if (deviationAmount > this._allowedDistance)
 		{
-			this._vrExtra = JigLib_JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
+			this._vrExtra = JigLib.JNumber3D.getScaleVector(deviation, (deviationAmount - this._allowedDistance) / (deviationAmount * Math.max(this._timescale, dt)));
 		}
 		else
 		{
-			this._vrExtra = new JigLib_Vector3D();
+			this._vrExtra = new JigLib.Vector3D();
 		}
 		
 }
 
-JigLib_JConstraintPoint.prototype.apply = function(dt)
+JigLib.JConstraintPoint.prototype.apply = function(dt)
 {
 
 		this.satisfied = true;
@@ -8268,24 +8211,24 @@ JigLib_JConstraintPoint.prototype.apply = function(dt)
 
 		if (normalVel > this._maxVelMag)
 		{
-			Vr = JigLib_JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
+			Vr = JigLib.JNumber3D.getScaleVector(Vr, this._maxVelMag / normalVel);
 			normalVel = this._maxVelMag;
 		}
 
-		N = JigLib_JNumber3D.getDivideVector(Vr, normalVel);
+		N = JigLib.JNumber3D.getDivideVector(Vr, normalVel);
 		tempVec1 = this.r0.crossProduct(N);
 		tempVec1 = this._body0.get_worldInvInertia().transformVector(tempVec1);
 		tempVec2 = this.r1.crossProduct(N);
 		tempVec2 = this._body1.get_worldInvInertia().transformVector(tempVec2);
 		denominator = this._body0.get_invMass() + this._body1.get_invMass() + N.dotProduct(tempVec1.crossProduct(this.r0)) + N.dotProduct(tempVec2.crossProduct(this.r1));
-		if (denominator < JigLib_JMath3D.NUM_TINY)
+		if (denominator < JigLib.JMath3D.NUM_TINY)
 		{
 			return false;
 		}
 
-		normalImpulse = JigLib_JNumber3D.getScaleVector(N, -normalVel / denominator);
+		normalImpulse = JigLib.JNumber3D.getScaleVector(N, -normalVel / denominator);
 		this._body0.applyWorldImpulse(normalImpulse, this._worldPos, false);
-		this._body1.applyWorldImpulse(JigLib_JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
+		this._body1.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(normalImpulse, -1), this._worldPos, false);
 
 		this._body0.setConstraintsAndCollisionsUnsatisfied();
 		this._body1.setConstraintsAndCollisionsUnsatisfied();
@@ -8296,9 +8239,8 @@ JigLib_JConstraintPoint.prototype.apply = function(dt)
 
 
 
-JigLib.JConstraintPoint = JigLib_JConstraintPoint; 
 
-var JigLib_MaterialProperties = function(_restitution, _friction)
+JigLib.MaterialProperties = function(_restitution, _friction)
 {
 	this.restitution = null; // Number
 	this.friction = null; // Number
@@ -8310,9 +8252,8 @@ var JigLib_MaterialProperties = function(_restitution, _friction)
 
 
 
-JigLib.MaterialProperties = JigLib_MaterialProperties; 
 
-var JigLib_PhysicsController = function()
+JigLib.PhysicsController = function()
 {
 	this._controllerEnabled = null; // Boolean
 
@@ -8320,25 +8261,25 @@ var JigLib_PhysicsController = function()
 		
 }
 
-JigLib_PhysicsController.prototype.updateController = function(dt)
+JigLib.PhysicsController.prototype.updateController = function(dt)
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.enableController = function()
+JigLib.PhysicsController.prototype.enableController = function()
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.disableController = function()
+JigLib.PhysicsController.prototype.disableController = function()
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.get_controllerEnabled = function()
+JigLib.PhysicsController.prototype.get_controllerEnabled = function()
 {
 
 		return this._controllerEnabled;
@@ -8347,9 +8288,8 @@ JigLib_PhysicsController.prototype.get_controllerEnabled = function()
 
 
 
-JigLib.PhysicsController = JigLib_PhysicsController; 
 
-var JigLib_CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
+JigLib.CachedImpulse = function(_normalImpulse, _normalImpulseAux, _frictionImpulse)
 {
 	this.normalImpulse = null; // Number
 	this.normalImpulseAux = null; // Number
@@ -8363,34 +8303,32 @@ var JigLib_CachedImpulse = function(_normalImpulse, _normalImpulseAux, _friction
 
 
 
-JigLib.CachedImpulse = JigLib_CachedImpulse; 
 
-var JigLib_PhysicsState = function()
+JigLib.PhysicsState = function()
 {
-	this.position =  new JigLib_Vector3D(); // Vector3D
-	this.orientation =  new JigLib_Matrix3D(); // Matrix3D
-	this.linVelocity =  new JigLib_Vector3D(); // Vector3D
-	this.rotVelocity =  new JigLib_Vector3D(); // Vector3D
+	this.position =  new JigLib.Vector3D(); // Vector3D
+	this.orientation =  new JigLib.Matrix3D(); // Matrix3D
+	this.linVelocity =  new JigLib.Vector3D(); // Vector3D
+	this.rotVelocity =  new JigLib.Vector3D(); // Vector3D
 	this.orientationCols =  []; // Vector3D
 
-		//this.orientationCols[0] = new JigLib_Vector3D();
-		//this.orientationCols[1] = new JigLib_Vector3D();
-		//this.orientationCols[2] = new JigLib_Vector3D();
+		//this.orientationCols[0] = new JigLib.Vector3D();
+		//this.orientationCols[1] = new JigLib.Vector3D();
+		//this.orientationCols[2] = new JigLib.Vector3D();
 		
 }
 
-JigLib_PhysicsState.prototype.getOrientationCols = function()
+JigLib.PhysicsState.prototype.getOrientationCols = function()
 {
 
-		return JigLib_JMatrix3D.getCols(this.orientation);
+		return JigLib.JMatrix3D.getCols(this.orientation);
 		
 }
 
 
 
-JigLib.PhysicsState = JigLib_PhysicsState; 
 
-var JigLib_HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHalfWidth, hingeFwdAngle, hingeBckAngle, sidewaysSlack, damping)
+JigLib.HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHalfWidth, hingeFwdAngle, hingeBckAngle, sidewaysSlack, damping)
 {
 	this.MAX_HINGE_ANGLE_LIMIT =  150; // Number
 	this._hingeAxis = null; // Vector3D
@@ -8418,25 +8356,25 @@ var JigLib_HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHal
 		this._hingeAxis.normalize();
 		var _hingePosRel1 = this._body0.get_currentState().position.add(this._hingePosRel0.subtract(this._body1.get_currentState().position));
 
-		var relPos0a = this._hingePosRel0.add(JigLib_JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
-		var relPos0b = this._hingePosRel0.subtract(JigLib_JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos0a = this._hingePosRel0.add(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos0b = this._hingePosRel0.subtract(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
 
-		var relPos1a = _hingePosRel1.add(JigLib_JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
-		var relPos1b = _hingePosRel1.subtract(JigLib_JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos1a = _hingePosRel1.add(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
+		var relPos1b = _hingePosRel1.subtract(JigLib.JNumber3D.getScaleVector(this._hingeAxis, hingeHalfWidth));
 
 		var timescale = 1 / 20;
 		var allowedDistanceMid = 0.005;
 		var allowedDistanceSide = sidewaysSlack * hingeHalfWidth;
 
 		this.sidePointConstraints = [];
-		this.sidePointConstraints[0] = new JigLib_JConstraintMaxDistance(this._body0, relPos0a, this._body1, relPos1a, allowedDistanceSide);
-		this.sidePointConstraints[1] = new JigLib_JConstraintMaxDistance(this._body0, relPos0b, this._body1, relPos1b, allowedDistanceSide);
+		this.sidePointConstraints[0] = new JigLib.JConstraintMaxDistance(this._body0, relPos0a, this._body1, relPos1a, allowedDistanceSide);
+		this.sidePointConstraints[1] = new JigLib.JConstraintMaxDistance(this._body0, relPos0b, this._body1, relPos1b, allowedDistanceSide);
 
-		this.midPointConstraint = new JigLib_JConstraintPoint(this._body0, this._hingePosRel0, this._body1, _hingePosRel1, allowedDistanceMid, timescale);
+		this.midPointConstraint = new JigLib.JConstraintPoint(this._body0, this._hingePosRel0, this._body1, _hingePosRel1, allowedDistanceMid, timescale);
 
 		if (hingeFwdAngle <= this.MAX_HINGE_ANGLE_LIMIT)
 		{
-			var perpDir = JigLib_Vector3D.Y_AXIS;
+			var perpDir = JigLib.Vector3D.Y_AXIS;
 			if (perpDir.dotProduct(this._hingeAxis) > 0.1)
 			{
 				perpDir.x = 1;
@@ -8448,9 +8386,9 @@ var JigLib_HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHal
 			perpDir.normalize();
 
 			var len = 10 * hingeHalfWidth;
-			var hingeRelAnchorPos0 = JigLib_JNumber3D.getScaleVector(perpDir, len);
+			var hingeRelAnchorPos0 = JigLib.JNumber3D.getScaleVector(perpDir, len);
 			var angleToMiddle = 0.5 * (hingeFwdAngle - hingeBckAngle);
-			var hingeRelAnchorPos1 = JigLib_JMatrix3D.getRotationMatrix(this._hingeAxis.x, this._hingeAxis.y, this._hingeAxis.z, -angleToMiddle).transformVector(hingeRelAnchorPos0);
+			var hingeRelAnchorPos1 = JigLib.JMatrix3D.getRotationMatrix(this._hingeAxis.x, this._hingeAxis.y, this._hingeAxis.z, -angleToMiddle).transformVector(hingeRelAnchorPos0);
 
 			var hingeHalfAngle = 0.5 * (hingeFwdAngle + hingeBckAngle);
 			var allowedDistance = len * 2 * Math.sin(0.5 * hingeHalfAngle * Math.PI / 180);
@@ -8459,7 +8397,7 @@ var JigLib_HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHal
 			var relPos0c = hingePos.add(hingeRelAnchorPos0.subtract(this._body0.get_currentState().position));
 			var relPos1c = hingePos.add(hingeRelAnchorPos1.subtract(this._body1.get_currentState().position));
 
-			this.maxDistanceConstraint = new JigLib_JConstraintMaxDistance(this._body0, relPos0c, this._body1, relPos1c, allowedDistance);
+			this.maxDistanceConstraint = new JigLib.JConstraintMaxDistance(this._body0, relPos0c, this._body1, relPos1c, allowedDistance);
 			this._usingLimit = true;
 		}
 		if (this._damping <= 0)
@@ -8468,16 +8406,16 @@ var JigLib_HingeJoint = function(body0, body1, hingeAxis, hingePosRel0, hingeHal
 		}
 		else
 		{
-			this._damping = JigLib_JMath3D.getLimiteNumber(this._damping, 0, 1);
+			this._damping = JigLib.JMath3D.getLimiteNumber(this._damping, 0, 1);
 		}
 
 		this.enableController();
 		
 }
 
-JigLib.extend(JigLib_HingeJoint, JigLib_PhysicsController);
+JigLib.extend(JigLib.HingeJoint, JigLib.PhysicsController);
 
-JigLib_HingeJoint.prototype.enableController = function()
+JigLib.HingeJoint.prototype.enableController = function()
 {
 
 		if (this._controllerEnabled)
@@ -8492,11 +8430,11 @@ JigLib_HingeJoint.prototype.enableController = function()
 			this.maxDistanceConstraint.enableConstraint();
 		}
 		this._controllerEnabled = true;
-		JigLib_PhysicsSystem.getInstance().addController(this);
+		JigLib.PhysicsSystem.getInstance().addController(this);
 		
 }
 
-JigLib_HingeJoint.prototype.disableController = function()
+JigLib.HingeJoint.prototype.disableController = function()
 {
 
 		if (!this._controllerEnabled)
@@ -8511,11 +8449,11 @@ JigLib_HingeJoint.prototype.disableController = function()
 			this.maxDistanceConstraint.disableConstraint();
 		}
 		this._controllerEnabled = false;
-		JigLib_PhysicsSystem.getInstance().removeController(this);
+		JigLib.PhysicsSystem.getInstance().removeController(this);
 		
 }
 
-JigLib_HingeJoint.prototype.breakHinge = function()
+JigLib.HingeJoint.prototype.breakHinge = function()
 {
 
 		if (this._broken)
@@ -8530,7 +8468,7 @@ JigLib_HingeJoint.prototype.breakHinge = function()
 		
 }
 
-JigLib_HingeJoint.prototype.mendHinge = function()
+JigLib.HingeJoint.prototype.mendHinge = function()
 {
 
 		if (!this._broken)
@@ -8545,28 +8483,28 @@ JigLib_HingeJoint.prototype.mendHinge = function()
 		
 }
 
-JigLib_HingeJoint.prototype.setExtraTorque = function(torque)
+JigLib.HingeJoint.prototype.setExtraTorque = function(torque)
 {
 
 		this._extraTorque = torque;
 		
 }
 
-JigLib_HingeJoint.prototype.isBroken = function()
+JigLib.HingeJoint.prototype.isBroken = function()
 {
 
 		return this._broken;
 		
 }
 
-JigLib_HingeJoint.prototype.getHingePosRel0 = function()
+JigLib.HingeJoint.prototype.getHingePosRel0 = function()
 {
 
 		return this._hingePosRel0;
 		
 }
 
-JigLib_HingeJoint.prototype.updateController = function(dt)
+JigLib.HingeJoint.prototype.updateController = function(dt)
 {
 
 		if (this._damping > 0)
@@ -8585,8 +8523,8 @@ JigLib_HingeJoint.prototype.updateController = function(dt)
 			newAngRot1 = avAngRot + (angRot1 - avAngRot) * frac;
 			newAngRot2 = avAngRot + (angRot2 - avAngRot) * frac;
 
-			newAngVel1 = this._body0.get_currentState().rotVelocity.add(JigLib_JNumber3D.getScaleVector(hingeAxis, newAngRot1 - angRot1));
-			newAngVel2 = this._body1.get_currentState().rotVelocity.add(JigLib_JNumber3D.getScaleVector(hingeAxis, newAngRot2 - angRot2));
+			newAngVel1 = this._body0.get_currentState().rotVelocity.add(JigLib.JNumber3D.getScaleVector(hingeAxis, newAngRot1 - angRot1));
+			newAngVel2 = this._body1.get_currentState().rotVelocity.add(JigLib.JNumber3D.getScaleVector(hingeAxis, newAngRot2 - angRot2));
 
 			this._body0.setAngleVelocity(newAngVel1);
 			this._body1.setAngleVelocity(newAngVel2);
@@ -8595,19 +8533,18 @@ JigLib_HingeJoint.prototype.updateController = function(dt)
 		if (this._extraTorque != 0)
 		{
 			var torque1 = this._body0.get_currentState().orientation.transformVector(this._hingeAxis);
-			torque1 = JigLib_JNumber3D.getScaleVector(torque1, this._extraTorque);
+			torque1 = JigLib.JNumber3D.getScaleVector(torque1, this._extraTorque);
 
 			this._body0.addWorldTorque(torque1);
-			this._body1.addWorldTorque(JigLib_JNumber3D.getScaleVector(torque1, -1));
+			this._body1.addWorldTorque(JigLib.JNumber3D.getScaleVector(torque1, -1));
 		}
 		
 }
 
 
 
-JigLib.HingeJoint = JigLib_HingeJoint; 
 
-var JigLib_BodyPair = function(_body0, _body1, r0, r1)
+JigLib.BodyPair = function(_body0, _body1, r0, r1)
 {
 	this.body0 = null; // RigidBody
 	this.body1 = null; // RigidBody
@@ -8634,9 +8571,8 @@ var JigLib_BodyPair = function(_body0, _body1, r0, r1)
 
 
 
-JigLib.BodyPair = JigLib_BodyPair; 
 
-var JigLib_PhysicsSystem = function()
+JigLib.PhysicsSystem = function()
 {
 	this._maxVelMag =  0.5; // Number
 	this._minVelForProcessing =  0.001; // Number
@@ -8655,7 +8591,7 @@ var JigLib_PhysicsSystem = function()
 	this._cachedContacts = null; // ContactData
 	this._collisionSystem = null; // CollisionSystemAbstract
 
-		this.setSolverType(JigLib_JConfig.solverType);
+		this.setSolverType(JigLib.JConfig.solverType);
 		this._doingIntegration = false;
 		this._bodies = [];
 		this._collisions = [];
@@ -8665,11 +8601,11 @@ var JigLib_PhysicsSystem = function()
 		
 		this._cachedContacts = [];
 		
-		this.setGravity(JigLib_JNumber3D.getScaleVector(JigLib_Vector3D.Y_AXIS, -10));
+		this.setGravity(JigLib.JNumber3D.getScaleVector(JigLib.Vector3D.Y_AXIS, -10));
 		
 }
 
-JigLib_PhysicsSystem.prototype.setCollisionSystem = function(collisionSystemGrid, sx, sy, sz, nx, ny, nz, dx, dy, dz)
+JigLib.PhysicsSystem.prototype.setCollisionSystem = function(collisionSystemGrid, sx, sy, sz, nx, ny, nz, dx, dy, dz)
 {
 	if (collisionSystemGrid == null) collisionSystemGrid = false;
 	if (nx == null) nx = 20;
@@ -8682,22 +8618,22 @@ JigLib_PhysicsSystem.prototype.setCollisionSystem = function(collisionSystemGrid
 		// which collisionsystem to use grid / brute
 		if (collisionSystemGrid)
 		{
-			this._collisionSystem = new JigLib_CollisionSystemGrid(sx, sy, sz, nx, ny, nz, dx, dy, dz);
+			this._collisionSystem = new JigLib.CollisionSystemGrid(sx, sy, sz, nx, ny, nz, dx, dy, dz);
 		}
 		else {
-			this._collisionSystem = new JigLib_CollisionSystemBrute(); // brute by default	
+			this._collisionSystem = new JigLib.CollisionSystemBrute(); // brute by default	
 		}
 		
 }
 
-JigLib_PhysicsSystem.prototype.getCollisionSystem = function()
+JigLib.PhysicsSystem.prototype.getCollisionSystem = function()
 {
 
 		return this._collisionSystem;
 		
 }
 
-JigLib_PhysicsSystem.prototype.setGravity = function(gravity)
+JigLib.PhysicsSystem.prototype.setGravity = function(gravity)
 {
 
 		this._gravity = gravity;
@@ -8708,7 +8644,7 @@ JigLib_PhysicsSystem.prototype.setGravity = function(gravity)
 		if (Math.abs(this._gravity.y) > Math.abs(this._gravity.z))
 			this._gravityAxis = 1;
 		
-		if (Math.abs(this._gravity.z) > Math.abs(JigLib_JNumber3D.toArray(this._gravity)[this._gravityAxis]))
+		if (Math.abs(this._gravity.z) > Math.abs(JigLib.JNumber3D.toArray(this._gravity)[this._gravityAxis]))
 			this._gravityAxis = 2;
 		
 		// do update only when dirty, faster than call every time in step
@@ -8717,42 +8653,42 @@ JigLib_PhysicsSystem.prototype.setGravity = function(gravity)
 		
 }
 
-JigLib_PhysicsSystem.prototype.get_gravity = function()
+JigLib.PhysicsSystem.prototype.get_gravity = function()
 {
 
 		return this._gravity;
 		
 }
 
-JigLib_PhysicsSystem.prototype.get_gravityAxis = function()
+JigLib.PhysicsSystem.prototype.get_gravityAxis = function()
 {
 
 		return this._gravityAxis;
 		
 }
 
-JigLib_PhysicsSystem.prototype.get_bodies = function()
+JigLib.PhysicsSystem.prototype.get_bodies = function()
 {
 
 		return this._bodies;
 		
 }
 
-JigLib_PhysicsSystem.prototype.get_activeBodies = function()
+JigLib.PhysicsSystem.prototype.get_activeBodies = function()
 {
 
 		return this._activeBodies;
 		
 }
 
-JigLib_PhysicsSystem.prototype.get_constraints = function()
+JigLib.PhysicsSystem.prototype.get_constraints = function()
 {
 
 		return this._constraints;
 		
 }
 
-JigLib_PhysicsSystem.prototype.addBody = function(body)
+JigLib.PhysicsSystem.prototype.addBody = function(body)
 {
 
 		if (this._bodies.indexOf(body) < 0)
@@ -8766,7 +8702,7 @@ JigLib_PhysicsSystem.prototype.addBody = function(body)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeBody = function(body)
+JigLib.PhysicsSystem.prototype.removeBody = function(body)
 {
 
 		if (this._bodies.indexOf(body) >= 0)
@@ -8777,7 +8713,7 @@ JigLib_PhysicsSystem.prototype.removeBody = function(body)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeAllBodies = function()
+JigLib.PhysicsSystem.prototype.removeAllBodies = function()
 {
 
 		this._bodies.length=0;
@@ -8785,7 +8721,7 @@ JigLib_PhysicsSystem.prototype.removeAllBodies = function()
 		
 }
 
-JigLib_PhysicsSystem.prototype.addConstraint = function(constraint)
+JigLib.PhysicsSystem.prototype.addConstraint = function(constraint)
 {
 
 		if (this._constraints.indexOf(constraint) < 0)
@@ -8793,7 +8729,7 @@ JigLib_PhysicsSystem.prototype.addConstraint = function(constraint)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeConstraint = function(constraint)
+JigLib.PhysicsSystem.prototype.removeConstraint = function(constraint)
 {
 
 		if (this._constraints.indexOf(constraint) >= 0)
@@ -8801,7 +8737,7 @@ JigLib_PhysicsSystem.prototype.removeConstraint = function(constraint)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeAllConstraints = function()
+JigLib.PhysicsSystem.prototype.removeAllConstraints = function()
 {
 
 		for (var _constraints_i = 0, _constraints_l = this._constraints.length, constraint; (_constraints_i < _constraints_l) && (constraint = this._constraints[_constraints_i]); _constraints_i++) {
@@ -8811,7 +8747,7 @@ JigLib_PhysicsSystem.prototype.removeAllConstraints = function()
 		
 }
 
-JigLib_PhysicsSystem.prototype.addController = function(controller)
+JigLib.PhysicsSystem.prototype.addController = function(controller)
 {
 
 		if (this._controllers.indexOf(controller) < 0)
@@ -8819,7 +8755,7 @@ JigLib_PhysicsSystem.prototype.addController = function(controller)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeController = function(controller)
+JigLib.PhysicsSystem.prototype.removeController = function(controller)
 {
 
 		if (this._controllers.indexOf(controller) >= 0)
@@ -8827,7 +8763,7 @@ JigLib_PhysicsSystem.prototype.removeController = function(controller)
 		
 }
 
-JigLib_PhysicsSystem.prototype.removeAllControllers = function()
+JigLib.PhysicsSystem.prototype.removeAllControllers = function()
 {
 
 		for (var _controllers_i = 0, _controllers_l = this._controllers.length, controller; (_controllers_i < _controllers_l) && (controller = this._controllers[_controllers_i]); _controllers_i++) {
@@ -8837,7 +8773,7 @@ JigLib_PhysicsSystem.prototype.removeAllControllers = function()
 		
 }
 
-JigLib_PhysicsSystem.prototype.setSolverType = function(type)
+JigLib.PhysicsSystem.prototype.setSolverType = function(type)
 {
 
 		switch (type)
@@ -8870,7 +8806,7 @@ JigLib_PhysicsSystem.prototype.setSolverType = function(type)
 		
 }
 
-JigLib_PhysicsSystem.prototype.moreCollPtPenetration = function(info0, info1)
+JigLib.PhysicsSystem.prototype.moreCollPtPenetration = function(info0, info1)
 {
 
 		if (info0.initialPenetration < info1.initialPenetration)
@@ -8882,7 +8818,7 @@ JigLib_PhysicsSystem.prototype.moreCollPtPenetration = function(info0, info1)
 		
 }
 
-JigLib_PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
+JigLib.PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
 {
 
 		collision.satisfied = false;
@@ -8893,7 +8829,7 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib_JMath3D.NUM_TINY, allowedPenetration=JigLib_JConfig.allowedPenetration;
+		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib.JMath3D.NUM_TINY, allowedPenetration=JigLib.JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -8954,7 +8890,7 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionFast = function(collision, dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, dt)
+JigLib.PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, dt)
 {
 
 		collision.satisfied = false;
@@ -8965,7 +8901,7 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, d
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib_JMath3D.NUM_TINY, allowedPenetration=JigLib_JConfig.allowedPenetration;
+		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, tiny=JigLib.JMath3D.NUM_TINY, allowedPenetration=JigLib.JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -9017,7 +8953,7 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionNormal = function(collision, d
 		
 }
 
-JigLib_PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collision, dt)
+JigLib.PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collision, dt)
 {
 
 		collision.satisfied = false;
@@ -9028,7 +8964,7 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collisi
 		body1 = collision.objInfo.body1;
 		
 		var N = collision.dirToBody, tempV;
-		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, numTiny = JigLib_JMath3D.NUM_TINY, allowedPenetration = JigLib_JConfig.allowedPenetration;
+		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt, approachScale = 0, numTiny = JigLib.JMath3D.NUM_TINY, allowedPenetration = JigLib.JConfig.allowedPenetration;
 		var ptInfo;
 		var collision_pointInfo = collision.pointInfo;
 		
@@ -9079,10 +9015,10 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collisi
 			
 			ptInfo.accumulatedNormalImpulse = 0;
 			ptInfo.accumulatedNormalImpulseAux = 0;
-			ptInfo.accumulatedFrictionImpulse = new JigLib_Vector3D();
+			ptInfo.accumulatedFrictionImpulse = new JigLib.Vector3D();
 			
 			var bestDistSq = 0.04;
-			var bp = new JigLib_BodyPair(body0, body1, new JigLib_Vector3D(), new JigLib_Vector3D());
+			var bp = new JigLib.BodyPair(body0, body1, new JigLib.Vector3D(), new JigLib.Vector3D());
 			
 			for (var _cachedContacts_i = 0, _cachedContacts_l = this._cachedContacts.length, cachedContact; (_cachedContacts_i < _cachedContacts_l) && (cachedContact = this._cachedContacts[_cachedContacts_i]); _cachedContacts_i++)
 			{
@@ -9099,31 +9035,31 @@ JigLib_PhysicsSystem.prototype.preProcessCollisionAccumulated = function(collisi
 				ptInfo.accumulatedFrictionImpulse = cachedContact.impulse.frictionImpulse;
 				
 				if (cachedContact.pair.body0 != body0)
-					ptInfo.accumulatedFrictionImpulse = JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+					ptInfo.accumulatedFrictionImpulse = JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
 				}
 			}
 			
 			if (ptInfo.accumulatedNormalImpulse != 0)
 			{
-				var impulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulse);
+				var impulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulse);
 				impulse = impulse.add(ptInfo.accumulatedFrictionImpulse);
 				body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
 				if (body1)
-				body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			}
 			
 			if (ptInfo.accumulatedNormalImpulseAux != 0)
 			{
-				impulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux);
+				impulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux);
 				body0.applyBodyWorldImpulseAux(impulse, ptInfo.r0, false);
 				if (body1)
-				body1.applyBodyWorldImpulseAux(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				body1.applyBodyWorldImpulseAux(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			}
 		}
 		
 }
 
-JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
+JigLib.PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
 {
 
 		collision.satisfied = true;
@@ -9134,7 +9070,7 @@ JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
 		body1 = collision.objInfo.body1;
 		
 		var gotOne=false;
-		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, impulseFromNormalImpulse, frictionImpulse, tiny=JigLib_JMath3D.NUM_TINY;
+		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, impulseFromNormalImpulse, frictionImpulse, tiny=JigLib.JMath3D.NUM_TINY;
 		var N = collision.dirToBody, impulse, Vr0, Vr1, tempV, VR, tangent_vel, T;
 		var ptInfo;
 		
@@ -9165,19 +9101,19 @@ JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
 			normalImpulse = deltaVel / ptInfo.denominator;
 			
 			gotOne = true;
-			impulse = JigLib_JNumber3D.getScaleVector(N, normalImpulse);
+			impulse = JigLib.JNumber3D.getScaleVector(N, normalImpulse);
 			
 			body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-			if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+			if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 			
 			VR = Vr0.clone();
 			if (body1) VR = VR.subtract(Vr1);
-			tangent_vel = VR.subtract(JigLib_JNumber3D.getScaleVector(N, VR.dotProduct(N)));
+			tangent_vel = VR.subtract(JigLib.JNumber3D.getScaleVector(N, VR.dotProduct(N)));
 			tangent_speed = tangent_vel.get_length();
 			
 			if (tangent_speed > this._minVelForProcessing)
 			{
-				T = JigLib_JNumber3D.getDivideVector(tangent_vel, -tangent_speed);
+				T = JigLib.JNumber3D.getDivideVector(tangent_vel, -tangent_speed);
 				denominator = 0;
 				
 				if (body0.get_movable())
@@ -9206,7 +9142,7 @@ JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
 				}
 				T.scaleBy(frictionImpulse);
 				body0.applyBodyWorldImpulse(T, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
 				}
 			}
 		}
@@ -9221,7 +9157,7 @@ JigLib_PhysicsSystem.prototype.processCollisionNormal = function(collision, dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision, dt)
+JigLib.PhysicsSystem.prototype.processCollisionAccumulated = function(collision, dt)
 {
 
 		collision.satisfied = true;
@@ -9231,7 +9167,7 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 		body1 = collision.objInfo.body1;
 		
 		var gotOne=false;
-		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, AFIMag, maxAllowedAFIMag, tiny=JigLib_JMath3D.NUM_TINY;
+		var deltaVel=0, normalVel=0, finalNormalVel=0, normalImpulse=0, tangent_speed, denominator, impulseToReverse, AFIMag, maxAllowedAFIMag, tiny=JigLib.JMath3D.NUM_TINY;
 		var N = collision.dirToBody, impulse, Vr0, Vr1, tempV, VR, tangent_vel, T, frictionImpulseVec, origAccumulatedFrictionImpulse, actualFrictionImpulse;
 		var ptInfo;
 		
@@ -9258,9 +9194,9 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 				ptInfo.accumulatedNormalImpulse = Math.max(ptInfo.accumulatedNormalImpulse + normalImpulse, 0);
 				var actualImpulse = ptInfo.accumulatedNormalImpulse - origAccumulatedNormalImpulse;
 				
-				impulse = JigLib_JNumber3D.getScaleVector(N, actualImpulse);
+				impulse = JigLib.JNumber3D.getScaleVector(N, actualImpulse);
 				body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 				
 				gotOne = true;
 			}
@@ -9285,9 +9221,9 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 				ptInfo.accumulatedNormalImpulseAux = Math.max(ptInfo.accumulatedNormalImpulseAux + normalImpulse, 0);
 				actualImpulse = ptInfo.accumulatedNormalImpulseAux - origAccumulatedNormalImpulse;
 				
-				impulse = JigLib_JNumber3D.getScaleVector(N, actualImpulse);
+				impulse = JigLib.JNumber3D.getScaleVector(N, actualImpulse);
 				body0.applyBodyWorldImpulseAux(impulse, ptInfo.r0, false);
-				if(body1)body1.applyBodyWorldImpulseAux(JigLib_JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+				if(body1)body1.applyBodyWorldImpulseAux(JigLib.JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
 				
 				gotOne = true;
 			}
@@ -9300,13 +9236,13 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 				Vr1 = body1.getVelocity(ptInfo.r1);
 				VR = VR.subtract(Vr1);
 				} 
-				tangent_vel = VR.subtract(JigLib_JNumber3D.getScaleVector(N, VR.dotProduct(N)));
+				tangent_vel = VR.subtract(JigLib.JNumber3D.getScaleVector(N, VR.dotProduct(N)));
 				tangent_speed = tangent_vel.get_length();
 				
 				if (tangent_speed > this._minVelForProcessing)
 				{
 				
-				T = JigLib_JNumber3D.getScaleVector(JigLib_JNumber3D.getDivideVector(tangent_vel, tangent_speed), -1);
+				T = JigLib.JNumber3D.getScaleVector(JigLib.JNumber3D.getDivideVector(tangent_vel, tangent_speed), -1);
 				denominator = 0;
 				if (body0.get_movable())
 				{
@@ -9325,7 +9261,7 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 				if (denominator > tiny)
 				{
 					impulseToReverse = tangent_speed / denominator;
-					frictionImpulseVec = JigLib_JNumber3D.getScaleVector(T, impulseToReverse);
+					frictionImpulseVec = JigLib.JNumber3D.getScaleVector(T, impulseToReverse);
 					
 					origAccumulatedFrictionImpulse = ptInfo.accumulatedFrictionImpulse.clone();
 					ptInfo.accumulatedFrictionImpulse = ptInfo.accumulatedFrictionImpulse.add(frictionImpulseVec);
@@ -9334,12 +9270,12 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 					maxAllowedAFIMag = collision.mat.friction * ptInfo.accumulatedNormalImpulse;
 					
 					if (AFIMag > tiny && AFIMag > maxAllowedAFIMag)
-						ptInfo.accumulatedFrictionImpulse = JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, maxAllowedAFIMag / AFIMag);
+						ptInfo.accumulatedFrictionImpulse = JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, maxAllowedAFIMag / AFIMag);
 					
 					actualFrictionImpulse = ptInfo.accumulatedFrictionImpulse.subtract(origAccumulatedFrictionImpulse);
 					
 					body0.applyBodyWorldImpulse(actualFrictionImpulse, ptInfo.r0, false);
-					if(body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
+					if(body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
 				}
 				}
 			}
@@ -9355,14 +9291,14 @@ JigLib_PhysicsSystem.prototype.processCollisionAccumulated = function(collision,
 		
 }
 
-JigLib_PhysicsSystem.prototype.processCollisionForShock = function(collision, dt)
+JigLib.PhysicsSystem.prototype.processCollisionForShock = function(collision, dt)
 {
 
 		
 		collision.satisfied = true;
 		var N = collision.dirToBody;
 		
-		var timescale = JigLib_JConfig.numPenetrationRelaxationTimesteps * dt;
+		var timescale = JigLib.JConfig.numPenetrationRelaxationTimesteps * dt;
 		var body0 = collision.objInfo.body0;
 		var body1 = collision.objInfo.body1;
 		
@@ -9390,17 +9326,17 @@ JigLib_PhysicsSystem.prototype.processCollisionForShock = function(collision, dt
 				normalVel -= (body1.getVelocity(ptInfo.r1).dotProduct(N) + body1.getVelocityAux(ptInfo.r1).dotProduct(N));
 			}
 			
-			finalNormalVel = (ptInfo.initialPenetration - JigLib_JConfig.allowedPenetration) / timescale;
+			finalNormalVel = (ptInfo.initialPenetration - JigLib.JConfig.allowedPenetration) / timescale;
 			if (finalNormalVel < 0) {
 				continue;
 			}
 			impulse = (finalNormalVel - normalVel) / ptInfo.denominator;
 			orig = ptInfo.accumulatedNormalImpulseAux;
 			ptInfo.accumulatedNormalImpulseAux = Math.max(ptInfo.accumulatedNormalImpulseAux + impulse, 0);
-			actualImpulse = JigLib_JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux - orig);
+			actualImpulse = JigLib.JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux - orig);
 			
 			if (body0)body0.applyBodyWorldImpulse(actualImpulse, ptInfo.r0, false);
-			if (body1)body1.applyBodyWorldImpulse(JigLib_JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
+			if (body1)body1.applyBodyWorldImpulse(JigLib.JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
 		}
 		
 		if (body0)body0.setConstraintsAndCollisionsUnsatisfied();
@@ -9409,7 +9345,7 @@ JigLib_PhysicsSystem.prototype.processCollisionForShock = function(collision, dt
 		
 }
 
-JigLib_PhysicsSystem.prototype.sortPositionX = function(body0, body1)
+JigLib.PhysicsSystem.prototype.sortPositionX = function(body0, body1)
 {
 
 		if (body0.get_currentState().position.x < body1.get_currentState().position.x)
@@ -9421,7 +9357,7 @@ JigLib_PhysicsSystem.prototype.sortPositionX = function(body0, body1)
 		
 }
 
-JigLib_PhysicsSystem.prototype.sortPositionY = function(body0, body1)
+JigLib.PhysicsSystem.prototype.sortPositionY = function(body0, body1)
 {
 
 		if (body0.get_currentState().position.y < body1.get_currentState().position.y)
@@ -9433,7 +9369,7 @@ JigLib_PhysicsSystem.prototype.sortPositionY = function(body0, body1)
 		
 }
 
-JigLib_PhysicsSystem.prototype.sortPositionZ = function(body0, body1)
+JigLib.PhysicsSystem.prototype.sortPositionZ = function(body0, body1)
 {
 
 		if (body0.get_currentState().position.z < body1.get_currentState().position.z)
@@ -9445,7 +9381,7 @@ JigLib_PhysicsSystem.prototype.sortPositionZ = function(body0, body1)
 		
 }
 
-JigLib_PhysicsSystem.prototype.doShockStep = function(dt)
+JigLib.PhysicsSystem.prototype.doShockStep = function(dt)
 {
 
 		if (Math.abs(this._gravity.x) > Math.abs(this._gravity.y) && Math.abs(this._gravity.x) > Math.abs(this._gravity.z))
@@ -9507,7 +9443,7 @@ JigLib_PhysicsSystem.prototype.doShockStep = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.updateContactCache = function()
+JigLib.PhysicsSystem.prototype.updateContactCache = function()
 {
 
 		this._cachedContacts = [];
@@ -9529,20 +9465,20 @@ JigLib_PhysicsSystem.prototype.updateContactCache = function()
 			{
 				id1=-1;
 				if (body1) id1=body1.get_id();
-				fricImpulse = (body0.get_id() > id1) ? ptInfo.accumulatedFrictionImpulse : JigLib_JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+				fricImpulse = (body0.get_id() > id1) ? ptInfo.accumulatedFrictionImpulse : JigLib.JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
 				
-				this._cachedContacts[i++] = contact = new JigLib_ContactData();
-				contact.pair = new JigLib_BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
-				contact.impulse = new JigLib_CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
+				this._cachedContacts[i++] = contact = new JigLib.ContactData();
+				contact.pair = new JigLib.BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
+				contact.impulse = new JigLib.CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
 			}
 		}
 		
 }
 
-JigLib_PhysicsSystem.prototype.handleAllConstraints = function(dt, iter, forceInelastic)
+JigLib.PhysicsSystem.prototype.handleAllConstraints = function(dt, iter, forceInelastic)
 {
 
-		var origNumCollisions = this._collisions.length, iteration = JigLib_JConfig.numConstraintIterations, step, i, len;
+		var origNumCollisions = this._collisions.length, iteration = JigLib.JConfig.numConstraintIterations, step, i, len;
 		var collInfo;
 		var constraint;
 		var flag, gotOne;
@@ -9625,7 +9561,7 @@ JigLib_PhysicsSystem.prototype.handleAllConstraints = function(dt, iter, forceIn
 		
 }
 
-JigLib_PhysicsSystem.prototype.activateObject = function(body)
+JigLib.PhysicsSystem.prototype.activateObject = function(body)
 {
 
 		if (!body.get_movable() || body.isActive) return;
@@ -9639,7 +9575,7 @@ JigLib_PhysicsSystem.prototype.activateObject = function(body)
 		
 }
 
-JigLib_PhysicsSystem.prototype.tryToActivateAllFrozenObjects = function()
+JigLib.PhysicsSystem.prototype.tryToActivateAllFrozenObjects = function()
 {
 
 		for (var _bodies_i = 0, _bodies_l = this._bodies.length, body; (_bodies_i < _bodies_l) && (body = this._bodies[_bodies_i]); _bodies_i++)
@@ -9652,15 +9588,15 @@ JigLib_PhysicsSystem.prototype.tryToActivateAllFrozenObjects = function()
 				}
 				else
 				{
-				body.setLineVelocity(new JigLib_Vector3D());
-				body.setAngleVelocity(new JigLib_Vector3D());
+				body.setLineVelocity(new JigLib.Vector3D());
+				body.setAngleVelocity(new JigLib.Vector3D());
 				}
 			}
 		}
 		
 }
 
-JigLib_PhysicsSystem.prototype.tryToFreezeAllObjects = function(dt)
+JigLib.PhysicsSystem.prototype.tryToFreezeAllObjects = function(dt)
 {
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++){
@@ -9670,7 +9606,7 @@ JigLib_PhysicsSystem.prototype.tryToFreezeAllObjects = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.activateAllFrozenObjectsLeftHanging = function()
+JigLib.PhysicsSystem.prototype.activateAllFrozenObjectsLeftHanging = function()
 {
 
 		var other_body;
@@ -9696,7 +9632,7 @@ JigLib_PhysicsSystem.prototype.activateAllFrozenObjectsLeftHanging = function()
 		
 }
 
-JigLib_PhysicsSystem.prototype.updateAllController = function(dt)
+JigLib.PhysicsSystem.prototype.updateAllController = function(dt)
 {
 
 		for (var _controllers_i = 0, _controllers_l = this._controllers.length, controller; (_controllers_i < _controllers_l) && (controller = this._controllers[_controllers_i]); _controllers_i++)
@@ -9704,7 +9640,7 @@ JigLib_PhysicsSystem.prototype.updateAllController = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.updateAllVelocities = function(dt)
+JigLib.PhysicsSystem.prototype.updateAllVelocities = function(dt)
 {
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++)
@@ -9712,7 +9648,7 @@ JigLib_PhysicsSystem.prototype.updateAllVelocities = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.notifyAllPostPhysics = function(dt)
+JigLib.PhysicsSystem.prototype.notifyAllPostPhysics = function(dt)
 {
 
 		for (var _activeBodies_i = 0, _activeBodies_l = this._activeBodies.length, activeBody; (_activeBodies_i < _activeBodies_l) && (activeBody = this._activeBodies[_activeBodies_i]); _activeBodies_i++)
@@ -9720,7 +9656,7 @@ JigLib_PhysicsSystem.prototype.notifyAllPostPhysics = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.detectAllCollisions = function(dt)
+JigLib.PhysicsSystem.prototype.detectAllCollisions = function(dt)
 {
 
 		for (var _bodies_i = 0, _bodies_l = this._bodies.length, body; (_bodies_i < _bodies_l) && (body = this._bodies[_bodies_i]); _bodies_i++) {
@@ -9740,7 +9676,7 @@ JigLib_PhysicsSystem.prototype.detectAllCollisions = function(dt)
 		
 }
 
-JigLib_PhysicsSystem.prototype.findAllActiveBodiesAndCopyStates = function()
+JigLib.PhysicsSystem.prototype.findAllActiveBodiesAndCopyStates = function()
 {
 
 		this._activeBodies = [];
@@ -9766,7 +9702,7 @@ JigLib_PhysicsSystem.prototype.findAllActiveBodiesAndCopyStates = function()
 		
 }
 
-JigLib_PhysicsSystem.prototype.integrate = function(dt)
+JigLib.PhysicsSystem.prototype.integrate = function(dt)
 {
 
 		this._doingIntegration = true;
@@ -9774,11 +9710,11 @@ JigLib_PhysicsSystem.prototype.integrate = function(dt)
 		this.findAllActiveBodiesAndCopyStates();
 		this.updateAllController(dt);
 		this.detectAllCollisions(dt);
-		this.handleAllConstraints(dt, JigLib_JConfig.numCollisionIterations, false);
+		this.handleAllConstraints(dt, JigLib.JConfig.numCollisionIterations, false);
 		this.updateAllVelocities(dt);
-		this.handleAllConstraints(dt, JigLib_JConfig.numContactIterations, true);
+		this.handleAllConstraints(dt, JigLib.JConfig.numContactIterations, true);
 		
-		if (JigLib_JConfig.doShockStep) this.doShockStep(dt);
+		if (JigLib.JConfig.doShockStep) this.doShockStep(dt);
 		
 		this.tryToActivateAllFrozenObjects();
 		this.tryToFreezeAllObjects(dt);
@@ -9786,31 +9722,30 @@ JigLib_PhysicsSystem.prototype.integrate = function(dt)
 		
 		this.notifyAllPostPhysics(dt);
 		
-		if (JigLib_JConfig.solverType == "ACCUMULATED")
+		if (JigLib.JConfig.solverType == "ACCUMULATED")
 			this.updateContactCache();
 		
 		this._doingIntegration = false;
 		
 }
 
-JigLib_PhysicsSystem._currentPhysicsSystem = null ; // PhysicsSystem
+JigLib.PhysicsSystem._currentPhysicsSystem = null ; // PhysicsSystem
 
-JigLib_PhysicsSystem.getInstance = function()
+JigLib.PhysicsSystem.getInstance = function()
 {
 
-			if (!JigLib_PhysicsSystem._currentPhysicsSystem)
+			if (!JigLib.PhysicsSystem._currentPhysicsSystem)
 			{
 				trace("version: JigLibFlash fp11 (2011-10-31)");
-				JigLib_PhysicsSystem._currentPhysicsSystem = new JigLib_PhysicsSystem();
+				JigLib.PhysicsSystem._currentPhysicsSystem = new JigLib.PhysicsSystem();
 			}
-			return JigLib_PhysicsSystem._currentPhysicsSystem;
+			return JigLib.PhysicsSystem._currentPhysicsSystem;
 		
 }
 
 
-JigLib.PhysicsSystem = JigLib_PhysicsSystem; 
 
-var JigLib_Stats = function(view3d, physics, grid)
+JigLib.Stats = function(view3d, physics, grid)
 {
 	this.WIDTH =  182; // uint
 	this.HEIGHT =  126; // uint
@@ -9869,7 +9804,7 @@ var JigLib_Stats = function(view3d, physics, grid)
 		
 }
 
-JigLib_Stats.prototype.init = function(e)
+JigLib.Stats.prototype.init = function(e)
 {
 
 		addChild(this.statsSkinBm);
@@ -9885,14 +9820,14 @@ JigLib_Stats.prototype.init = function(e)
 		
 }
 
-JigLib_Stats.prototype.disableSkin = function()
+JigLib.Stats.prototype.disableSkin = function()
 {
 
 		removeChild(this.statsSkinBm);
 		
 }
 
-JigLib_Stats.prototype.update = function(e)
+JigLib.Stats.prototype.update = function(e)
 {
 
 		this.timer = getTimer();
@@ -9904,14 +9839,14 @@ JigLib_Stats.prototype.update = function(e)
 
 			this.fps = this.fps > stage.frameRate ? stage.frameRate : this.fps;
 
-			this.textFps.htmlText = this.fps + " / " + stage.frameRate + "<br>" + JigLib_PhysicsSystem.getInstance().getCollisionSystem().numCollisionsChecks + "<br>" + this.view3d.renderedFacesCount;
+			this.textFps.htmlText = this.fps + " / " + stage.frameRate + "<br>" + JigLib.PhysicsSystem.getInstance().getCollisionSystem().numCollisionsChecks + "<br>" + this.view3d.renderedFacesCount;
 
 			// todo temp. till away3d got _deltatime avail.
 			var ms3D = (this.timer - this.ms) - this.physics.frameTime;
 
 			this.textMs.htmlText = (this.timer - this.ms) + " this.ms<br>" + this.physics.frameTime + " this.ms<br>" + ms3D + " this.ms";
-			this.textBottomLeft.htmlText = "MEM " + this.mem + "<br>RIGIDB. " + JigLib_PhysicsSystem.getInstance().get_bodies().length;
-			this.textBottomRight.htmlText = "/ MAX <font color='#cb2929'>" + this.mem_max + "</font><br>/ ACTIVE <font color='#cb2929'>" + JigLib_PhysicsSystem.getInstance().get_activeBodies().length + "</font>";
+			this.textBottomLeft.htmlText = "MEM " + this.mem + "<br>RIGIDB. " + JigLib.PhysicsSystem.getInstance().get_bodies().length;
+			this.textBottomRight.htmlText = "/ MAX <font color='#cb2929'>" + this.mem_max + "</font><br>/ ACTIVE <font color='#cb2929'>" + JigLib.PhysicsSystem.getInstance().get_activeBodies().length + "</font>";
 			if (this.grid) {
 				this.textBottom.htmlText = "CDT GRID";
 			} else {
@@ -9924,7 +9859,7 @@ JigLib_Stats.prototype.update = function(e)
 		
 }
 
-JigLib_Stats.prototype.destroy = function(event)
+JigLib.Stats.prototype.destroy = function(event)
 {
 
 		while (numChildren > 0)
@@ -9934,7 +9869,7 @@ JigLib_Stats.prototype.destroy = function(event)
 		
 }
 
-JigLib_Stats.prototype.addTextField = function(text, colorText, textSize, bold, alignText, leading, xPos, yPos, widthText, heightText)
+JigLib.Stats.prototype.addTextField = function(text, colorText, textSize, bold, alignText, leading, xPos, yPos, widthText, heightText)
 {
 	if (widthText == null) widthText = 52;
 	if (heightText == null) heightText = 45;
@@ -9962,4 +9897,3 @@ JigLib_Stats.prototype.addTextField = function(text, colorText, textSize, bold, 
 
 
 
-JigLib.Stats = JigLib_Stats; 

@@ -1,5 +1,5 @@
 
-var JigLib_PhysicsController = function()
+JigLib.PhysicsController = function()
 {
 	this._controllerEnabled = null; // Boolean
 
@@ -7,25 +7,25 @@ var JigLib_PhysicsController = function()
 		
 }
 
-JigLib_PhysicsController.prototype.updateController = function(dt)
+JigLib.PhysicsController.prototype.updateController = function(dt)
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.enableController = function()
+JigLib.PhysicsController.prototype.enableController = function()
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.disableController = function()
+JigLib.PhysicsController.prototype.disableController = function()
 {
 
 		
 }
 
-JigLib_PhysicsController.prototype.get_controllerEnabled = function()
+JigLib.PhysicsController.prototype.get_controllerEnabled = function()
 {
 
 		return this._controllerEnabled;
@@ -34,4 +34,3 @@ JigLib_PhysicsController.prototype.get_controllerEnabled = function()
 
 
 
-JigLib.PhysicsController = JigLib_PhysicsController; 

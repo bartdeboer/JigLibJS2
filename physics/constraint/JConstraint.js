@@ -1,5 +1,5 @@
 
-var JigLib_JConstraint = function()
+JigLib.JConstraint = function()
 {
 	this.satisfied = null; // Boolean
 	this._constraintEnabled = null; // Boolean
@@ -7,33 +7,33 @@ var JigLib_JConstraint = function()
 		
 }
 
-JigLib_JConstraint.prototype.preApply = function(dt)
+JigLib.JConstraint.prototype.preApply = function(dt)
 {
 
 		this.satisfied = false;
 		
 }
 
-JigLib_JConstraint.prototype.apply = function(dt)
+JigLib.JConstraint.prototype.apply = function(dt)
 {
 
 		return false;
 		
 }
 
-JigLib_JConstraint.prototype.enableConstraint = function()
+JigLib.JConstraint.prototype.enableConstraint = function()
 {
 
 		
 }
 
-JigLib_JConstraint.prototype.disableConstraint = function()
+JigLib.JConstraint.prototype.disableConstraint = function()
 {
 
 		
 }
 
-JigLib_JConstraint.prototype.get_constraintEnabled = function()
+JigLib.JConstraint.prototype.get_constraintEnabled = function()
 {
 
 		return this._constraintEnabled;
@@ -42,4 +42,3 @@ JigLib_JConstraint.prototype.get_constraintEnabled = function()
 
 
 
-JigLib.JConstraint = JigLib_JConstraint; 

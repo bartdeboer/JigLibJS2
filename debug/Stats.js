@@ -1,5 +1,5 @@
 
-var JigLib_Stats = function(view3d, physics, grid)
+JigLib.Stats = function(view3d, physics, grid)
 {
 	this.WIDTH =  182; // uint
 	this.HEIGHT =  126; // uint
@@ -58,7 +58,7 @@ var JigLib_Stats = function(view3d, physics, grid)
 		
 }
 
-JigLib_Stats.prototype.init = function(e)
+JigLib.Stats.prototype.init = function(e)
 {
 
 		addChild(this.statsSkinBm);
@@ -74,14 +74,14 @@ JigLib_Stats.prototype.init = function(e)
 		
 }
 
-JigLib_Stats.prototype.disableSkin = function()
+JigLib.Stats.prototype.disableSkin = function()
 {
 
 		removeChild(this.statsSkinBm);
 		
 }
 
-JigLib_Stats.prototype.update = function(e)
+JigLib.Stats.prototype.update = function(e)
 {
 
 		this.timer = getTimer();
@@ -93,14 +93,14 @@ JigLib_Stats.prototype.update = function(e)
 
 			this.fps = this.fps > stage.frameRate ? stage.frameRate : this.fps;
 
-			this.textFps.htmlText = this.fps + " / " + stage.frameRate + "<br>" + JigLib_PhysicsSystem.getInstance().getCollisionSystem().numCollisionsChecks + "<br>" + this.view3d.renderedFacesCount;
+			this.textFps.htmlText = this.fps + " / " + stage.frameRate + "<br>" + JigLib.PhysicsSystem.getInstance().getCollisionSystem().numCollisionsChecks + "<br>" + this.view3d.renderedFacesCount;
 
 			// todo temp. till away3d got _deltatime avail.
 			var ms3D = (this.timer - this.ms) - this.physics.frameTime;
 
 			this.textMs.htmlText = (this.timer - this.ms) + " this.ms<br>" + this.physics.frameTime + " this.ms<br>" + ms3D + " this.ms";
-			this.textBottomLeft.htmlText = "MEM " + this.mem + "<br>RIGIDB. " + JigLib_PhysicsSystem.getInstance().get_bodies().length;
-			this.textBottomRight.htmlText = "/ MAX <font color='#cb2929'>" + this.mem_max + "</font><br>/ ACTIVE <font color='#cb2929'>" + JigLib_PhysicsSystem.getInstance().get_activeBodies().length + "</font>";
+			this.textBottomLeft.htmlText = "MEM " + this.mem + "<br>RIGIDB. " + JigLib.PhysicsSystem.getInstance().get_bodies().length;
+			this.textBottomRight.htmlText = "/ MAX <font color='#cb2929'>" + this.mem_max + "</font><br>/ ACTIVE <font color='#cb2929'>" + JigLib.PhysicsSystem.getInstance().get_activeBodies().length + "</font>";
 			if (this.grid) {
 				this.textBottom.htmlText = "CDT GRID";
 			} else {
@@ -113,7 +113,7 @@ JigLib_Stats.prototype.update = function(e)
 		
 }
 
-JigLib_Stats.prototype.destroy = function(event)
+JigLib.Stats.prototype.destroy = function(event)
 {
 
 		while (numChildren > 0)
@@ -123,7 +123,7 @@ JigLib_Stats.prototype.destroy = function(event)
 		
 }
 
-JigLib_Stats.prototype.addTextField = function(text, colorText, textSize, bold, alignText, leading, xPos, yPos, widthText, heightText)
+JigLib.Stats.prototype.addTextField = function(text, colorText, textSize, bold, alignText, leading, xPos, yPos, widthText, heightText)
 {
 	if (widthText == null) widthText = 52;
 	if (heightText == null) heightText = 45;
@@ -151,4 +151,3 @@ JigLib_Stats.prototype.addTextField = function(text, colorText, textSize, bold, 
 
 
 
-JigLib.Stats = JigLib_Stats; 

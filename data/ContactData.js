@@ -1,5 +1,5 @@
 
-var JigLib_ContactData = function()
+JigLib.ContactData = function()
 {
 	this.pair = null; // BodyPair
 	this.impulse = null; // CachedImpulse
@@ -7,4 +7,3 @@ var JigLib_ContactData = function()
 
 
 
-JigLib.ContactData = JigLib_ContactData; 

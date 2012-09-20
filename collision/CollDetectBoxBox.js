@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectBoxBox = function()
+JigLib.CollDetectBoxBox = function()
 {
 	this.MAX_SUPPORT_VERTS =  10; // Number
 	this.combinationDist = null; // Number
@@ -10,16 +10,16 @@ var JigLib_CollDetectBoxBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
+JigLib.CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
 {
 
 		var obj0 = box0.getSpan(axis);
 		var obj1 = box1.getSpan(axis);
-		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib_JMath3D.NUM_TINY;
+		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib.JMath3D.NUM_TINY;
 
-		if (obj0Min > (obj1Max + JigLib_JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib_JConfig.collToll + tiny))
+		if (obj0Min > (obj1Max + JigLib.JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib.JConfig.collToll + tiny))
 		{
 			out.flag = true;
 			return true;
@@ -42,14 +42,14 @@ JigLib_CollDetectBoxBox.prototype.disjoint = function(out, axis, box0, box1)
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
+JigLib.CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
 {
 
 		for (var contactPoints_i = 0, contactPoints_l = contactPoints.length, contactPoint; (contactPoints_i < contactPoints_l) && (contactPoint = contactPoints[contactPoints_i]); contactPoints_i++)
 		{
 			if (contactPoint.subtract(pt).get_lengthSquared() < combinationDistanceSq)
 			{
-				contactPoint = JigLib_JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
+				contactPoint = JigLib.JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
 				return false;
 			}
 		}
@@ -58,49 +58,49 @@ JigLib_CollDetectBoxBox.prototype.addPoint = function(contactPoints, pt, combina
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getSupportPoint = function(box, axis)
+JigLib.CollDetectBoxBox.prototype.getSupportPoint = function(box, axis)
 {
 
 		var orientationCol = box.get_currentState().getOrientationCols();
-		var _as=axis.dotProduct(orientationCol[0]), _au=axis.dotProduct(orientationCol[1]), _ad=axis.dotProduct(orientationCol[2]), tiny=JigLib_JMath3D.NUM_TINY;
+		var _as=axis.dotProduct(orientationCol[0]), _au=axis.dotProduct(orientationCol[1]), _ad=axis.dotProduct(orientationCol[2]), tiny=JigLib.JMath3D.NUM_TINY;
 		
 		var p = box.get_currentState().position.clone();
   
 		if (_as < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
 		}else if (_as >= tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[0], 0.5 * box.get_sideLengths().x));
 		}
   
 		if (_au < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
 		}else if (_au > tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[1], 0.5 * box.get_sideLengths().y));
 		}
   
 		if (_ad < -tiny) {
-			p = p.add(JigLib_JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
+			p = p.add(JigLib.JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
 		}else if (_ad > tiny) {
-			p = p.subtract(JigLib_JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
+			p = p.subtract(JigLib.JNumber3D.getScaleVector(orientationCol[2], 0.5 * box.get_sideLengths().z));
 		}
 		return p;
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(contactPoint, origBoxSides, origBoxState, edgePt0, edgePt1)
+JigLib.CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(contactPoint, origBoxSides, origBoxState, edgePt0, edgePt1)
 {
 
 		var jDir, kDir, num=0, iDir, iFace;
-		var dist0, dist1, frac, tiny=JigLib_JMath3D.NUM_TINY;
+		var dist0, dist1, frac, tiny=JigLib.JMath3D.NUM_TINY;
 		var pt, edgeDir;
 		
 		edgeDir = edgePt1.subtract(edgePt0);
 		edgeDir.normalize();
 		var ptArr, faceOffsets, edgePt0Arr, edgePt1Arr, edgeDirArr, sidesArr;
-		edgePt0Arr = JigLib_JNumber3D.toArray(edgePt0);
-		edgePt1Arr = JigLib_JNumber3D.toArray(edgePt1);
-		edgeDirArr = JigLib_JNumber3D.toArray(edgeDir);
-		sidesArr = JigLib_JNumber3D.toArray(JigLib_JNumber3D.getScaleVector(origBoxSides, 0.5));
+		edgePt0Arr = JigLib.JNumber3D.toArray(edgePt0);
+		edgePt1Arr = JigLib.JNumber3D.toArray(edgePt1);
+		edgeDirArr = JigLib.JNumber3D.toArray(edgeDir);
+		sidesArr = JigLib.JNumber3D.toArray(JigLib.JNumber3D.getScaleVector(origBoxSides, 0.5));
 		for (iDir = 2; iDir >= 0; iDir--) {
 			if (Math.abs(edgeDirArr[iDir]) < 0.1) {
 				continue;
@@ -120,8 +120,8 @@ JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(con
 				frac = 1;
 				}
 				if (frac >= 0) {
-				pt = JigLib_JNumber3D.getScaleVector(edgePt0, 1 - frac).add(JigLib_JNumber3D.getScaleVector(edgePt1, frac));
-				ptArr = JigLib_JNumber3D.toArray(pt);
+				pt = JigLib.JNumber3D.getScaleVector(edgePt0, 1 - frac).add(JigLib.JNumber3D.getScaleVector(edgePt1, frac));
+				ptArr = JigLib.JNumber3D.toArray(pt);
 				if ((ptArr[jDir] > -sidesArr[jDir] - tiny) && (ptArr[jDir] < sidesArr[jDir] + tiny) && (ptArr[kDir] > -sidesArr[kDir] - tiny) && (ptArr[kDir] < sidesArr[kDir] + tiny) ) {
 					pt = origBoxState.orientation.transformVector(pt);
 					pt = pt.add(origBoxState.position);
@@ -137,7 +137,7 @@ JigLib_CollDetectBoxBox.prototype.getAABox2EdgeIntersectionPoints = function(con
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(contactPoint, box0, box1, newState)
+JigLib.CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(contactPoint, box0, box1, newState)
 {
 
 		var num = 0;
@@ -161,7 +161,7 @@ JigLib_CollDetectBoxBox.prototype.getBox2BoxEdgesIntersectionPoints = function(c
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contactPoint, box0, box1, newState)
+JigLib.CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contactPoint, box0, box1, newState)
 {
 
 		this.getBox2BoxEdgesIntersectionPoints(contactPoint, box0, box1, newState);
@@ -170,7 +170,7 @@ JigLib_CollDetectBoxBox.prototype.getBoxBoxIntersectionPoints = function(contact
 		
 }
 
-JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 {
 
 		var box0 = info.body0;
@@ -182,7 +182,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		if (!box0.get_boundingBox().overlapTest(box1.get_boundingBox()))
 			return;
 
-		var numTiny = JigLib_JMath3D.NUM_TINY, numHuge = JigLib_JMath3D.NUM_HUGE;
+		var numTiny = JigLib.JMath3D.NUM_TINY, numHuge = JigLib.JMath3D.NUM_HUGE;
 
 		var dirs0Arr = box0.get_currentState().getOrientationCols();
 		var dirs1Arr = box1.get_currentState().getOrientationCols();
@@ -211,7 +211,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var ax;
 		for (i = 0; i < axesLength; i++)
 		{
-			overlapDepths[i] = new JigLib_SpanData();
+			overlapDepths[i] = new JigLib.SpanData();
 
 			l2 = axes[i].get_lengthSquared();
 			if (l2 < numTiny)
@@ -258,7 +258,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var contactPointsFromOld = true;
 		var contactPoints = [];
 		this.combinationDist = 0.05 * Math.min(Math.min(box0.get_sideLengths().x, box0.get_sideLengths().y, box0.get_sideLengths().z), Math.min(box1.get_sideLengths().x, box1.get_sideLengths().y, box1.get_sideLengths().z));
-		this.combinationDist += (JigLib_JConfig.collToll * 3.464);
+		this.combinationDist += (JigLib.JConfig.collToll * 3.464);
 		this.combinationDist *= this.combinationDist;
 
 		if (minDepth > -numTiny)
@@ -274,7 +274,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		var bodyDeltaLen = bodyDelta.dotProduct(N);
 		var oldDepth = minDepth + bodyDeltaLen;
 		
-		var SATPoint = new JigLib_Vector3D();
+		var SATPoint = new JigLib.Vector3D();
 		switch(minAxis){
 			//-----------------------------------------------------------------
 			// Box0 face, Box1 Corner collision
@@ -286,7 +286,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			//-----------------------------------------------------------------
 			// Get the lowest point on the box1 along box1 normal
 			//-----------------------------------------------------------------
-			SATPoint = this.getSupportPoint(box1, JigLib_JNumber3D.getScaleVector(N, -1));
+			SATPoint = this.getSupportPoint(box1, JigLib.JNumber3D.getScaleVector(N, -1));
 			break;
 		}
 		//-----------------------------------------------------------------
@@ -325,7 +325,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			// find two P0, P1 point on both edges. 
 			//-----------------------------------------------------------------
 			var P0 = this.getSupportPoint(box0, N);
-			var P1 = this.getSupportPoint(box1, JigLib_JNumber3D.getScaleVector(N, -1));
+			var P1 = this.getSupportPoint(box1, JigLib.JNumber3D.getScaleVector(N, -1));
       
 			//-----------------------------------------------------------------
 			// Find the edge intersection. 
@@ -353,8 +353,8 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			//-----------------------------------------------------------------
 			// point on edge of box0
 			//-----------------------------------------------------------------
-			P0 = P0.add(JigLib_JNumber3D.getScaleVector(dirs0Arr[ia], t));
-			SATPoint = P0.add(JigLib_JNumber3D.getScaleVector(N, 0.5 * minDepth));
+			P0 = P0.add(JigLib.JNumber3D.getScaleVector(dirs0Arr[ia], t));
+			SATPoint = P0.add(JigLib.JNumber3D.getScaleVector(N, 0.5 * minDepth));
 			break;
 		}
 		}
@@ -389,7 +389,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 				dist = contactPoint.subtract(SATPoint).length;
 				depthScale = (dist - minDist) / (maxDist - minDist);
 				depth = (1 - depthScale) * oldDepth;
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				
 				if (contactPointsFromOld)
 				{
@@ -408,7 +408,7 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 		}
 		else
 		{
-			cpInfo = new JigLib_CollPointInfo();
+			cpInfo = new JigLib.CollPointInfo();
 			cpInfo.r0 = SATPoint.subtract(box0.get_currentState().position);
 			cpInfo.r1 = SATPoint.subtract(box1.get_currentState().position);
 			cpInfo.initialPenetration = oldDepth;
@@ -417,12 +417,12 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 			collPts[0] = cpInfo;
 		}
 
-		var collInfo = new JigLib_CollisionInfo();
+		var collInfo = new JigLib.CollisionInfo();
 		collInfo.objInfo = info;
 		collInfo.dirToBody = N;
 		collInfo.pointInfo = collPts;
 		
-		var mat = new JigLib_MaterialProperties();
+		var mat = new JigLib.MaterialProperties();
 		mat.restitution = 0.5*(box0.get_material().restitution + box1.get_material().restitution);
 		mat.friction = 0.5*(box0.get_material().friction + box1.get_material().friction);
 		collInfo.mat = mat;
@@ -436,4 +436,3 @@ JigLib_CollDetectBoxBox.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxBox = JigLib_CollDetectBoxBox; 

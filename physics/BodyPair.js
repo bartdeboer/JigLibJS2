@@ -1,5 +1,5 @@
 
-var JigLib_BodyPair = function(_body0, _body1, r0, r1)
+JigLib.BodyPair = function(_body0, _body1, r0, r1)
 {
 	this.body0 = null; // RigidBody
 	this.body1 = null; // RigidBody
@@ -26,4 +26,3 @@ var JigLib_BodyPair = function(_body0, _body1, r0, r1)
 
 
 
-JigLib.BodyPair = JigLib_BodyPair; 

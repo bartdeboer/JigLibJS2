@@ -1,45 +1,45 @@
 
-var JigLib_PlaneData = function()
+JigLib.PlaneData = function()
 {
 	this._position = null; // Vector3D
 	this._normal = null; // Vector3D
 	this._distance = null; // Number
 
-		this._position = new JigLib_Vector3D();
-		this._normal = new JigLib_Vector3D(0, 1, 0);
+		this._position = new JigLib.Vector3D();
+		this._normal = new JigLib.Vector3D(0, 1, 0);
 		this._distance = 0;
 		
 }
 
-JigLib_PlaneData.prototype.get_position = function()
+JigLib.PlaneData.prototype.get_position = function()
 {
 
 		return this._position;
 		
 }
 
-JigLib_PlaneData.prototype.get_normal = function()
+JigLib.PlaneData.prototype.get_normal = function()
 {
 
 		return this._normal;
 		
 }
 
-JigLib_PlaneData.prototype.get_distance = function()
+JigLib.PlaneData.prototype.get_distance = function()
 {
 
 		return this._distance;
 		
 }
 
-JigLib_PlaneData.prototype.pointPlaneDistance = function(pt)
+JigLib.PlaneData.prototype.pointPlaneDistance = function(pt)
 {
 
 		return this._normal.dotProduct(pt) - this._distance;
 		
 }
 
-JigLib_PlaneData.prototype.setWithNormal = function(pos, nor)
+JigLib.PlaneData.prototype.setWithNormal = function(pos, nor)
 {
 
 		this._position = pos.clone();
@@ -48,7 +48,7 @@ JigLib_PlaneData.prototype.setWithNormal = function(pos, nor)
 		
 }
 
-JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
+JigLib.PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 {
 
 		this._position = pos0.clone();
@@ -58,8 +58,8 @@ JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 		this._normal = dr1.crossProduct(dr2);
 		
 		var nLen = this._normal.get_length();
-		if (nLen < JigLib_JMath3D.NUM_TINY) {
-			this._normal = new JigLib_Vector3D(0, 1, 0);
+		if (nLen < JigLib.JMath3D.NUM_TINY) {
+			this._normal = new JigLib.Vector3D(0, 1, 0);
 			this._distance = 0;
 		}else {
 			this._normal.scaleBy(1 / nLen);
@@ -70,4 +70,3 @@ JigLib_PlaneData.prototype.setWithPoint = function(pos0, pos1, pos2)
 
 
 
-JigLib.PlaneData = JigLib_PlaneData; 

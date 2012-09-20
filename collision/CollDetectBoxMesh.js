@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectBoxMesh = function()
+JigLib.CollDetectBoxMesh = function()
 {
 
 		this.name = "BoxMesh";
@@ -8,16 +8,16 @@ var JigLib_CollDetectBoxMesh = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxMesh, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxMesh, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
+JigLib.CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
 {
 
 		var obj0 = box.getSpan(axis);
 		var obj1 = triangle.getSpan(axis);
-		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib_JMath3D.NUM_TINY;
+		var obj0Min=obj0.min, obj0Max=obj0.max, obj1Min=obj1.min, obj1Max=obj1.max, tiny=JigLib.JMath3D.NUM_TINY;
 		
-		if (obj0Min > (obj1Max + JigLib_JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib_JConfig.collToll + tiny))
+		if (obj0Min > (obj1Max + JigLib.JConfig.collToll + tiny) || obj1Min > (obj0Max + JigLib.JConfig.collToll + tiny))
 		{
 			out.flag = true;
 			return true;
@@ -40,14 +40,14 @@ JigLib_CollDetectBoxMesh.prototype.disjoint = function(out, axis, box, triangle)
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
+JigLib.CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combinationDistanceSq)
 {
 
 		for (var contactPoints_i = 0, contactPoints_l = contactPoints.length, contactPoint; (contactPoints_i < contactPoints_l) && (contactPoint = contactPoints[contactPoints_i]); contactPoints_i++)
 		{
 			if (contactPoint.subtract(pt).get_lengthSquared() < combinationDistanceSq)
 			{
-				contactPoint = JigLib_JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
+				contactPoint = JigLib.JNumber3D.getScaleVector(contactPoint.add(pt), 0.5);
 				return false;
 			}
 		}
@@ -56,7 +56,7 @@ JigLib_CollDetectBoxMesh.prototype.addPoint = function(contactPoints, pt, combin
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(pts, box, triangle, combinationDistanceSq)
+JigLib.CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(pts, box, triangle, combinationDistanceSq)
 {
 
 		var edges=box.get_edges();
@@ -67,8 +67,8 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		var seg;
 		for(var i=0;i<12;i++){
 			edge=edges[i];
-			data=new JigLib_CollOutData();
-			seg=new JigLib_JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
+			data=new JigLib.CollOutData();
+			seg=new JigLib.JSegment(boxPts[edge.ind0],boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
 			if(triangle.segmentTriangleIntersection(data,seg)){
 				this.addPoint(pts,seg.getPoint(data.frac),combinationDistanceSq);
 				if(pts.length>8) return pts.length;
@@ -79,12 +79,12 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		for(i=0;i<3;i++){
 			pt0=triangle.getVertex(i);
 			pt1=triangle.getVertex((i+1)%3);
-			data=new JigLib_CollOutData();
-			if(box.segmentIntersect(data,new JigLib_JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
+			data=new JigLib.CollOutData();
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt0,pt1.subtract(pt0)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
-			if(box.segmentIntersect(data,new JigLib_JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
+			if(box.segmentIntersect(data,new JigLib.JSegment(pt1,pt0.subtract(pt1)),box.get_currentState())){
 				this.addPoint(pts,data.position,combinationDistanceSq);
 				if(pts.length>8) return pts.length;
 			}
@@ -93,13 +93,13 @@ JigLib_CollDetectBoxMesh.prototype.getBoxTriangleIntersectionPoints = function(p
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, triangle, mesh, info, collArr)
+JigLib.CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, triangle, mesh, info, collArr)
 {
 
 		
 		var triEdge0, triEdge1, triEdge2, triNormal, D, N, boxOldPos, boxNewPos, meshPos, delta;
 		var dirs0=box.get_currentState().getOrientationCols();
-		var tri=new JigLib_JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
+		var tri=new JigLib.JTriangle(mesh.get_octree().getVertex(triangle.getVertexIndex(0)),mesh.get_octree().getVertex(triangle.getVertexIndex(1)),mesh.get_octree().getVertex(triangle.getVertexIndex(2)));
 		triEdge0=tri.getVertex(1).subtract(tri.getVertex(0));
 		triEdge0.normalize();
 		triEdge1=tri.getVertex(2).subtract(tri.getVertex(1));
@@ -122,14 +122,14 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		
 		var overlapDepths=[];
 		for(var i=0;i<numAxes;i++){
-			overlapDepths[i]=new JigLib_SpanData();
+			overlapDepths[i]=new JigLib.SpanData();
 			if(this.disjoint(overlapDepths[i],axes[i],box,tri)){
 				return false;
 			}
 		}
 		
 		var minAxis=-1;
-		var tiny=JigLib_JMath3D.NUM_TINY, minDepth=JigLib_JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
+		var tiny=JigLib.JMath3D.NUM_TINY, minDepth=JigLib.JMath3D.NUM_HUGE, l2, invl, depth, combinationDist, oldDepth;
 
 		for(i = 0; i < numAxes; i++){
 			l2=axes[i].get_lengthSquared();
@@ -173,19 +173,19 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		if(numPts>0){
 			var cpInfo;
 			for (i=0; i<numPts; i++){
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0=pts[i].subtract(boxNewPos);
 				cpInfo.r1=pts[i].subtract(meshPos);
 				cpInfo.initialPenetration=oldDepth;
 				collPts[i]=cpInfo;
 			}
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = N;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + mesh.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + mesh.get_material().friction);
 			collInfo.mat = mat;
@@ -203,7 +203,7 @@ JigLib_CollDetectBoxMesh.prototype.doOverlapBoxTriangleTest = function(box, tria
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box, mesh, info, collArr)
+JigLib.CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box, mesh, info, collArr)
 {
 
 		var boxRadius=box.get_boundingSphere();
@@ -232,7 +232,7 @@ JigLib_CollDetectBoxMesh.prototype.collDetectBoxStaticMeshOverlap = function(box
 		
 }
 
-JigLib_CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -251,4 +251,3 @@ JigLib_CollDetectBoxMesh.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxMesh = JigLib_CollDetectBoxMesh; 

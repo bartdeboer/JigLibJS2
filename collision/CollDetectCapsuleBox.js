@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectCapsuleBox = function()
+JigLib.CollDetectCapsuleBox = function()
 {
 
 		this.name = "CapsuleBox";
@@ -8,13 +8,12 @@ var JigLib_CollDetectCapsuleBox = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectCapsuleBox, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectCapsuleBox, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectCapsuleBox.prototype.collDetect = function(info, collArr)
 {
 
 }
 
 
 
-JigLib.CollDetectCapsuleBox = JigLib_CollDetectCapsuleBox; 

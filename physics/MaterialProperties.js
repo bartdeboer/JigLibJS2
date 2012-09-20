@@ -1,5 +1,5 @@
 
-var JigLib_MaterialProperties = function(_restitution, _friction)
+JigLib.MaterialProperties = function(_restitution, _friction)
 {
 	this.restitution = null; // Number
 	this.friction = null; // Number
@@ -11,4 +11,3 @@ var JigLib_MaterialProperties = function(_restitution, _friction)
 
 
 
-JigLib.MaterialProperties = JigLib_MaterialProperties; 

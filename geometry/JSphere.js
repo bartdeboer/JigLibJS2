@@ -1,11 +1,11 @@
 
-var JigLib_JSphere = function(skin, r)
+JigLib.JSphere = function(skin, r)
 {
 	this.name = null; // String
 	this._radius = null; // Number
 
 
-		JigLib_RigidBody.apply(this, [ skin ]);
+		JigLib.RigidBody.apply(this, [ skin ]);
 		this._type = "SPHERE";
 		this._radius = r;
 		this._boundingSphere = this._radius;
@@ -14,9 +14,9 @@ var JigLib_JSphere = function(skin, r)
 		
 }
 
-JigLib.extend(JigLib_JSphere, JigLib_RigidBody);
+JigLib.extend(JigLib.JSphere, JigLib.RigidBody);
 
-JigLib_JSphere.prototype.set_radius = function(r)
+JigLib.JSphere.prototype.set_radius = function(r)
 {
 
 		this._radius = r;
@@ -27,19 +27,19 @@ JigLib_JSphere.prototype.set_radius = function(r)
 		
 }
 
-JigLib_JSphere.prototype.get_radius = function()
+JigLib.JSphere.prototype.get_radius = function()
 {
 
 		return this._radius;
 		
 }
 
-JigLib_JSphere.prototype.segmentIntersect = function(out, seg, state)
+JigLib.JSphere.prototype.segmentIntersect = function(out, seg, state)
 {
 
 		out.frac = 0;
-		out.position = new JigLib_Vector3D();
-		out.normal = new JigLib_Vector3D();
+		out.position = new JigLib.Vector3D();
+		out.normal = new JigLib.Vector3D();
 
 		var frac = 0, radiusSq, rSq, sDotr, sSq, sigma, sigmaSqrt, lambda1, lambda2;
 		var r, s;
@@ -80,15 +80,15 @@ JigLib_JSphere.prototype.segmentIntersect = function(out, seg, state)
 		
 }
 
-JigLib_JSphere.prototype.getInertiaProperties = function(m)
+JigLib.JSphere.prototype.getInertiaProperties = function(m)
 {
 
 		var Ixx = 0.4 * m * this._radius * this._radius;
-		return JigLib_JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
+		return JigLib.JMatrix3D.getScaleMatrix(Ixx, Ixx, Ixx);
 		
 }
 
-JigLib_JSphere.prototype.updateBoundingBox = function()
+JigLib.JSphere.prototype.updateBoundingBox = function()
 {
 
 		this._boundingBox.clear();
@@ -98,4 +98,3 @@ JigLib_JSphere.prototype.updateBoundingBox = function()
 
 
 
-JigLib.JSphere = JigLib_JSphere; 

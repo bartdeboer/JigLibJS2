@@ -1,5 +1,5 @@
 
-var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
+JigLib.JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 {
 	this.minVelForProcessing =  0.001; // Number
 	this.allowedDeviation =  0.01; // Number
@@ -8,7 +8,7 @@ var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 	this._pointOnBody = null; // Vector3D
 	this._worldPosition = null; // Vector3D
 
-		JigLib_JConstraint.apply(this, [  ]);
+		JigLib.JConstraint.apply(this, [  ]);
 		this._body = body;
 		this._pointOnBody = pointOnBody;
 		this._worldPosition = worldPosition;
@@ -18,23 +18,23 @@ var JigLib_JConstraintWorldPoint = function(body, pointOnBody, worldPosition)
 		
 }
 
-JigLib.extend(JigLib_JConstraintWorldPoint, JigLib_JConstraint);
+JigLib.extend(JigLib.JConstraintWorldPoint, JigLib.JConstraint);
 
-JigLib_JConstraintWorldPoint.prototype.set_worldPosition = function(pos)
+JigLib.JConstraintWorldPoint.prototype.set_worldPosition = function(pos)
 {
 
 		this._worldPosition = pos;
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.get_worldPosition = function()
+JigLib.JConstraintWorldPoint.prototype.get_worldPosition = function()
 {
 
 		return this._worldPosition;
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.enableConstraint = function()
+JigLib.JConstraintWorldPoint.prototype.enableConstraint = function()
 {
 
 		if (this._constraintEnabled)
@@ -43,11 +43,11 @@ JigLib_JConstraintWorldPoint.prototype.enableConstraint = function()
 		}
 		this._constraintEnabled = true;
 		this._body.addConstraint(this);
-		JigLib_PhysicsSystem.getInstance().addConstraint(this);
+		JigLib.PhysicsSystem.getInstance().addConstraint(this);
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.disableConstraint = function()
+JigLib.JConstraintWorldPoint.prototype.disableConstraint = function()
 {
 
 		if (!this._constraintEnabled)
@@ -56,11 +56,11 @@ JigLib_JConstraintWorldPoint.prototype.disableConstraint = function()
 		}
 		this._constraintEnabled = false;
 		this._body.removeConstraint(this);
-		JigLib_PhysicsSystem.getInstance().removeConstraint(this);
+		JigLib.PhysicsSystem.getInstance().removeConstraint(this);
 		
 }
 
-JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
+JigLib.JConstraintWorldPoint.prototype.apply = function(dt)
 {
 
 		this.satisfied = true;
@@ -76,10 +76,10 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 		deviation = worldPos.subtract(this._worldPosition);
 		deviationDistance = deviation.get_length();
 		if (deviationDistance > this.allowedDeviation) {
-			deviationDir = JigLib_JNumber3D.getDivideVector(deviation, deviationDistance);
-			desiredVel = JigLib_JNumber3D.getScaleVector(deviationDir, (this.allowedDeviation - deviationDistance) / (this.timescale * dt));
+			deviationDir = JigLib.JNumber3D.getDivideVector(deviation, deviationDistance);
+			desiredVel = JigLib.JNumber3D.getScaleVector(deviationDir, (this.allowedDeviation - deviationDistance) / (this.timescale * dt));
 		} else {
-			desiredVel = new JigLib_Vector3D();
+			desiredVel = new JigLib.Vector3D();
 		}
 		
 		N = currentVel.subtract(desiredVel);
@@ -87,19 +87,19 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 		if (normalVel < this.minVelForProcessing) {
 			return false;
 		}
-		N = JigLib_JNumber3D.getDivideVector(N, normalVel);
+		N = JigLib.JNumber3D.getDivideVector(N, normalVel);
 		
 		tempV = R.crossProduct(N);
 		tempV = this._body.get_worldInvInertia().transformVector(tempV);
 		denominator = this._body.get_invMass() + N.dotProduct(tempV.crossProduct(R));
 		 
-		if (denominator < JigLib_JMath3D.NUM_TINY) {
+		if (denominator < JigLib.JMath3D.NUM_TINY) {
 			return false;
 		}
 		 
 		normalImpulse = -normalVel / denominator;
 		
-		this._body.applyWorldImpulse(JigLib_JNumber3D.getScaleVector(N, normalImpulse), worldPos, false);
+		this._body.applyWorldImpulse(JigLib.JNumber3D.getScaleVector(N, normalImpulse), worldPos, false);
 		
 		this._body.setConstraintsAndCollisionsUnsatisfied();
 		this.satisfied = true;
@@ -110,4 +110,3 @@ JigLib_JConstraintWorldPoint.prototype.apply = function(dt)
 
 
 
-JigLib.JConstraintWorldPoint = JigLib_JConstraintWorldPoint; 

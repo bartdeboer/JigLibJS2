@@ -1,5 +1,5 @@
 
-var JigLib_JAABox = function()
+JigLib.JAABox = function()
 {
 	this.minPos = null; // Vector3D
 	this.maxPos = null; // Vector3D
@@ -8,7 +8,7 @@ var JigLib_JAABox = function()
 		
 }
 
-JigLib_JAABox.prototype.get_sideLengths = function()
+JigLib.JAABox.prototype.get_sideLengths = function()
 {
 
 		var pos = this.maxPos.clone();
@@ -17,54 +17,54 @@ JigLib_JAABox.prototype.get_sideLengths = function()
 		
 }
 
-JigLib_JAABox.prototype.get_centrePos = function()
+JigLib.JAABox.prototype.get_centrePos = function()
 {
 
 		var pos = this.minPos.clone();
-		return JigLib_JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
+		return JigLib.JNumber3D.getScaleVector(pos.add(this.maxPos), 0.5);
 		
 }
 
-JigLib_JAABox.prototype.getAllPoints = function()
+JigLib.JAABox.prototype.getAllPoints = function()
 {
 
 		var center, halfSide;
 		var points;
 		center = this.get_centrePos();
-		halfSide = JigLib_JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
+		halfSide = JigLib.JNumber3D.getScaleVector(this.get_sideLengths(), 0.5);
 		points = [];
-		points[0] = center.add(new JigLib_Vector3D(halfSide.x, -halfSide.y, halfSide.z));
-		points[1] = center.add(new JigLib_Vector3D(halfSide.x, halfSide.y, halfSide.z));
-		points[2] = center.add(new JigLib_Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
-		points[3] = center.add(new JigLib_Vector3D(-halfSide.x, halfSide.y, halfSide.z));
-		points[4] = center.add(new JigLib_Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
-		points[5] = center.add(new JigLib_Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
-		points[6] = center.add(new JigLib_Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
-		points[7] = center.add(new JigLib_Vector3D(halfSide.x, halfSide.y, -halfSide.z));
+		points[0] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, halfSide.z));
+		points[1] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, halfSide.z));
+		points[2] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
+		points[3] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, halfSide.z));
+		points[4] = center.add(new JigLib.Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
+		points[5] = center.add(new JigLib.Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
+		points[6] = center.add(new JigLib.Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
+		points[7] = center.add(new JigLib.Vector3D(halfSide.x, halfSide.y, -halfSide.z));
 		
 		return points;
 		
 }
 
-JigLib_JAABox.prototype.get_edges = function()
+JigLib.JAABox.prototype.get_edges = function()
 {
 
 		return [
-		new JigLib_EdgeData( 0, 1 ), new JigLib_EdgeData( 0, 2 ), new JigLib_EdgeData( 0, 6 ),
-		new JigLib_EdgeData( 2, 3 ), new JigLib_EdgeData( 2, 4 ), new JigLib_EdgeData( 6, 7 ),
-		new JigLib_EdgeData( 6, 4 ), new JigLib_EdgeData( 1, 3 ), new JigLib_EdgeData( 1, 7 ),
-		new JigLib_EdgeData( 3, 5 ), new JigLib_EdgeData( 7, 5 ), new JigLib_EdgeData( 4, 5 )];
+		new JigLib.EdgeData( 0, 1 ), new JigLib.EdgeData( 0, 2 ), new JigLib.EdgeData( 0, 6 ),
+		new JigLib.EdgeData( 2, 3 ), new JigLib.EdgeData( 2, 4 ), new JigLib.EdgeData( 6, 7 ),
+		new JigLib.EdgeData( 6, 4 ), new JigLib.EdgeData( 1, 3 ), new JigLib.EdgeData( 1, 7 ),
+		new JigLib.EdgeData( 3, 5 ), new JigLib.EdgeData( 7, 5 ), new JigLib.EdgeData( 4, 5 )];
 		
 }
 
-JigLib_JAABox.prototype.getRadiusAboutCentre = function()
+JigLib.JAABox.prototype.getRadiusAboutCentre = function()
 {
 
 		return 0.5 * (this.maxPos.subtract(this.minPos).get_length());
 		
 }
 
-JigLib_JAABox.prototype.move = function(delta)
+JigLib.JAABox.prototype.move = function(delta)
 {
 
 		this.minPos.add(delta);
@@ -72,29 +72,29 @@ JigLib_JAABox.prototype.move = function(delta)
 		
 }
 
-JigLib_JAABox.prototype.clear = function()
+JigLib.JAABox.prototype.clear = function()
 {
 
-		var huge=JigLib_JMath3D.NUM_HUGE;
-		this.minPos = new JigLib_Vector3D(huge, huge, huge);
-		this.maxPos = new JigLib_Vector3D( -huge, -huge, -huge);
+		var huge=JigLib.JMath3D.NUM_HUGE;
+		this.minPos = new JigLib.Vector3D(huge, huge, huge);
+		this.maxPos = new JigLib.Vector3D( -huge, -huge, -huge);
 		
 }
 
-JigLib_JAABox.prototype.clone = function()
+JigLib.JAABox.prototype.clone = function()
 {
 
-		var aabb = new JigLib_JAABox();
+		var aabb = new JigLib.JAABox();
 		aabb.minPos = this.minPos.clone();
 		aabb.maxPos = this.maxPos.clone();
 		return aabb;
 		
 }
 
-JigLib_JAABox.prototype.addPoint = function(pos)
+JigLib.JAABox.prototype.addPoint = function(pos)
 {
 
-		var tiny=JigLib_JMath3D.NUM_TINY;
+		var tiny=JigLib.JMath3D.NUM_TINY;
 		if (pos.x < this.minPos.x) this.minPos.x = pos.x - tiny;
 		if (pos.x > this.maxPos.x) this.maxPos.x = pos.x + tiny;
 		if (pos.y < this.minPos.y) this.minPos.y = pos.y - tiny;
@@ -104,7 +104,7 @@ JigLib_JAABox.prototype.addPoint = function(pos)
 		
 }
 
-JigLib_JAABox.prototype.addBox = function(box)
+JigLib.JAABox.prototype.addBox = function(box)
 {
 
 		var pts = box.getCornerPoints(box.get_currentState());
@@ -119,7 +119,7 @@ JigLib_JAABox.prototype.addBox = function(box)
 		
 }
 
-JigLib_JAABox.prototype.addSphere = function(sphere)
+JigLib.JAABox.prototype.addSphere = function(sphere)
 {
 
 		//if (sphere.get_currentState().position.x - sphere.get_radius() < _minPos.x) {
@@ -160,7 +160,7 @@ JigLib_JAABox.prototype.addSphere = function(sphere)
 		
 }
 
-JigLib_JAABox.prototype.addCapsule = function(capsule)
+JigLib.JAABox.prototype.addCapsule = function(capsule)
 {
 
 		var pos = capsule.getBottomPos(capsule.get_currentState());
@@ -209,7 +209,7 @@ JigLib_JAABox.prototype.addCapsule = function(capsule)
 		
 }
 
-JigLib_JAABox.prototype.addSegment = function(seg)
+JigLib.JAABox.prototype.addSegment = function(seg)
 {
 
 		this.addPoint(seg.origin);
@@ -217,7 +217,7 @@ JigLib_JAABox.prototype.addSegment = function(seg)
 		
 }
 
-JigLib_JAABox.prototype.overlapTest = function(box)
+JigLib.JAABox.prototype.overlapTest = function(box)
 {
 
 		return (
@@ -230,7 +230,7 @@ JigLib_JAABox.prototype.overlapTest = function(box)
 		
 }
 
-JigLib_JAABox.prototype.isPointInside = function(pos)
+JigLib.JAABox.prototype.isPointInside = function(pos)
 {
 
 		return ((pos.x >= this.minPos.x) && 
@@ -242,17 +242,17 @@ JigLib_JAABox.prototype.isPointInside = function(pos)
 		
 }
 
-JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
+JigLib.JAABox.prototype.segmentAABoxOverlap = function(seg)
 {
 
 		var jDir, kDir, i, iFace;
-		var frac, dist0, dist1, tiny=JigLib_JMath3D.NUM_TINY;
+		var frac, dist0, dist1, tiny=JigLib.JMath3D.NUM_TINY;
 		
 		var pt, minPosArr, maxPosArr, p0, p1, faceOffsets;
-		minPosArr = JigLib_JNumber3D.toArray(this.minPos);
-		maxPosArr = JigLib_JNumber3D.toArray(this.maxPos);
-		p0 = JigLib_JNumber3D.toArray(seg.origin);
-		p1 = JigLib_JNumber3D.toArray(seg.getEnd());
+		minPosArr = JigLib.JNumber3D.toArray(this.minPos);
+		maxPosArr = JigLib.JNumber3D.toArray(this.maxPos);
+		p0 = JigLib.JNumber3D.toArray(seg.origin);
+		p1 = JigLib.JNumber3D.toArray(seg.getEnd());
 		for (i = 0; i < 3; i++ ) {
 			jDir = (i + 1) % 3;
 			kDir = (i + 2) % 3;
@@ -270,7 +270,7 @@ JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
 				frac = 1;
 				
 				if (frac >= 0) {
-				pt = JigLib_JNumber3D.toArray(seg.getPoint(frac));
+				pt = JigLib.JNumber3D.toArray(seg.getPoint(frac));
 				if((pt[jDir] > minPosArr[jDir] - tiny) && 
 				(pt[jDir] < maxPosArr[jDir] + tiny) && 
 				(pt[kDir] > minPosArr[kDir] - tiny) && 
@@ -286,4 +286,3 @@ JigLib_JAABox.prototype.segmentAABoxOverlap = function(seg)
 
 
 
-JigLib.JAABox = JigLib_JAABox; 

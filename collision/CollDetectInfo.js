@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectInfo = function()
+JigLib.CollDetectInfo = function()
 {
 	this.body0 = null; // RigidBody
 	this.body1 = null; // RigidBody
@@ -7,4 +7,3 @@ var JigLib_CollDetectInfo = function()
 
 
 
-JigLib.CollDetectInfo = JigLib_CollDetectInfo; 

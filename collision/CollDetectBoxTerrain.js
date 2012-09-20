@@ -1,5 +1,5 @@
 
-var JigLib_CollDetectBoxTerrain = function()
+JigLib.CollDetectBoxTerrain = function()
 {
 
 		this.name = "BoxTerrain";
@@ -8,9 +8,9 @@ var JigLib_CollDetectBoxTerrain = function()
 		
 }
 
-JigLib.extend(JigLib_CollDetectBoxTerrain, JigLib_CollDetectFunctor);
+JigLib.extend(JigLib.CollDetectBoxTerrain, JigLib.CollDetectFunctor);
 
-JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
+JigLib.CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 {
 
 		var tempBody;
@@ -26,7 +26,7 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 				
 		var oldPts = box.getCornerPoints(box.get_oldState());
 		var newPts = box.getCornerPoints(box.get_currentState());
-		var collNormal = new JigLib_Vector3D();
+		var collNormal = new JigLib.Vector3D();
 		
 		var obj;
 		var dist;
@@ -40,11 +40,11 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 			newPt = newPts[i];
 			obj = terrain.getHeightAndNormalByPoint(newPt);
 			
-			if (obj.height < JigLib_JConfig.collToll) {
+			if (obj.height < JigLib.JConfig.collToll) {
 				oldPt = oldPts[i];
 				dist = terrain.getHeightByPoint(oldPt);
 				collNormal = collNormal.add(obj.normal);
-				cpInfo = new JigLib_CollPointInfo();
+				cpInfo = new JigLib.CollPointInfo();
 				cpInfo.r0 = oldPt.subtract(box.get_oldState().position);
 				cpInfo.r1 = oldPt.subtract(terrain.get_oldState().position);
 				cpInfo.initialPenetration = -dist;
@@ -55,12 +55,12 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 		if (collPts.length > 0) {
 			collNormal.normalize();
 			
-			var collInfo = new JigLib_CollisionInfo();
+			var collInfo = new JigLib.CollisionInfo();
 			collInfo.objInfo = info;
 			collInfo.dirToBody = collNormal;
 			collInfo.pointInfo = collPts;
 			
-			var mat = new JigLib_MaterialProperties();
+			var mat = new JigLib.MaterialProperties();
 			mat.restitution = 0.5*(box.get_material().restitution + terrain.get_material().restitution);
 			mat.friction = 0.5*(box.get_material().friction + terrain.get_material().friction);
 			collInfo.mat = mat;
@@ -78,4 +78,3 @@ JigLib_CollDetectBoxTerrain.prototype.collDetect = function(info, collArr)
 
 
 
-JigLib.CollDetectBoxTerrain = JigLib_CollDetectBoxTerrain; 

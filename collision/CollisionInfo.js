@@ -1,7 +1,7 @@
 
-var JigLib_CollisionInfo = function()
+JigLib.CollisionInfo = function()
 {
-	this.mat =  new JigLib_MaterialProperties(); // MaterialProperties
+	this.mat =  new JigLib.MaterialProperties(); // MaterialProperties
 	this.objInfo = null; // CollDetectInfo
 	this.dirToBody = null; // Vector3D
 	this.pointInfo = null; // CollPointInfo
@@ -10,4 +10,3 @@ var JigLib_CollisionInfo = function()
 
 
 
-JigLib.CollisionInfo = JigLib_CollisionInfo; 

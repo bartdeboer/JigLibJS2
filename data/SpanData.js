@@ -1,5 +1,5 @@
 
-var JigLib_SpanData = function()
+JigLib.SpanData = function()
 {
 	this.min = null; // Number
 	this.max = null; // Number
@@ -9,4 +9,3 @@ var JigLib_SpanData = function()
 
 
 
-JigLib.SpanData = JigLib_SpanData; 

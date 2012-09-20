@@ -1,14 +1,14 @@
 
-var JigLib_CollisionSystemBrute = function()
+JigLib.CollisionSystemBrute = function()
 {
 
-		JigLib_CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 }
 
-JigLib.extend(JigLib_CollisionSystemBrute, JigLib_CollisionSystemAbstract);
+JigLib.extend(JigLib.CollisionSystemBrute, JigLib.CollisionSystemAbstract);
 
-JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
+JigLib.CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, collArr)
 {
 
 		var info;
@@ -36,7 +36,7 @@ JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, col
 				
 				if (this.checkCollidables(_body, _collBody) && this.detectionFunctors[bodyType + "_" + _collBody.get_type()] != undefined)
 				{
-				info = new JigLib_CollDetectInfo();
+				info = new JigLib.CollDetectInfo();
 				info.body0 = _body;
 				info.body1 = _collBody;
 				fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -50,4 +50,3 @@ JigLib_CollisionSystemBrute.prototype.detectAllCollisions = function(bodies, col
 
 
 
-JigLib.CollisionSystemBrute = JigLib_CollisionSystemBrute; 

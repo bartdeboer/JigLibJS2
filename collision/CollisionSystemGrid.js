@@ -1,5 +1,5 @@
 
-var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
+JigLib.CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 {
 	this.gridEntries = null; // CollisionSystemGridEntry
 	this.overflowEntries = null; // CollisionSystemGridEntry
@@ -14,7 +14,7 @@ var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 	this.sizeZ = null; // Number
 	this.minDelta = null; // Number
 
-		JigLib_CollisionSystemAbstract.apply(this, [  ]);
+		JigLib.CollisionSystemAbstract.apply(this, [  ]);
 		
 		this.nx = nx; this.ny = ny; this.nz = nz;
 		this.dx = dx; this.dy = dy; this.dz = dz;
@@ -23,26 +23,26 @@ var JigLib_CollisionSystemGrid = function(sx, sy, sz, nx, ny, nz, dx, dy, dz)
 		this.sizeZ = nz * dz;
 		this.minDelta = Math.min(dx, dy, dz);
 		
-		this.startPoint = new JigLib_Vector3D(sx, sy, sz);
+		this.startPoint = new JigLib.Vector3D(sx, sy, sz);
 		
 		this.gridEntries = [];
 		
 		var len=this.gridEntries.length;
 		for (var j = 0; j < len; ++j)
 		{
-			var gridEntry = new JigLib_CollisionSystemGridEntry(null);
+			var gridEntry = new JigLib.CollisionSystemGridEntry(null);
 			gridEntry.gridIndex = j;
 			this.gridEntries[j]=gridEntry;
 		}
 		
-		this.overflowEntries = new JigLib_CollisionSystemGridEntry(null);
+		this.overflowEntries = new JigLib.CollisionSystemGridEntry(null);
 		this.overflowEntries.gridIndex = -1;
 		
 }
 
-JigLib.extend(JigLib_CollisionSystemGrid, JigLib_CollisionSystemAbstract);
+JigLib.extend(JigLib.CollisionSystemGrid, JigLib.CollisionSystemAbstract);
 
-JigLib_CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
+JigLib.CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
 {
 
 		var _i = i % this.nx;
@@ -53,7 +53,7 @@ JigLib_CollisionSystemGrid.prototype.calcIndex = function(i, j, k)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
 {
 
 		var i;var j;var k;
@@ -62,23 +62,23 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin3 = function(colBody)
 		if ((sides.x > this.dx) || (sides.y > this.dy) || (sides.z > this.dz))
 		{
 			i = j = k = -1;
-			return new JigLib_Vector3D(i,j,k);
+			return new JigLib.Vector3D(i,j,k);
 		}
 		
 		var min = colBody.get_boundingBox().minPos.clone();
-		min.x = JigLib_JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JigLib_JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JigLib_JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		i =  ((min.x - this.startPoint.x) / this.dx) % this.nx;
 		j =  ((min.y - this.startPoint.y) / this.dy) % this.ny;
 		k =  ((min.z - this.startPoint.z) / this.dz) % this.nz;
 		
-		return new JigLib_Vector3D(i,j,k);
+		return new JigLib.Vector3D(i,j,k);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 {
 
 		var tempStoreObject = new Object;
@@ -98,9 +98,9 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 		
 		var min = colBody.get_boundingBox().minPos.clone();
 
-		min.x = JigLib_JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
-		min.y = JigLib_JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
-		min.z = JigLib_JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
+		min.x = JigLib.JMath3D.getLimiteNumber(min.x, this.startPoint.x, this.startPoint.x + this.sizeX);
+		min.y = JigLib.JMath3D.getLimiteNumber(min.y, this.startPoint.y, this.startPoint.y + this.sizeY);
+		min.z = JigLib.JMath3D.getLimiteNumber(min.z, this.startPoint.z, this.startPoint.z + this.sizeZ);
 		
 		fi = (min.x - this.startPoint.x) / this.dx;
 		fj = (min.y - this.startPoint.y) / this.dy;
@@ -129,7 +129,7 @@ JigLib_CollisionSystemGrid.prototype.calcGridForSkin6 = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
+JigLib.CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
 {
 
 		var tempStoreVector = this.calcGridForSkin3(colBody);
@@ -139,7 +139,7 @@ JigLib_CollisionSystemGrid.prototype.calcGridIndexForBody = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.addCollisionBody = function(body)
+JigLib.CollisionSystemGrid.prototype.addCollisionBody = function(body)
 {
 
 		if (this.collBody.indexOf(body) < 0)
@@ -148,22 +148,22 @@ JigLib_CollisionSystemGrid.prototype.addCollisionBody = function(body)
 		body.collisionSystem = this;
 
 		// also do the grid stuff - for now put it on the overflow list
-		var entry = new JigLib_CollisionSystemGridEntry(body);
+		var entry = new JigLib.CollisionSystemGridEntry(body);
 		body.externalData = entry;
 		
 		// add entry to the start of the list
-		JigLib_CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, this.overflowEntries);
 		this.collisionSkinMoved(body);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.removeCollisionBody = function(body)
+JigLib.CollisionSystemGrid.prototype.removeCollisionBody = function(body)
 {
 
 		if (body.externalData != null)
 		{
 			body.externalData.collisionBody = null;
-			JigLib_CollisionSystemGridEntry.removeGridEntry(body.externalData);
+			JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			body.externalData = null;
 		}
 
@@ -172,21 +172,21 @@ JigLib_CollisionSystemGrid.prototype.removeCollisionBody = function(body)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.removeAllCollisionBodies = function()
+JigLib.CollisionSystemGrid.prototype.removeAllCollisionBodies = function()
 {
 
 		for (var collBody_i = 0, collBody_l = this.collBody.length, body; (collBody_i < collBody_l) && (body = this.collBody[collBody_i]); collBody_i++){
 			if (body.externalData != null)
 			{
 				body.externalData.collisionBody = null;
-				JigLib_CollisionSystemGridEntry.removeGridEntry(body.externalData);
+				JigLib.CollisionSystemGridEntry.removeGridEntry(body.externalData);
 			}
 		}
 		this.collBody.length=0;
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
+JigLib.CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
 {
 
 		var entry = colBody.externalData;
@@ -210,12 +210,12 @@ JigLib_CollisionSystemGrid.prototype.collisionSkinMoved = function(colBody)
 		else
 			start = this.overflowEntries;
 		
-		JigLib_CollisionSystemGridEntry.removeGridEntry(entry);
-		JigLib_CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
+		JigLib.CollisionSystemGridEntry.removeGridEntry(entry);
+		JigLib.CollisionSystemGridEntry.insertGridEntryAfter(entry, start);
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
+JigLib.CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
 {
 
 		var entries = []; 
@@ -278,7 +278,7 @@ JigLib_CollisionSystemGrid.prototype.getListsToCheck = function(colBody)
 		
 }
 
-JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, collArr)
+JigLib.CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, collArr)
 {
 
 		var info;
@@ -310,7 +310,7 @@ JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, coll
 				
 				if (this.checkCollidables(body, entry.collisionBody) && this.detectionFunctors[bodyType + "_" + entry.collisionBody.get_type()] != undefined)
 				{
-					info = new JigLib_CollDetectInfo();
+					info = new JigLib.CollDetectInfo();
 					info.body0 = body;
 					info.body1 = entry.collisionBody;
 					fu = this.detectionFunctors[info.body0.get_type() + "_" + info.body1.get_type()];
@@ -325,4 +325,3 @@ JigLib_CollisionSystemGrid.prototype.detectAllCollisions = function(bodies, coll
 
 
 
-JigLib.CollisionSystemGrid = JigLib_CollisionSystemGrid; 

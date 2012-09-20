@@ -1,5 +1,5 @@
 
-var JigLib_CollisionSystemGridEntry = function(collisionBody)
+JigLib.CollisionSystemGridEntry = function(collisionBody)
 {
 	this.collisionBody = null; // RigidBody
 	this.previous = null; // CollisionSystemGridEntry
@@ -12,12 +12,12 @@ var JigLib_CollisionSystemGridEntry = function(collisionBody)
 }
 
 
-JigLib_CollisionSystemGridEntry.removeGridEntry = function(entry)
+JigLib.CollisionSystemGridEntry.removeGridEntry = function(entry)
 {
 
-			// link the JigLib_CollisionSystemGridEntry.previous to the JigLib_CollisionSystemGridEntry.next (may be 0)
+			// link the JigLib.CollisionSystemGridEntry.previous to the JigLib.CollisionSystemGridEntry.next (may be 0)
 			entry.previous.next = entry.next;
-			// link the JigLib_CollisionSystemGridEntry.next (if it exists) to the JigLib_CollisionSystemGridEntry.previous.
+			// link the JigLib.CollisionSystemGridEntry.next (if it exists) to the JigLib.CollisionSystemGridEntry.previous.
 			if (entry.next != null)
 				entry.next.previous = entry.previous;
 			// tidy up this entry
@@ -26,7 +26,7 @@ JigLib_CollisionSystemGridEntry.removeGridEntry = function(entry)
 		
 }
 
-JigLib_CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
+JigLib.CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
 {
 
 			var next = prev.next;
@@ -40,4 +40,3 @@ JigLib_CollisionSystemGridEntry.insertGridEntryAfter = function(entry, prev)
 }
 
 
-JigLib.CollisionSystemGridEntry = JigLib_CollisionSystemGridEntry; 

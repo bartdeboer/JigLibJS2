@@ -1,5 +1,5 @@
 
-var JigLib_EdgeData = function(ind0, ind1)
+JigLib.EdgeData = function(ind0, ind1)
 {
 	this.ind0 = null; // int
 	this.ind1 = null; // int
@@ -11,4 +11,3 @@ var JigLib_EdgeData = function(ind0, ind1)
 
 
 
-JigLib.EdgeData = JigLib_EdgeData; 

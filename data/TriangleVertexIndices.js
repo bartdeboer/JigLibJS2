@@ -1,5 +1,5 @@
 
-var JigLib_TriangleVertexIndices = function(_i0, _i1, _i2)
+JigLib.TriangleVertexIndices = function(_i0, _i1, _i2)
 {
 	this.i0 = null; // uint
 	this.i1 = null; // uint
@@ -13,4 +13,3 @@ var JigLib_TriangleVertexIndices = function(_i0, _i1, _i2)
 
 
 
-JigLib.TriangleVertexIndices = JigLib_TriangleVertexIndices; 

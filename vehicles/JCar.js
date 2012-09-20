@@ -1,5 +1,5 @@
 
-var JigLib_JCar = function(skin)
+JigLib.JCar = function(skin)
 {
 	this._maxSteerAngle = null; // Number
 	this._steerRate = null; // Number
@@ -13,7 +13,7 @@ var JigLib_JCar = function(skin)
 	this._wheels = null; // Array
 	this._steerWheels = null; // Array
 
-		this._chassis = new JigLib_JChassis(this, skin);
+		this._chassis = new JigLib.JChassis(this, skin);
 		this._wheels = [];
 		this._steerWheels = [];
 		this._destSteering = this._destAccelerate = this._steering = this._accelerate = this._HBrake = 0;
@@ -21,7 +21,7 @@ var JigLib_JCar = function(skin)
 		
 }
 
-JigLib_JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
+JigLib.JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
 {
 	if (maxSteerAngle == null) maxSteerAngle = 45;
 	if (steerRate == null) steerRate = 1;
@@ -33,7 +33,7 @@ JigLib_JCar.prototype.setCar = function(maxSteerAngle, steerRate, driveTorque)
 		
 }
 
-JigLib_JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
+JigLib.JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheelFwdFriction, wheelTravel, wheelRadius, wheelRestingFrac, wheelDampingFrac, wheelNumRays)
 {
 	if (wheelSideFriction == null) wheelSideFriction = 2;
 	if (wheelFwdFriction == null) wheelFwdFriction = 2;
@@ -46,44 +46,44 @@ JigLib_JCar.prototype.setupWheel = function(_name, pos, wheelSideFriction, wheel
 		var mass = this._chassis.get_mass();
 		var mass4 = 0.25 * mass;
 		
-		var gravity = JigLib_PhysicsSystem.getInstance().get_gravity().clone();
-		var gravityLen = JigLib_PhysicsSystem.getInstance().get_gravity().get_length();
+		var gravity = JigLib.PhysicsSystem.getInstance().get_gravity().clone();
+		var gravityLen = JigLib.PhysicsSystem.getInstance().get_gravity().get_length();
 		gravity.normalize();
-		var axis = JigLib_JNumber3D.getScaleVector(gravity, -1);
+		var axis = JigLib.JNumber3D.getScaleVector(gravity, -1);
 		var spring = mass4 * gravityLen / (wheelRestingFrac * wheelTravel);
 		var inertia = 0.015 * wheelRadius * wheelRadius * mass;
 		var damping = 2 * Math.sqrt(spring * mass);
 		damping *= (0.25 * wheelDampingFrac);
 
-		this._wheels[_name] = new JigLib_JWheel(this);
+		this._wheels[_name] = new JigLib.JWheel(this);
 		this._wheels[_name].setup(pos, axis, spring, wheelTravel, inertia,
 			wheelRadius, wheelSideFriction, wheelFwdFriction,
 			damping, wheelNumRays);
 		
 }
 
-JigLib_JCar.prototype.get_chassis = function()
+JigLib.JCar.prototype.get_chassis = function()
 {
 
 		return this._chassis;
 		
 }
 
-JigLib_JCar.prototype.get_wheels = function()
+JigLib.JCar.prototype.get_wheels = function()
 {
 
 		return this._wheels;
 		
 }
 
-JigLib_JCar.prototype.setAccelerate = function(val)
+JigLib.JCar.prototype.setAccelerate = function(val)
 {
 
 		this._destAccelerate = val;
 		
 }
 
-JigLib_JCar.prototype.setSteer = function(wheels, val)
+JigLib.JCar.prototype.setSteer = function(wheels, val)
 {
 
 		this._destSteering = val;
@@ -98,7 +98,7 @@ JigLib_JCar.prototype.setSteer = function(wheels, val)
 		
 }
 
-JigLib_JCar.prototype.findWheel = function(_name)
+JigLib.JCar.prototype.findWheel = function(_name)
 {
 
 		for (var i in this._wheels)
@@ -112,14 +112,14 @@ JigLib_JCar.prototype.findWheel = function(_name)
 		
 }
 
-JigLib_JCar.prototype.setHBrake = function(val)
+JigLib.JCar.prototype.setHBrake = function(val)
 {
 
 		this._HBrake = val;
 		
 }
 
-JigLib_JCar.prototype.addExternalForces = function(dt)
+JigLib.JCar.prototype.addExternalForces = function(dt)
 {
 
 		for (var wheels_i = 0, wheels_l = this.get_wheels().length, wheel; (wheels_i < wheels_l) && (wheel = this.get_wheels()[wheels_i]); wheels_i++)
@@ -129,7 +129,7 @@ JigLib_JCar.prototype.addExternalForces = function(dt)
 		
 }
 
-JigLib_JCar.prototype.postPhysics = function(dt)
+JigLib.JCar.prototype.postPhysics = function(dt)
 {
 
 		var wheel;
@@ -178,7 +178,7 @@ JigLib_JCar.prototype.postPhysics = function(dt)
 		
 }
 
-JigLib_JCar.prototype.getNumWheelsOnFloor = function()
+JigLib.JCar.prototype.getNumWheelsOnFloor = function()
 {
 
 		var count = 0;
@@ -195,4 +195,3 @@ JigLib_JCar.prototype.getNumWheelsOnFloor = function()
 
 
 
-JigLib.JCar = JigLib_JCar; 
