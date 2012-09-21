@@ -1,5 +1,5 @@
 
-JigLib_Vector3D = function(x, y, z, w) 
+JigLib.Vector3D = function(x, y, z, w) 
 {
   this.x = x ? x : 0;
   this.y = y ? y : 0;
@@ -7,19 +7,19 @@ JigLib_Vector3D = function(x, y, z, w)
   this.w = w ? w : 0;
 }
 
-JigLib_Vector3D.prototype.x = null;
-JigLib_Vector3D.prototype.y = null;
-JigLib_Vector3D.prototype.z = null;
-JigLib_Vector3D.prototype.w = null;
+JigLib.Vector3D.prototype.x = null;
+JigLib.Vector3D.prototype.y = null;
+JigLib.Vector3D.prototype.z = null;
+JigLib.Vector3D.prototype.w = null;
     
 //add(a:Vector3D):Vector3D
 //Adds the value of the x, y, and z elements of the current Vector3D object to the values of the x, y, and z elements of another Vector3D object.
-JigLib_Vector3D.prototype.add = function(a) 
+JigLib.Vector3D.prototype.add = function(a) 
 {
-  return new Vector3D(this.x + a.x, this.y + a.y, this.z + a.z, this.w /* + a.w */);
+  return new JigLib.Vector3D(this.x + a.x, this.y + a.y, this.z + a.z, this.w /* + a.w */);
 }
 
-JigLib_Vector3D.prototype.setTo = function(xa, ya, za)
+JigLib.Vector3D.prototype.setTo = function(xa, ya, za)
 {	
   this.x = xa;
   this.y = ya;
@@ -29,7 +29,7 @@ JigLib_Vector3D.prototype.setTo = function(xa, ya, za)
     
 //angleBetween(a:Vector3D, b:Vector3D):Number
 //[static] Returns the angle in radians between two vectors.
-JigLib_Vector3D.angleBetween = function(a, b) 
+JigLib.Vector3D.angleBetween = function(a, b) 
 {
   return a.dotProduct(b);
   // var an = a.clone();
@@ -44,18 +44,18 @@ JigLib_Vector3D.angleBetween = function(a, b)
     
 //clone():Vector3D
 //Returns a new Vector3D object that is an exact copy of the current Vector3D object.
-JigLib_Vector3D.prototype.clone = function() 
+JigLib.Vector3D.prototype.clone = function() 
 {
-  return new JigLib_Vector3D(this.x, this.y, this.z, this.w);
+  return new JigLib.Vector3D(this.x, this.y, this.z, this.w);
 }
 
     
 //crossProduct(a:Vector3D):Vector3D
 //Returns a new Vector3D object that is perpendicular (at a right angle) to the current Vector3D and another Vector3D object.
-JigLib_Vector3D.prototype.crossProduct = function(a) 
+JigLib.Vector3D.prototype.crossProduct = function(a) 
 {
   var x1 = this.x, y1 = this.y, z1 = this.z, x2 = a.x, y2 = a.y, z2 = a.z;
-  return new JigLib_Vector3D(
+  return new JigLib.Vector3D(
     y1 * z2 - z1 * y2, 
     z1 * x2 - x1 * z2, 
     x1 * y2 - y1 * x2, 0);
@@ -63,7 +63,7 @@ JigLib_Vector3D.prototype.crossProduct = function(a)
     
 //decrementBy(a:Vector3D):void
 //Decrements the value of the x, y, and z elements of the current Vector3D object by the values of the x, y, and z elements of specified Vector3D object.
-JigLib_Vector3D.prototype.decrementBy = function(a) 
+JigLib.Vector3D.prototype.decrementBy = function(a) 
 {
   this.x -= a.x;
   this.y -= a.y;
@@ -74,7 +74,7 @@ JigLib_Vector3D.prototype.decrementBy = function(a)
     
 //distance(pt1:Vector3D, pt2:Vector3D):Number
 //[static] Returns the distance between two Vector3D objects.
-JigLib_Vector3D.distance = function(pt1, pt2) 
+JigLib.Vector3D.distance = function(pt1, pt2) 
 {
   var pow = Math.pow;
   var x = pow(pt1.x - pt2.x, 2);
@@ -85,7 +85,7 @@ JigLib_Vector3D.distance = function(pt1, pt2)
     
 //dotProduct(a:Vector3D):Number
 //If the current Vector3D object and the one specified as the parameter are unit vertices, this method returns the cosine of the angle between the two vertices.
-JigLib_Vector3D.prototype.dotProduct = function(a) 
+JigLib.Vector3D.prototype.dotProduct = function(a) 
 {
   var d = (this.x * a.x) + (this.y * a.y) + (this.z * a.z);
   // return (this.get_length() == 1 && a.get_length() == 1) ? Math.acos(d) : d;
@@ -94,7 +94,7 @@ JigLib_Vector3D.prototype.dotProduct = function(a)
     
 //equals(toCompare:Vector3D, allFour:Boolean = false):Boolean
 //Determines whether two Vector3D objects are equal by comparing the x, y, and z elements of the current Vector3D object with a specified Vector3D object.
-JigLib_Vector3D.prototype.equals = function(toCompare, allFour) 
+JigLib.Vector3D.prototype.equals = function(toCompare, allFour) 
 {
   if (allFour)
     return (this.x == toCompare.x && this.y == toCompare.y && this.z == toCompare.z && this.w == toCompare.w);
@@ -104,7 +104,7 @@ JigLib_Vector3D.prototype.equals = function(toCompare, allFour)
     
 //incrementBy(a:Vector3D):void
 //Increments the value of the x, y, and z elements of the current Vector3D object by the values of the x, y, and z elements of a specified Vector3D object.
-JigLib_Vector3D.prototype.incrementBy = function(a) 
+JigLib.Vector3D.prototype.incrementBy = function(a) 
 {
   this.x += a.x;
   this.y += a.y;
@@ -115,7 +115,7 @@ JigLib_Vector3D.prototype.incrementBy = function(a)
     
 //nearEquals(toCompare:Vector3D, tolerance:Number, allFour:Boolean = false):Boolean
 //Compares the elements of the current Vector3D object with the elements of a specified Vector3D object to determine whether they are nearly equal.
-JigLib_Vector3D.prototype.nearEquals = function(toCompare, tolerance, allFour) 
+JigLib.Vector3D.prototype.nearEquals = function(toCompare, tolerance, allFour) 
 {
   var abs = Math.abs;
   if (allFour)
@@ -131,7 +131,7 @@ JigLib_Vector3D.prototype.nearEquals = function(toCompare, tolerance, allFour)
     
 //negate():void
 //Sets the current Vector3D object to its inverse.
-JigLib_Vector3D.prototype.negate = function() 
+JigLib.Vector3D.prototype.negate = function() 
 {
     this.x *= -1;
     this.y *= -1;
@@ -141,7 +141,7 @@ JigLib_Vector3D.prototype.negate = function()
     
 //normalize():Number
 //Converts a Vector3D object to a unit vector by dividing the first three elements (x, y, z) by the length of the vector.
-JigLib_Vector3D.prototype.normalize = function() 
+JigLib.Vector3D.prototype.normalize = function() 
 {
   var f = this.get_length();
   if (f > 0) 
@@ -156,7 +156,7 @@ JigLib_Vector3D.prototype.normalize = function()
     
 //project():void
 //Divides the value of the x, y, and z properties of the current Vector3D object by the value of its w property.
-JigLib_Vector3D.prototype.project = function() 
+JigLib.Vector3D.prototype.project = function() 
 {
   var w = this.w;
   this.x /= w;
@@ -168,7 +168,7 @@ JigLib_Vector3D.prototype.project = function()
     
 //scaleBy(s:Number):void
 //Scales the current Vector3D object by a scalar, a magnitude.
-JigLib_Vector3D.prototype.scaleBy = function(s) 
+JigLib.Vector3D.prototype.scaleBy = function(s) 
 {
   this.x *= s;
   this.y *= s;
@@ -178,14 +178,14 @@ JigLib_Vector3D.prototype.scaleBy = function(s)
     
 //subtract(a:Vector3D):Vector3D
 //Subtracts the value of the x, y, and z elements of the current Vector3D object from the values of the x, y, and z elements of another Vector3D object.
-JigLib_Vector3D.prototype.subtract = function(a) 
+JigLib.Vector3D.prototype.subtract = function(a) 
 {
-  return new Vector3D(this.x - a.x, this.y - a.y, this.z - a.z, this.w /* - a.w */);
+  return new JigLib.Vector3D(this.x - a.x, this.y - a.y, this.z - a.z, this.w /* - a.w */);
 }
     
 //toString():String
 //Returns a string representation of the current Vector3D object.
-JigLib_Vector3D.prototype.toString = function() 
+JigLib.Vector3D.prototype.toString = function() 
 {
   return '[ ' + this.x + ', ' + this.y + ', ' + this.z + ', ' + this.w + ' ]';
 }
@@ -196,7 +196,7 @@ JigLib_Vector3D.prototype.toString = function()
  * @param v {array} in the format [x,y,z,w]
  * @type number
  **/
-JigLib_Vector3D.prototype.get_length = function() 
+JigLib.Vector3D.prototype.get_length = function() 
 {
   var sq = this.get_lengthSquared();	
   return (sq > 0) ? Math.pow(sq, 0.5) : 0.0;
@@ -207,15 +207,12 @@ JigLib_Vector3D.prototype.get_length = function()
  * @param v {array} in the format [x,y,z,w]
  * @type number
  **/
-JigLib_Vector3D.prototype.get_lengthSquared = function()
+JigLib.Vector3D.prototype.get_lengthSquared = function()
 {
   var x = this.x, y = this.y, z = this.z;
   return x * x + y * y + z * z;	
 };
 
-JigLib_Vector3D.X_AXIS = new JigLib_Vector3D(1, 0, 0, 0);
-JigLib_Vector3D.Y_AXIS = new JigLib_Vector3D(0, 1, 0, 0);
-JigLib_Vector3D.Z_AXIS = new JigLib_Vector3D(0, 0, 1, 0);
-
-JigLib.Vector3D = JigLib_Vector3D;
-
+JigLib.Vector3D.X_AXIS = new JigLib.Vector3D(1, 0, 0, 0);
+JigLib.Vector3D.Y_AXIS = new JigLib.Vector3D(0, 1, 0, 0);
+JigLib.Vector3D.Z_AXIS = new JigLib.Vector3D(0, 0, 1, 0);

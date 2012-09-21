@@ -18,9 +18,13 @@ Other links:
 
 ### Change log ###
 
+2012 09 21
+
+* Reverted back to normal namespace. 
+
 2012 09 17
 
-* Introducing new namespace scheme for better performance and less dependency hassle
+* Introducing new namespace scheme for better performance and less dependency hassle.
 
 2012 09 16
 
